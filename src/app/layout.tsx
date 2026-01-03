@@ -4,6 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { LayoutWrapper } from "@/components/layout-wrapper";
 import { AuthProvider } from "@/providers/auth-provider";
+import { CatalogProvider } from "@/providers/catalog-provider";
 
 const inter = Inter({ subsets: ["latin"], display: "swap" });
 
@@ -35,9 +36,11 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <AuthProvider>
-            <LayoutWrapper>
-              {children}
-            </LayoutWrapper>
+            <CatalogProvider>
+              <LayoutWrapper>
+                {children}
+              </LayoutWrapper>
+            </CatalogProvider>
           </AuthProvider>
         </ThemeProvider>
       </body>

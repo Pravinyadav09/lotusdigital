@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useAuth } from "@/providers/auth-provider";
+import { useCatalog } from "@/providers/catalog-provider"; // Import Context Hook
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
@@ -14,32 +15,10 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
-const INITIAL_CATALOG_DATA = {
-    machines: [
-        { id: "M1", name: "Lotus Max 5000", type: "Inkjet", basePrice: 1200000, hsn: "8443", status: "Active" },
-        { id: "M2", name: "Lotus Pro 2000", type: "Laser", basePrice: 850000, hsn: "8456", status: "Active" },
-        { id: "M3", name: "Lotus Hybrid X1", type: "Hybrid", basePrice: 1550000, hsn: "8443", status: "Review" },
-    ],
-    heads: [
-        { id: "H1", name: "Konica 512i", resolution: "30pl", price: 45000, status: "In-Stock" },
-        { id: "H2", name: "Konica 1024i", resolution: "13pl", price: 85000, status: "Low-Stock" },
-        { id: "H3", name: "Ricoh Gen5", resolution: "7pl", price: 110000, status: "Special Order" },
-    ],
-    accessories: [
-        { id: "A1", name: "Extra Take-up Roller", price: 25000, category: "Hardware" },
-        { id: "A2", name: "UV Curing Lamp Kit", price: 95000, category: "Add-on" },
-        { id: "A3", name: "External Dryer Fan", price: 15000, category: "Hardware" },
-    ]
-};
-
 export default function CatalogPage() {
     const { user } = useAuth();
+    const { machines, heads, accessories, addMachine, addHead, addAccessory } = useCatalog(); // Use Global State
     const [activeTab, setActiveTab] = useState("machines");
-
-    // State for catalog data
-    const [machines, setMachines] = useState(INITIAL_CATALOG_DATA.machines);
-    const [heads, setHeads] = useState(INITIAL_CATALOG_DATA.heads);
-    const [accessories, setAccessories] = useState(INITIAL_CATALOG_DATA.accessories);
 
     // State for Dialog
     const [isAddOpen, setIsAddOpen] = useState(false);
@@ -48,33 +27,45 @@ export default function CatalogPage() {
     const handleAddItem = (e: React.FormEvent) => {
         e.preventDefault();
 
+        // Basic Validation
+        if (!newItem.name || !newItem.price) {
+            toast.error("Please fill in all required fields (Name and Price).");
+            return;
+        }
+
+        const price = Number(newItem.price);
+        if (isNaN(price) || price <= 0) {
+            toast.error("Please enter a valid positive price.");
+            return;
+        }
+
+        const timestampId = Date.now().toString().slice(-4);
+
         if (activeTab === "machines") {
-            const nextId = `M${machines.length + 1}`;
-            setMachines([...machines, {
-                id: newItem.id || nextId,
+            addMachine({
+                id: `M-NEW-${timestampId}`,
                 name: newItem.name,
                 type: newItem.type || "Inkjet",
-                basePrice: Number(newItem.price),
+                basePrice: price,
                 hsn: newItem.hsn || "8443",
                 status: "Active"
-            }]);
+            });
         } else if (activeTab === "heads") {
-            const nextId = `H${heads.length + 1}`;
-            setHeads([...heads, {
-                id: newItem.id || nextId,
+            addHead({
+                id: `H-NEW-${timestampId}`,
                 name: newItem.name,
                 resolution: newItem.resolution || "14pl",
-                price: Number(newItem.price),
+                price: price,
                 status: "In-Stock"
-            }]);
+            });
         } else {
-            const nextId = `A${accessories.length + 1}`;
-            setAccessories([...accessories, {
-                id: newItem.id || nextId,
+            addAccessory({
+                id: `A-NEW-${timestampId}`,
                 name: newItem.name,
                 category: newItem.category || "General",
-                price: Number(newItem.price)
-            }]);
+                price: price,
+                status: "Active"
+            });
         }
 
         toast.success(`${newItem.name} added to ${activeTab} catalog.`);

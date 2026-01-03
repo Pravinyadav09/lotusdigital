@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -11,30 +11,21 @@ import { Icons } from "@/components/icons";
 import { toast } from "sonner";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
+import { useCatalog } from "@/providers/catalog-provider";
 
-const MACHINE_METADATA: Record<string, { base: number, heads: Record<string, number>, widths: Record<string, number> }> = {
-    "Lotus Max 5000": {
-        base: 850000,
-        heads: { "Konica 512i": 45000, "Starfire 1024": 85000 },
-        widths: { "3.2m": 0, "5m": 250000 }
-    },
-    "Lotus Pro 2000": {
-        base: 450000,
-        heads: { "Ricoh Gen5": 65000, "Toshiba CE4": 35000 },
-        widths: { "1.8m": 0, "2.5m": 120000 }
-    }
-};
+const WIDTH_COSTS: Record<string, number> = { "3.2m": 0, "5m": 250000, "1.8m": 0, "2.5m": 120000 };
 
-export default function CreateQuotePage() {
+function CreateQuoteContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
+    const { machines, heads, accessories: catalogAccessories } = useCatalog();
     const [step, setStep] = useState(1);
 
     // Config State
     const [config, setConfig] = useState({
         leadId: searchParams.get("leadId") || "",
-        model: "Lotus Max 5000",
-        headType: "Konica 512i",
+        model: machines[0]?.name || "Lotus Max 5000",
+        headType: heads[0]?.name || "Konica 512i",
         headCount: 4,
         width: "3.2m",
         accessories: [] as string[]
@@ -51,17 +42,26 @@ export default function CreateQuotePage() {
 
     // Calculated fields
     useEffect(() => {
-        const meta = MACHINE_METADATA[config.model];
-        if (meta) {
-            const headCost = (meta.heads[config.headType] || 0) * config.headCount;
-            const widthCost = meta.widths[config.width] || 0;
+        const selectedMachine = machines.find(m => m.name === config.model);
+        const selectedHead = heads.find(h => h.name === config.headType);
+
+        if (selectedMachine) {
+            const headCost = (selectedHead?.price || 0) * config.headCount;
+            const widthCost = WIDTH_COSTS[config.width] || 0;
+
+            // Calculate selected accessories cost
+            const selectedAccessoriesCost = config.accessories.reduce((acc, accName) => {
+                const item = catalogAccessories.find(a => a.name === accName);
+                return acc + (item?.price || 0);
+            }, 0);
+
             setPricing(prev => ({
                 ...prev,
-                body: meta.base + headCost + widthCost,
-                accessories: 45000 + (config.accessories.length * 15000)
+                body: selectedMachine.basePrice + headCost + widthCost,
+                accessories: 45000 + selectedAccessoriesCost // 45k is basic kit base
             }));
         }
-    }, [config]);
+    }, [config, machines, heads, catalogAccessories]);
 
     const calculateTotal = () => {
         let total = pricing.body + pricing.service + pricing.accessories;
@@ -96,12 +96,12 @@ export default function CreateQuotePage() {
         );
     };
 
-    const toggleAccessory = (acc: string) => {
+    const toggleAccessory = (accName: string) => {
         setConfig(prev => ({
             ...prev,
-            accessories: prev.accessories.includes(acc)
-                ? prev.accessories.filter(a => a !== acc)
-                : [...prev.accessories, acc]
+            accessories: prev.accessories.includes(accName)
+                ? prev.accessories.filter(a => a !== accName)
+                : [...prev.accessories, accName]
         }));
     };
 
@@ -152,8 +152,9 @@ export default function CreateQuotePage() {
                                     <Select value={config.model} onValueChange={v => setConfig({ ...config, model: v })}>
                                         <SelectTrigger><SelectValue /></SelectTrigger>
                                         <SelectContent>
-                                            <SelectItem value="Lotus Max 5000">Lotus Max 5000 (Inkjet)</SelectItem>
-                                            <SelectItem value="Lotus Pro 2000">Lotus Pro 2000 (Laser)</SelectItem>
+                                            {machines.map(m => (
+                                                <SelectItem key={m.id} value={m.name}>{m.name} ({m.type})</SelectItem>
+                                            ))}
                                         </SelectContent>
                                     </Select>
                                 </div>
@@ -167,8 +168,8 @@ export default function CreateQuotePage() {
                                     <Select value={config.headType} onValueChange={v => setConfig({ ...config, headType: v })}>
                                         <SelectTrigger><SelectValue /></SelectTrigger>
                                         <SelectContent>
-                                            {Object.keys(MACHINE_METADATA[config.model].heads).map(h => (
-                                                <SelectItem key={h} value={h}>{h}</SelectItem>
+                                            {heads.map(h => (
+                                                <SelectItem key={h.id} value={h.name}>{h.name}</SelectItem>
                                             ))}
                                         </SelectContent>
                                     </Select>
@@ -189,7 +190,7 @@ export default function CreateQuotePage() {
                                     <Select value={config.width} onValueChange={v => setConfig({ ...config, width: v })}>
                                         <SelectTrigger><SelectValue /></SelectTrigger>
                                         <SelectContent>
-                                            {Object.keys(MACHINE_METADATA[config.model].widths).map(w => (
+                                            {Object.keys(WIDTH_COSTS).map(w => (
                                                 <SelectItem key={w} value={w}>{w}</SelectItem>
                                             ))}
                                         </SelectContent>
@@ -200,16 +201,16 @@ export default function CreateQuotePage() {
                             <div className="space-y-3">
                                 <Label>Optional Accessories</Label>
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                    {["External IR Dryer", "Anti-Static Bar", "Heavy Duty Take-up", "PC Station with RIP Software"].map(acc => (
+                                    {catalogAccessories.map(acc => (
                                         <div
-                                            key={acc}
-                                            onClick={() => toggleAccessory(acc)}
-                                            className={`p-3 border rounded-lg flex items-center gap-3 cursor-pointer transition-all ${config.accessories.includes(acc) ? 'bg-blue-50 border-blue-200' : 'hover:bg-slate-50'}`}
+                                            key={acc.id}
+                                            onClick={() => toggleAccessory(acc.name)}
+                                            className={`p-3 border rounded-lg flex items-center gap-3 cursor-pointer transition-all ${config.accessories.includes(acc.name) ? 'bg-blue-50 border-blue-200' : 'hover:bg-slate-50'}`}
                                         >
-                                            <div className={`h-4 w-4 rounded-full border flex items-center justify-center ${config.accessories.includes(acc) ? 'bg-blue-600 border-blue-600' : 'bg-white'}`}>
-                                                {config.accessories.includes(acc) && <Icons.check className="h-3 w-3 text-white" />}
+                                            <div className={`h-4 w-4 rounded-full border flex items-center justify-center ${config.accessories.includes(acc.name) ? 'bg-blue-600 border-blue-600' : 'bg-white'}`}>
+                                                {config.accessories.includes(acc.name) && <Icons.check className="h-3 w-3 text-white" />}
                                             </div>
-                                            <span className="text-xs font-medium">{acc}</span>
+                                            <span className="text-xs font-medium">{acc.name} <span className="text-muted-foreground">(₹{acc.price.toLocaleString()})</span></span>
                                         </div>
                                     ))}
                                 </div>
@@ -448,5 +449,13 @@ export default function CreateQuotePage() {
                 </div>
             )}
         </div>
+    );
+}
+
+export default function CreateQuotePage() {
+    return (
+        <Suspense fallback={<div>Loading quote wizard...</div>}>
+            <CreateQuoteContent />
+        </Suspense>
     );
 }
