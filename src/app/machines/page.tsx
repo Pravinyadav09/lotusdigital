@@ -127,9 +127,12 @@ export default function MachinesPage() {
                                 </div>
                             )}
 
-                            <div className="pt-4 border-t flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                                <span className="text-xs text-muted-foreground italic">Last Service: {machine.lastService}</span>
-                                <div className="flex flex-wrap gap-2 justify-start sm:justify-end w-full sm:w-auto">
+                            <div className="pt-4 border-t flex flex-col gap-4">
+                                <div className="flex justify-between items-center w-full">
+                                    <span className="text-[10px] text-muted-foreground italic">Last Service: {machine.lastService}</span>
+                                    <Badge variant="outline" className="text-[10px] border-blue-100 bg-blue-50/30">ID: {machine.id.split('-').pop()}</Badge>
+                                </div>
+                                <div className="grid grid-cols-2 sm:flex sm:flex-wrap gap-2 w-full">
                                     <Button
                                         variant="outline"
                                         size="sm"
@@ -218,7 +221,7 @@ export default function MachinesPage() {
                         />
 
                         <Dialog open={isDetailsOpen} onOpenChange={setIsDetailsOpen}>
-                            <DialogContent className="max-w-xl max-h-[90vh] overflow-y-auto">
+                            <DialogContent className="sm:max-w-xl max-h-[90vh] overflow-y-auto">
                                 <DialogHeader>
                                     <DialogTitle>Machine Master File: {selectedMachine}</DialogTitle>
                                     <DialogDescription>Full technical specs and service history.</DialogDescription>

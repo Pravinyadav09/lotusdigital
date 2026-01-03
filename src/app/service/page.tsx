@@ -67,8 +67,8 @@ export default function ServicePage() {
                     <div className="overflow-x-auto">
                         <Table>
                             <TableHeader>
-                                <TableRow className="bg-muted/30 hover:bg-muted/30 border-b-2">
-                                    <TableHead className="w-[100px] font-bold">Ticket ID</TableHead>
+                                <TableRow className="bg-muted/30 hover:bg-muted/30">
+                                    <TableHead className="min-w-[100px] font-bold">Ticket ID</TableHead>
                                     <TableHead className="min-w-[150px] font-bold">Customer</TableHead>
                                     <TableHead className="min-w-[200px] font-bold">Issue Details</TableHead>
                                     <TableHead className="min-w-[100px] font-bold">Status</TableHead>

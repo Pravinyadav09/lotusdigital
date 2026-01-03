@@ -128,12 +128,12 @@ export default function UserManagementPage() {
                     <div className="overflow-x-auto -mx-4 md:mx-0">
                         <Table>
                             <TableHeader>
-                                <TableRow className="bg-muted/30 hover:bg-muted/30 border-b-2">
-                                    <TableHead className="w-[150px] font-bold">Name</TableHead>
-                                    <TableHead className="min-w-[200px] font-bold">Email</TableHead>
-                                    <TableHead className="min-w-[120px] font-bold">Role</TableHead>
+                                <TableRow className="bg-muted/30 hover:bg-muted/30">
+                                    <TableHead className="min-w-[150px] font-bold">Name</TableHead>
+                                    <TableHead className="min-w-[200px] font-bold">Email Address</TableHead>
+                                    <TableHead className="min-w-[150px] font-bold">Role Assignment</TableHead>
                                     <TableHead className="min-w-[100px] font-bold">Status</TableHead>
-                                    <TableHead className="text-right min-w-[120px] font-bold">Actions</TableHead>
+                                    <TableHead className="text-right min-w-[120px] font-bold">Quick Actions</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
@@ -293,7 +293,7 @@ export default function UserManagementPage() {
                 </DialogContent>
             </Dialog>
 
-            <div className="grid gap-4 md:grid-cols-2">
+            <div className="grid gap-4 grid-cols-1 sm:grid-cols-2">
                 <Card className="border-blue-100 bg-blue-50/20">
                     <CardHeader>
                         <CardTitle className="text-sm">Role Permissions Matrix</CardTitle>

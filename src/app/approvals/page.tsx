@@ -155,14 +155,14 @@ export default function ApprovalsPage() {
                 </div>
             </CardHeader>
             <CardContent className="space-y-4">
-                <div className="grid grid-cols-2 gap-4 text-sm">
-                    <div>
-                        <span className="text-muted-foreground">Quote Amount:</span>
-                        <p className="font-semibold text-lg">₹ {quote.amount.toLocaleString()}</p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+                    <div className="p-3 bg-muted/40 rounded-lg border">
+                        <span className="text-[10px] text-muted-foreground uppercase font-bold">Quote Amount</span>
+                        <p className="font-bold text-xl">₹ {quote.amount.toLocaleString()}</p>
                     </div>
-                    <div>
-                        <span className="text-muted-foreground">Discount Applied:</span>
-                        <p className="font-semibold text-lg text-red-600">{quote.discount}%</p>
+                    <div className="p-3 bg-red-50 rounded-lg border border-red-100">
+                        <span className="text-[10px] text-red-600 uppercase font-bold">Discount Applied</span>
+                        <p className="font-bold text-xl text-red-700">{quote.discount}%</p>
                     </div>
                 </div>
 
@@ -200,31 +200,31 @@ export default function ApprovalsPage() {
                 </div>
 
                 {quote.status === "pending" && (
-                    <div className="flex flex-col sm:flex-row gap-2 pt-2">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-2">
                         <Button
                             variant="outline"
-                            className="flex-1 h-9 text-xs"
+                            className="h-9 text-[10px] sm:text-xs"
                             onClick={() => {
                                 toast.info(`Viewing transaction history for ${quote.quoteNumber}`);
                                 router.push(`/quotes/${quote.id}`);
                             }}
                         >
-                            <Icons.view className="mr-2 h-4 w-4" />
+                            <Icons.view className="mr-2 h-3 w-3" />
                             Audit Trail
                         </Button>
                         <Button
                             variant="outline"
-                            className="flex-1 h-9 text-xs text-red-500 hover:text-red-600 hover:bg-red-50"
+                            className="h-9 text-[10px] sm:text-xs text-red-500 hover:text-red-600 hover:bg-red-50"
                             onClick={() => openRejectDialog(quote)}
                         >
-                            <Icons.warning className="mr-2 h-4 w-4" />
+                            <Icons.warning className="mr-2 h-3 w-3" />
                             Reject
                         </Button>
                         <Button
-                            className="flex-1 h-9 text-xs bg-green-600 hover:bg-green-700"
+                            className="h-9 text-[10px] sm:text-xs bg-green-600 hover:bg-green-700"
                             onClick={() => handleApprove(quote)}
                         >
-                            <Icons.check className="mr-2 h-4 w-4" />
+                            <Icons.check className="mr-2 h-3 w-3" />
                             Approve
                         </Button>
                     </div>

@@ -37,7 +37,7 @@ export default function GSTReportsPage() {
                         <CardTitle className="text-sm">Output GST (Total)</CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-bold text-green-700">₹ 4,30,500</div>
+                        <div className="text-xl sm:text-2xl font-bold text-green-700">₹ 4,30,500</div>
                         <p className="text-xs text-muted-foreground text-green-600">↑ 12% vs last month</p>
                     </CardContent>
                 </Card>
@@ -46,7 +46,7 @@ export default function GSTReportsPage() {
                         <CardTitle className="text-sm">ITC Available (Input)</CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-bold text-blue-700">₹ 2,10,000</div>
+                        <div className="text-xl sm:text-2xl font-bold text-blue-700">₹ 2,10,000</div>
                         <p className="text-xs text-muted-foreground">98% Reconciled with GSTR-2B</p>
                     </CardContent>
                 </Card>
@@ -55,7 +55,7 @@ export default function GSTReportsPage() {
                         <CardTitle className="text-sm">Net Tax Payable</CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-bold text-red-700">₹ 2,20,500</div>
+                        <div className="text-xl sm:text-2xl font-bold text-red-700">₹ 2,20,500</div>
                         <p className="text-xs text-muted-foreground">Cash Ledger: ₹ 45,000</p>
                     </CardContent>
                 </Card>
@@ -64,7 +64,7 @@ export default function GSTReportsPage() {
                         <CardTitle className="text-sm">Filing Health</CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-bold text-amber-700">96.4%</div>
+                        <div className="text-xl sm:text-2xl font-bold text-amber-700">96.4%</div>
                         <p className="text-xs text-muted-foreground">2 Missing E-way Bills</p>
                     </CardContent>
                 </Card>
@@ -86,14 +86,14 @@ export default function GSTReportsPage() {
                             <div className="overflow-x-auto">
                                 <Table>
                                     <TableHeader>
-                                        <TableRow>
-                                            <TableHead className="min-w-[140px]">GSTIN</TableHead>
-                                            <TableHead className="min-w-[180px]">Customer</TableHead>
-                                            <TableHead className="min-w-[100px]">Inv #</TableHead>
-                                            <TableHead className="min-w-[120px]">Taxable Val</TableHead>
-                                            <TableHead className="min-w-[100px]">IGST</TableHead>
-                                            <TableHead className="min-w-[120px]">CGST/SGST</TableHead>
-                                            <TableHead className="text-right min-w-[120px]">Total GST</TableHead>
+                                        <TableRow className="bg-muted/30 hover:bg-muted/30">
+                                            <TableHead className="min-w-[140px] font-bold">GSTIN</TableHead>
+                                            <TableHead className="min-w-[180px] font-bold">Customer Name</TableHead>
+                                            <TableHead className="min-w-[100px] font-bold">Inv #</TableHead>
+                                            <TableHead className="min-w-[120px] font-bold">Taxable Val</TableHead>
+                                            <TableHead className="min-w-[100px] font-bold">IGST</TableHead>
+                                            <TableHead className="min-w-[120px] font-bold">CGST/SGST</TableHead>
+                                            <TableHead className="text-right min-w-[120px] font-bold">Total GST</TableHead>
                                         </TableRow>
                                     </TableHeader>
                                     <TableBody>
@@ -138,13 +138,13 @@ export default function GSTReportsPage() {
                             <div className="overflow-x-auto">
                                 <Table>
                                     <TableHeader>
-                                        <TableRow>
-                                            <TableHead className="min-w-[120px]">HSN/SAC</TableHead>
-                                            <TableHead className="min-w-[200px]">Description</TableHead>
-                                            <TableHead className="min-w-[80px]">UOM</TableHead>
-                                            <TableHead className="min-w-[80px]">Quantity</TableHead>
-                                            <TableHead className="min-w-[120px]">Taxable Val</TableHead>
-                                            <TableHead className="text-right min-w-[120px]">Total Tax</TableHead>
+                                        <TableRow className="bg-muted/30 hover:bg-muted/30">
+                                            <TableHead className="min-w-[120px] font-bold">HSN/SAC Code</TableHead>
+                                            <TableHead className="min-w-[200px] font-bold">Description</TableHead>
+                                            <TableHead className="min-w-[80px] font-bold">UOM</TableHead>
+                                            <TableHead className="min-w-[80px] font-bold">Quantity</TableHead>
+                                            <TableHead className="min-w-[120px] font-bold">Taxable Val</TableHead>
+                                            <TableHead className="text-right min-w-[120px] font-bold">Total Tax</TableHead>
                                         </TableRow>
                                     </TableHeader>
                                     <TableBody>

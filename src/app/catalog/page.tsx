@@ -78,14 +78,14 @@ export default function CatalogPage() {
                             <div className="overflow-x-auto">
                                 <Table>
                                     <TableHeader>
-                                        <TableRow>
-                                            <TableHead className="min-w-[100px]">Model ID</TableHead>
-                                            <TableHead className="min-w-[180px]">Name</TableHead>
-                                            <TableHead className="min-w-[100px]">Type</TableHead>
-                                            <TableHead className="min-w-[100px]">HSN Code</TableHead>
-                                            <TableHead className="text-right min-w-[120px]">Base Price (₹)</TableHead>
-                                            <TableHead className="min-w-[100px]">Status</TableHead>
-                                            <TableHead className="text-right min-w-[80px]">Actions</TableHead>
+                                        <TableRow className="bg-muted/30 hover:bg-muted/30">
+                                            <TableHead className="min-w-[100px] font-bold">Model ID</TableHead>
+                                            <TableHead className="min-w-[180px] font-bold">Model Name</TableHead>
+                                            <TableHead className="min-w-[100px] font-bold">Tech Type</TableHead>
+                                            <TableHead className="min-w-[100px] font-bold">HSN Code</TableHead>
+                                            <TableHead className="text-right min-w-[130px] font-bold">Base Price (₹)</TableHead>
+                                            <TableHead className="min-w-[100px] font-bold">Status</TableHead>
+                                            <TableHead className="text-right min-w-[80px] font-bold">Action</TableHead>
                                         </TableRow>
                                     </TableHeader>
                                     <TableBody>
@@ -121,13 +121,13 @@ export default function CatalogPage() {
                             <div className="overflow-x-auto">
                                 <Table>
                                     <TableHeader>
-                                        <TableRow>
-                                            <TableHead className="min-w-[100px]">Head ID</TableHead>
-                                            <TableHead className="min-w-[180px]">Name</TableHead>
-                                            <TableHead className="min-w-[120px]">Resolution</TableHead>
-                                            <TableHead className="text-right min-w-[120px]">Unit Price (₹)</TableHead>
-                                            <TableHead className="min-w-[120px]">Inventory</TableHead>
-                                            <TableHead className="text-right min-w-[80px]">Actions</TableHead>
+                                        <TableRow className="bg-muted/30 hover:bg-muted/30">
+                                            <TableHead className="min-w-[100px] font-bold">Head ID</TableHead>
+                                            <TableHead className="min-w-[180px] font-bold">Component Name</TableHead>
+                                            <TableHead className="min-w-[120px] font-bold">Resolution</TableHead>
+                                            <TableHead className="text-right min-w-[130px] font-bold">Unit Price (₹)</TableHead>
+                                            <TableHead className="min-w-[120px] font-bold">Inventory State</TableHead>
+                                            <TableHead className="text-right min-w-[80px] font-bold">Action</TableHead>
                                         </TableRow>
                                     </TableHeader>
                                     <TableBody>
@@ -162,12 +162,12 @@ export default function CatalogPage() {
                             <div className="overflow-x-auto">
                                 <Table>
                                     <TableHeader>
-                                        <TableRow>
-                                            <TableHead className="min-w-[100px]">Part ID</TableHead>
-                                            <TableHead className="min-w-[200px]">Name</TableHead>
-                                            <TableHead className="min-w-[120px]">Category</TableHead>
-                                            <TableHead className="text-right min-w-[120px]">Price (₹)</TableHead>
-                                            <TableHead className="text-right min-w-[80px]">Actions</TableHead>
+                                        <TableRow className="bg-muted/30 hover:bg-muted/30">
+                                            <TableHead className="min-w-[100px] font-bold">Part ID</TableHead>
+                                            <TableHead className="min-w-[200px] font-bold">Part Name</TableHead>
+                                            <TableHead className="min-w-[120px] font-bold">Category</TableHead>
+                                            <TableHead className="text-right min-w-[130px] font-bold">Price (₹)</TableHead>
+                                            <TableHead className="text-right min-w-[80px] font-bold">Action</TableHead>
                                         </TableRow>
                                     </TableHeader>
                                     <TableBody>

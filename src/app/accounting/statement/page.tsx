@@ -44,19 +44,19 @@ export default function AccountStatementPage() {
             <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
                 <Card>
                     <CardHeader className="pb-2"><CardTitle className="text-sm">Total Outstanding</CardTitle></CardHeader>
-                    <CardContent><div className="text-2xl font-bold text-red-600">₹ 4,25,000</div></CardContent>
+                    <CardContent><div className="text-xl sm:text-2xl font-bold text-red-600">₹ 4,25,000</div></CardContent>
                 </Card>
                 <Card className="border-amber-200 bg-amber-50/20">
                     <CardHeader className="pb-2"><CardTitle className="text-sm">Accrued Interest</CardTitle></CardHeader>
-                    <CardContent><div className="text-2xl font-bold text-amber-700">₹ 14,850</div></CardContent>
+                    <CardContent><div className="text-xl sm:text-2xl font-bold text-amber-700">₹ 14,850</div></CardContent>
                 </Card>
                 <Card>
                     <CardHeader className="pb-2"><CardTitle className="text-sm">Paid Till Date</CardTitle></CardHeader>
-                    <CardContent><div className="text-2xl font-bold text-green-600">₹ 8,75,000</div></CardContent>
+                    <CardContent><div className="text-xl sm:text-2xl font-bold text-green-600">₹ 8,75,000</div></CardContent>
                 </Card>
                 <Card>
                     <CardHeader className="pb-2"><CardTitle className="text-sm">Credit Limit</CardTitle></CardHeader>
-                    <CardContent><div className="text-2xl font-bold">₹ 15,00,000</div></CardContent>
+                    <CardContent><div className="text-xl sm:text-2xl font-bold">₹ 15,00,000</div></CardContent>
                 </Card>
             </div>
 

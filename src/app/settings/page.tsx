@@ -64,7 +64,7 @@ export default function SettingsPage() {
                 </TabsList>
 
                 <TabsContent value="business" className="space-y-4">
-                    <div className="grid gap-4 md:grid-cols-2">
+                    <div className="grid gap-4 grid-cols-1 sm:grid-cols-2">
                         <Card>
                             <CardHeader>
                                 <CardTitle>Sales Thresholds</CardTitle>
@@ -144,7 +144,7 @@ export default function SettingsPage() {
                             <CardDescription>Default tax rates and interest policies.</CardDescription>
                         </CardHeader>
                         <CardContent className="space-y-4">
-                            <div className="grid grid-cols-2 gap-4">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div className="space-y-2">
                                     <Label>Standard GST (Goods)</Label>
                                     <Input
