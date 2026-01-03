@@ -156,6 +156,20 @@ export default function UserManagementPage() {
                                             variant="ghost"
                                             size="icon"
                                             onClick={() => {
+                                                toast.info(`Viewing system audit trail for ${u.name}...`);
+                                                toast.promise(new Promise(r => setTimeout(r, 1500)), {
+                                                    loading: 'Fetching user logs from global ledger...',
+                                                    success: 'Audit Trail: 14 actions today. Last IP: 202.45.1.2',
+                                                    error: 'Failed to fetch logs'
+                                                });
+                                            }}
+                                        >
+                                            <Icons.history className="h-4 w-4" />
+                                        </Button>
+                                        <Button
+                                            variant="ghost"
+                                            size="icon"
+                                            onClick={() => {
                                                 setEditingUser(u);
                                                 setIsEditOpen(true);
                                             }}

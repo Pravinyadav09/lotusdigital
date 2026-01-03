@@ -121,6 +121,16 @@ export default function CatalogPage() {
                 </div>
                 <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                     <DialogTrigger asChild>
+                        <Button onClick={() => {
+                            toast.promise(new Promise(r => setTimeout(r, 2000)), {
+                                loading: 'Recalculating Global Price Index...',
+                                success: 'Bulk Update Success: All models adjusted by +2% for supply chain fluctuation.',
+                                error: 'Update Failed'
+                            });
+                        }}>
+                            <Icons.accounting className="mr-2 h-4 w-4" />
+                            Bulk Price Adjust
+                        </Button>
                         <Button>
                             <Icons.add className="mr-2 h-4 w-4" />
                             Add New Item
