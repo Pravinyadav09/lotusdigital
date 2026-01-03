@@ -31,14 +31,14 @@ export default function GSTReportsPage() {
                 </div>
             </div>
 
-            <div className="grid gap-4 md:grid-cols-3">
+            <div className="grid gap-4 md:grid-cols-4">
                 <Card className="border-green-100 bg-green-50/10">
                     <CardHeader className="pb-2">
                         <CardTitle className="text-sm">Output GST (Total)</CardTitle>
                     </CardHeader>
                     <CardContent>
                         <div className="text-2xl font-bold text-green-700">₹ 4,30,500</div>
-                        <p className="text-xs text-muted-foreground">Current Month (May 2024)</p>
+                        <p className="text-xs text-muted-foreground text-green-600">↑ 12% vs last month</p>
                     </CardContent>
                 </Card>
                 <Card className="border-blue-100 bg-blue-50/10">
@@ -47,7 +47,7 @@ export default function GSTReportsPage() {
                     </CardHeader>
                     <CardContent>
                         <div className="text-2xl font-bold text-blue-700">₹ 2,10,000</div>
-                        <p className="text-xs text-muted-foreground">Based on purchase GSTR-2B</p>
+                        <p className="text-xs text-muted-foreground">98% Reconciled with GSTR-2B</p>
                     </CardContent>
                 </Card>
                 <Card className="border-red-100 bg-red-50/10">
@@ -56,7 +56,16 @@ export default function GSTReportsPage() {
                     </CardHeader>
                     <CardContent>
                         <div className="text-2xl font-bold text-red-700">₹ 2,20,500</div>
-                        <p className="text-xs text-muted-foreground">Due by 20th of next month</p>
+                        <p className="text-xs text-muted-foreground">Cash Ledger: ₹ 45,000</p>
+                    </CardContent>
+                </Card>
+                <Card className="border-amber-100 bg-amber-50/10">
+                    <CardHeader className="pb-2">
+                        <CardTitle className="text-sm">Filing Health</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <div className="text-2xl font-bold text-amber-700">96.4%</div>
+                        <p className="text-xs text-muted-foreground">2 Missing E-way Bills</p>
                     </CardContent>
                 </Card>
             </div>
@@ -113,8 +122,15 @@ export default function GSTReportsPage() {
 
                 <TabsContent value="hsn">
                     <Card>
-                        <CardHeader>
-                            <CardTitle>HSN/SAC Code Summary</CardTitle>
+                        <CardHeader className="flex flex-row items-center justify-between">
+                            <div>
+                                <CardTitle>HSN/SAC Code Summary</CardTitle>
+                                <CardDescription>Consolidated view for Table 12 of GSTR-1.</CardDescription>
+                            </div>
+                            <Button variant="ghost" size="sm" className="text-xs text-blue-600" onClick={() => toast.info("Downloading detailed HSN drill-down (XLS)...")}>
+                                <Icons.reports className="mr-2 h-3 w-3" />
+                                Export Excel
+                            </Button>
                         </CardHeader>
                         <CardContent className="p-0">
                             <Table>
@@ -124,23 +140,26 @@ export default function GSTReportsPage() {
                                         <TableHead>Description</TableHead>
                                         <TableHead>UOM</TableHead>
                                         <TableHead>Quantity</TableHead>
+                                        <TableHead>Taxable Val</TableHead>
                                         <TableHead className="text-right">Total Tax</TableHead>
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
-                                    <TableRow>
-                                        <TableCell className="font-mono">8443</TableCell>
-                                        <TableCell>Printing Machinery (Inkjet)</TableCell>
-                                        <TableCell>NOS</TableCell>
-                                        <TableCell>4</TableCell>
-                                        <TableCell className="text-right">₹ 6,10,000</TableCell>
+                                    <TableRow className="cursor-pointer hover:bg-muted/30" onClick={() => toast.info("Opening breakdown for Printing Machinery...")}>
+                                        <TableCell className="font-mono text-xs">84433210</TableCell>
+                                        <TableCell className="text-xs">Inkjet Printing Machinery</TableCell>
+                                        <TableCell className="text-xs">NOS</TableCell>
+                                        <TableCell className="text-xs font-bold">4</TableCell>
+                                        <TableCell className="text-xs">₹ 34,20,000</TableCell>
+                                        <TableCell className="text-right font-bold text-green-700">₹ 6,15,600</TableCell>
                                     </TableRow>
-                                    <TableRow>
-                                        <TableCell className="font-mono">9987</TableCell>
-                                        <TableCell>Installation & Training Services</TableCell>
-                                        <TableCell>OTH</TableCell>
-                                        <TableCell>5</TableCell>
-                                        <TableCell className="text-right">₹ 45,000</TableCell>
+                                    <TableRow className="cursor-pointer hover:bg-muted/30" onClick={() => toast.info("Opening breakdown for Services...")}>
+                                        <TableCell className="font-mono text-xs">998733</TableCell>
+                                        <TableCell className="text-xs">Maintenance & Repair Services</TableCell>
+                                        <TableCell className="text-xs">OTH</TableCell>
+                                        <TableCell className="text-xs font-bold">5</TableCell>
+                                        <TableCell className="text-xs">₹ 2,50,000</TableCell>
+                                        <TableCell className="text-right font-bold text-green-700">₹ 45,000</TableCell>
                                     </TableRow>
                                 </TableBody>
                             </Table>

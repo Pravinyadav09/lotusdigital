@@ -169,10 +169,31 @@ export default function ApprovalsPage() {
                     <p className="text-sm text-muted-foreground">{quote.reason}</p>
                 </div>
 
-                <div className="flex items-center justify-between pt-2 border-t">
-                    <div className="text-sm">
-                        <span className="text-muted-foreground">Discount Amount: </span>
-                        <span className="font-semibold text-red-600">₹ {quote.discountAmount.toLocaleString()}</span>
+                <div className="flex items-center justify-between pt-2 border-t text-[10px] text-muted-foreground">
+                    <div>
+                        <span>Discount Impact: </span>
+                        <span className="font-bold text-red-600">₹ {quote.discountAmount.toLocaleString()}</span>
+                    </div>
+                    <div>
+                        <span>Gross Margin: </span>
+                        <span className="font-bold text-green-600">24.2%</span>
+                    </div>
+                </div>
+
+                <div className="space-y-2">
+                    <p className="text-[10px] font-bold uppercase text-muted-foreground flex items-center gap-1">
+                        <Icons.reports className="h-3 w-3" />
+                        Internal Discussion Log
+                    </p>
+                    <div className="text-[10px] space-y-1">
+                        <div className="p-1.5 bg-blue-50/50 rounded border border-blue-100/50">
+                            <span className="font-bold">Rahul (Sales):</span> "Confirmed 2 machine order if 12% is approved."
+                        </div>
+                        {quote.status !== 'pending' && (
+                            <div className="p-1.5 bg-muted/50 rounded border italic">
+                                <span className="font-bold">System:</span> Decision logged by {user?.name}.
+                            </div>
+                        )}
                     </div>
                 </div>
 

@@ -10,43 +10,20 @@ import { useAuth } from "@/providers/auth-provider";
 import { Progress } from "@/components/ui/progress";
 
 const MOCK_VISITS = [
-    {
-        id: "V-201",
-        customer: "Pixel Printers",
-        location: "Okhla Phase III, New Delhi",
-        targetLat: 28.5355,
-        targetLng: 77.2732,
-        time: "10:30 AM",
-        type: "Installation",
-        status: "planned"
-    },
-    {
-        id: "V-202",
-        customer: "Sharma Graphics",
-        location: "Naraina Industrial Area, Delhi",
-        targetLat: 28.6276,
-        targetLng: 77.1354,
-        time: "02:00 PM",
-        type: "Repair",
-        status: "planned"
-    },
-    {
-        id: "V-203",
-        customer: "Super Flex",
-        location: "Sector 62, Noida",
-        targetLat: 28.622,
-        targetLng: 77.361,
-        time: "04:30 PM",
-        type: "Maintenance",
-        status: "planned"
-    }
+    { id: "V-201", rep: "Rahul Singh", customer: "Pixel Printers", location: "Okhla Phase III, New Delhi", targetLat: 28.5355, targetLng: 77.2732, time: "10:30 AM", type: "Installation", status: "planned" },
+    { id: "V-202", rep: "Amit Kumar", customer: "Sharma Graphics", location: "Naraina Industrial Area, Delhi", targetLat: 28.6276, targetLng: 77.1354, time: "02:00 PM", type: "Repair", status: "planned" },
+    { id: "V-203", rep: "Rahul Singh", customer: "Super Flex", location: "Sector 62, Noida", targetLat: 28.622, targetLng: 77.361, time: "04:30 PM", type: "Maintenance", status: "planned" },
+    { id: "V-204", rep: "Neha Sharma", customer: "Lotus Press", location: "Manesar, Haryana", targetLat: 28.3, targetLng: 76.9, time: "11:00 AM", type: "Demo", status: "checked-in" },
 ];
 
 export default function VisitsPage() {
     const { user } = useAuth();
+    const isManager = user?.role === "super_admin" || user?.role === "sales_manager";
     const [visits, setVisits] = useState(MOCK_VISITS);
     const [isCheckingIn, setIsCheckingIn] = useState<string | null>(null);
     const [progress, setProgress] = useState(0);
+
+    const filteredVisits = isManager ? visits : visits.filter(v => v.rep === user?.name);
 
     const handleCheckIn = (visitId: string) => {
         setIsCheckingIn(visitId);
@@ -92,13 +69,13 @@ export default function VisitsPage() {
             </div>
 
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                {visits.map((visit) => (
-                    <Card key={visit.id} className={visit.status === 'checked-in' ? 'border-green-200 bg-green-50/20' : ''}>
+                {filteredVisits.map((visit) => (
+                    <Card key={visit.id} className={visit.status === 'checked-in' ? 'border-green-200 bg-green-50/20 shadow-sm' : ''}>
                         <CardHeader className="pb-3">
                             <div className="flex justify-between items-start">
-                                <Badge variant="secondary">{visit.type}</Badge>
+                                <Badge variant="secondary" className="capitalize">{visit.type}</Badge>
                                 {visit.status === 'checked-in' ? (
-                                    <Badge className="bg-green-600">CHECKED IN</Badge>
+                                    <Badge className="bg-green-600 animate-pulse">LIVE: CHECKED IN</Badge>
                                 ) : (
                                     <p className="text-xs font-bold text-blue-600">{visit.time}</p>
                                 )}
@@ -108,42 +85,45 @@ export default function VisitsPage() {
                                 <Icons.location className="h-3 w-3" />
                                 {visit.location}
                             </CardDescription>
+                            {isManager && (
+                                <p className="text-[10px] font-bold text-muted-foreground mt-1 uppercase">Field Rep: {visit.rep}</p>
+                            )}
                         </CardHeader>
                         <CardContent className="space-y-4">
                             {isCheckingIn === visit.id ? (
                                 <div className="space-y-2">
-                                    <p className="text-[10px] text-center font-bold animate-pulse">VERIFYING GPS RADIUS...</p>
+                                    <p className="text-[10px] text-center font-bold animate-pulse">VALIDATING GEO-COORD...</p>
                                     <Progress value={progress} className="h-2" />
                                 </div>
                             ) : visit.status === 'checked-in' ? (
-                                <div className="space-y-3">
-                                    <div className="p-2 rounded bg-white border border-green-100 flex items-center justify-between text-xs">
-                                        <span className="text-muted-foreground">Timestamp:</span>
-                                        <span className="font-mono">{new Date().toLocaleTimeString()}</span>
+                                <div className="space-y-3 font-mono text-[10px]">
+                                    <div className="p-2 rounded bg-white border border-green-100 flex items-center justify-between">
+                                        <span className="text-muted-foreground uppercase">Verified At:</span>
+                                        <span>{new Date().toLocaleTimeString()}</span>
                                     </div>
-                                    <div className="p-2 rounded bg-white border border-green-100 flex items-center justify-between text-xs">
-                                        <span className="text-muted-foreground">Coordinates:</span>
-                                        <span className="font-mono">28.53, 77.27 (Acc: 12m)</span>
+                                    <div className="p-2 rounded bg-white border border-green-100 flex items-center justify-between">
+                                        <span className="text-muted-foreground uppercase">Precision:</span>
+                                        <span className="text-green-600">± 8m (GPS)</span>
                                     </div>
-                                    <Button className="w-full bg-green-600" onClick={() => toast.success("Opening Visit Summary form...")}>
+                                    <Button className="w-full bg-blue-600 hover:bg-blue-700" onClick={() => toast.success("Opening Visit Summary & Action Log...")}>
                                         <Icons.add className="mr-2 h-4 w-4" />
-                                        Add Visit Note
+                                        Log Action Items
                                     </Button>
-                                    <Button variant="outline" className="w-full" onClick={() => {
+                                    <Button variant="outline" className="w-full border-red-200 text-red-600 hover:bg-red-50" onClick={() => {
                                         setVisits(prev => prev.map(v => v.id === visit.id ? { ...v, status: 'planned' } : v));
-                                        toast.success("Checked out! Visit data synced.");
+                                        toast.success("Checked out! Summary synced to Lead Activity.");
                                     }}>
-                                        Checkout
+                                        Complete Visit
                                     </Button>
                                 </div>
                             ) : (
                                 <div className="grid grid-cols-2 gap-2">
-                                    <Button variant="outline" className="text-blue-600 border-blue-200 hover:bg-blue-50" onClick={() => toast.info(`Opening Google Maps for ${visit.location}`)}>
+                                    <Button variant="outline" className="text-blue-600 border-blue-200 hover:bg-blue-50" onClick={() => toast.info(`Opening Satellite Navigation for ${visit.location}`)}>
                                         <Icons.view className="mr-2 h-4 w-4" />
-                                        Navigate
+                                        Route
                                     </Button>
-                                    <Button className="bg-blue-600" onClick={() => handleCheckIn(visit.id)}>
-                                        Check-in
+                                    <Button className="bg-blue-600 hover:shadow-lg transition-all" onClick={() => handleCheckIn(visit.id)} disabled={isManager}>
+                                        {isManager ? "Rep Only" : "Check-in"}
                                     </Button>
                                 </div>
                             )}
@@ -151,13 +131,14 @@ export default function VisitsPage() {
                     </Card>
                 ))}
 
-                <Card className="border-dashed flex items-center justify-center p-6 bg-muted/20">
-                    <div className="text-center">
-                        <Icons.add className="h-8 w-8 mx-auto text-muted-foreground mb-2" />
-                        <p className="text-sm font-medium text-muted-foreground">Plan Future Visit</p>
-                        <Button variant="link" className="text-xs" onClick={() => toast.info("Opening Field Calendar...")}>Open Calendar</Button>
-                    </div>
-                </Card>
+                {!isManager && (
+                    <Card className="border-dashed flex items-center justify-center p-6 bg-muted/20 hover:bg-muted/30 cursor-pointer transition-colors" onClick={() => toast.info("Opening Site Planner...")}>
+                        <div className="text-center">
+                            <Icons.add className="h-8 w-8 mx-auto text-muted-foreground mb-2" />
+                            <p className="text-sm font-medium text-muted-foreground">Add Planned Site</p>
+                        </div>
+                    </Card>
+                )}
             </div>
 
             <div className="p-4 border rounded-lg bg-blue-50/30 flex items-start gap-3">
