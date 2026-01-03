@@ -3,6 +3,7 @@
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Icons } from "@/components/icons";
 import { useState } from "react";
@@ -55,16 +56,16 @@ export default function AuditLogsPage() {
                         </div>
                     </div>
                 </CardHeader>
-                <CardContent>
-                    <div className="overflow-x-auto">
+                <CardContent className="p-0">
+                    <div className="overflow-x-auto -mx-4 md:mx-0">
                         <Table>
                             <TableHeader>
                                 <TableRow>
-                                    <TableHead className="w-[180px]">Timestamp</TableHead>
-                                    <TableHead>User / Role</TableHead>
-                                    <TableHead>Module</TableHead>
-                                    <TableHead>Action</TableHead>
-                                    <TableHead>Details</TableHead>
+                                    <TableHead className="min-w-[160px]">Timestamp</TableHead>
+                                    <TableHead className="min-w-[140px]">User / Role</TableHead>
+                                    <TableHead className="min-w-[100px]">Module</TableHead>
+                                    <TableHead className="min-w-[140px]">Action</TableHead>
+                                    <TableHead className="min-w-[200px]">Details</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
@@ -91,5 +92,3 @@ export default function AuditLogsPage() {
         </div>
     );
 }
-
-import { Button } from "@/components/ui/button";

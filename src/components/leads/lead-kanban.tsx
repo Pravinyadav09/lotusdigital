@@ -23,7 +23,7 @@ export function LeadKanban() {
     return (
         <div className="flex gap-4 overflow-x-auto pb-4 h-[calc(100vh-250px)]">
             {COLUMNS.map((col) => (
-                <div key={col.id} className="flex-1 min-w-[280px] bg-slate-50/50 rounded-lg p-3 border border-slate-100 flex flex-col">
+                <div key={col.id} className="flex-1 min-w-[280px] sm:min-w-[320px] bg-slate-50/50 rounded-lg p-3 border border-slate-100 flex flex-col">
                     <div className="flex items-center justify-between mb-4">
                         <div className="flex items-center gap-2">
                             <div className={`h-2 w-2 rounded-full ${col.color}`} />
@@ -41,8 +41,8 @@ export function LeadKanban() {
                                     <div className="flex justify-between items-start">
                                         <p className="text-xs font-bold text-slate-800">{lead.name}</p>
                                         <Badge variant="outline" className={`text-[8px] px-1 h-3 font-bold uppercase ${lead.temp === 'hot' ? 'text-red-600 bg-red-50 border-red-100' :
-                                                lead.temp === 'warm' ? 'text-orange-600 bg-orange-50 border-orange-100' :
-                                                    'text-blue-600 bg-blue-50 border-blue-100'
+                                            lead.temp === 'warm' ? 'text-orange-600 bg-orange-50 border-orange-100' :
+                                                'text-blue-600 bg-blue-50 border-blue-100'
                                             }`}>
                                             {lead.temp}
                                         </Badge>

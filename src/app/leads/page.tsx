@@ -57,26 +57,26 @@ export default function LeadsPage() {
 
     return (
         <div className="flex-1 space-y-6 p-4 md:p-8 pt-6 h-full overflow-y-auto">
-            <div className="flex items-center justify-between">
-                <h2 className="text-3xl font-bold tracking-tight">Leads & Sales</h2>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <h2 className="text-2xl md:text-3xl xl:text-4xl font-bold tracking-tight">Leads & Sales</h2>
                 <div className="flex items-center gap-2">
                     <div className="flex border rounded-lg p-0.5 bg-muted">
                         <Button
                             variant={viewMode === "list" ? "default" : "ghost"}
                             size="sm"
-                            className="h-7 text-xs"
+                            className="h-8 text-xs px-3"
                             onClick={() => setViewMode("list")}
                         >
-                            <Icons.menu className="mr-1 h-3 w-3" />
+                            <Icons.menu className="mr-1.5 h-3 w-3" />
                             List
                         </Button>
                         <Button
                             variant={viewMode === "kanban" ? "default" : "ghost"}
                             size="sm"
-                            className="h-7 text-xs"
+                            className="h-8 text-xs px-3"
                             onClick={() => setViewMode("kanban")}
                         >
-                            <Icons.view className="mr-1 h-3 w-3" />
+                            <Icons.view className="mr-1.5 h-3 w-3" />
                             Kanban
                         </Button>
                     </div>
@@ -84,19 +84,20 @@ export default function LeadsPage() {
                 </div>
             </div>
 
-            <div className="flex items-center gap-2">
-                <div className="relative flex-1 max-w-sm">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+                <div className="relative flex-1 md:max-w-md">
                     <Icons.search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                     <Input
                         type="search"
                         placeholder="Search leads..."
-                        className="pl-8"
+                        className="pl-8 h-9"
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                     />
                 </div>
-                <Button variant="outline" size="icon" onClick={() => toast.info("Column visibility and filter settings opened.")}>
+                <Button variant="outline" size="sm" className="h-9 gap-2" onClick={() => toast.info("Column visibility and filter settings opened.")}>
                     <Icons.settings className="h-4 w-4" />
+                    <span className="sm:hidden text-xs">Filters</span>
                 </Button>
             </div>
 
@@ -109,90 +110,92 @@ export default function LeadsPage() {
                         <CardDescription>Manage your prospective customers.</CardDescription>
                     </CardHeader>
                     <CardContent className="p-0">
-                        <Table>
-                            <TableHeader>
-                                <TableRow>
-                                    <TableHead>Lead ID</TableHead>
-                                    <TableHead>Customer</TableHead>
-                                    <TableHead>Status</TableHead>
-                                    <TableHead>Interest</TableHead>
-                                    <TableHead>Created</TableHead>
-                                    <TableHead className="text-right">Actions</TableHead>
-                                </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                                {filteredLeads.map((lead) => (
-                                    <TableRow
-                                        key={lead.id}
-                                        className="cursor-pointer hover:bg-muted/50"
-                                    >
-                                        <TableCell className="font-medium" onClick={() => handleLeadClick(lead.id)}>{lead.id}</TableCell>
-                                        <TableCell onClick={() => handleLeadClick(lead.id)}>
-                                            <div className="flex flex-col">
-                                                <span className="font-medium">{lead.customerName}</span>
-                                                <span className="text-xs text-muted-foreground">{lead.companyName}</span>
-                                            </div>
-                                        </TableCell>
-                                        <TableCell onClick={() => handleLeadClick(lead.id)}>
-                                            <Badge variant={
-                                                lead.status === 'new' ? 'secondary' :
-                                                    lead.status === 'qualified' ? 'outline' :
-                                                        lead.status === 'negotiation' ? 'default' : 'secondary'
-                                            }>
-                                                {lead.status.toUpperCase()}
-                                            </Badge>
-                                        </TableCell>
-                                        <TableCell onClick={() => handleLeadClick(lead.id)}>{lead.productInterest.join(", ")}</TableCell>
-                                        <TableCell className="text-right">
-                                            <div className="flex items-center justify-end gap-2">
-                                                <Button
-                                                    size="sm"
-                                                    variant="outline"
-                                                    className="h-8 border-green-200 bg-green-50 text-green-700 hover:bg-green-100"
-                                                    onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        toast.promise(
-                                                            new Promise((resolve, reject) => {
-                                                                setTimeout(() => {
-                                                                    // Simulating 80% success rate for being within 500m
-                                                                    Math.random() > 0.2 ? resolve(true) : reject();
-                                                                }, 1500);
-                                                            }),
-                                                            {
-                                                                loading: 'Acquiring GPS Signal...',
-                                                                success: 'Visit Geo-Verified! (Within 350m of Site). Log Started.',
-                                                                error: 'Location Mismatch! You must be within 500m of the site to check-in.',
-                                                            }
-                                                        );
-                                                    }}
-                                                >
-                                                    <Icons.location className="mr-1.5 h-3 w-3" />
-                                                    Check-in
-                                                </Button>
-                                                <DropdownMenu>
-                                                    <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
-                                                        <Button variant="ghost" className="h-8 w-8 p-0">
-                                                            <span className="sr-only">Open menu</span>
-                                                            <Icons.menu className="h-4 w-4" />
-                                                        </Button>
-                                                    </DropdownMenuTrigger>
-                                                    <DropdownMenuContent align="end">
-                                                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                                                        <DropdownMenuItem onClick={() => handleLeadClick(lead.id)}>View Details</DropdownMenuItem>
-                                                        <DropdownMenuItem onClick={() => router.push('/quotes/create')}>Create Quote</DropdownMenuItem>
-                                                        <div className="px-2 py-1">
-                                                            <ScheduleVisitDialog leadName={lead.companyName} />
-                                                        </div>
-                                                        <DropdownMenuSeparator />
-                                                        <DropdownMenuItem className="text-destructive" onClick={() => handleArchiveLead(lead.id)}>Archive Lead</DropdownMenuItem>
-                                                    </DropdownMenuContent>
-                                                </DropdownMenu>
-                                            </div>
-                                        </TableCell>
+                        <div className="overflow-x-auto">
+                            <Table>
+                                <TableHeader>
+                                    <TableRow>
+                                        <TableHead className="min-w-[80px]">Lead ID</TableHead>
+                                        <TableHead className="min-w-[180px]">Customer</TableHead>
+                                        <TableHead className="min-w-[100px]">Status</TableHead>
+                                        <TableHead className="min-w-[150px]">Interest</TableHead>
+                                        <TableHead className="min-w-[100px]">Created</TableHead>
+                                        <TableHead className="text-right min-w-[160px]">Actions</TableHead>
                                     </TableRow>
-                                ))}
-                            </TableBody>
-                        </Table>
+                                </TableHeader>
+                                <TableBody>
+                                    {filteredLeads.map((lead) => (
+                                        <TableRow
+                                            key={lead.id}
+                                            className="cursor-pointer hover:bg-muted/50"
+                                        >
+                                            <TableCell className="font-medium" onClick={() => handleLeadClick(lead.id)}>{lead.id}</TableCell>
+                                            <TableCell onClick={() => handleLeadClick(lead.id)}>
+                                                <div className="flex flex-col">
+                                                    <span className="font-medium">{lead.customerName}</span>
+                                                    <span className="text-xs text-muted-foreground">{lead.companyName}</span>
+                                                </div>
+                                            </TableCell>
+                                            <TableCell onClick={() => handleLeadClick(lead.id)}>
+                                                <Badge variant={
+                                                    lead.status === 'new' ? 'secondary' :
+                                                        lead.status === 'qualified' ? 'outline' :
+                                                            lead.status === 'negotiation' ? 'default' : 'secondary'
+                                                }>
+                                                    {lead.status.toUpperCase()}
+                                                </Badge>
+                                            </TableCell>
+                                            <TableCell onClick={() => handleLeadClick(lead.id)}>{lead.productInterest.join(", ")}</TableCell>
+                                            <TableCell className="text-right">
+                                                <div className="flex items-center justify-end gap-2">
+                                                    <Button
+                                                        size="sm"
+                                                        variant="outline"
+                                                        className="h-8 border-green-200 bg-green-50 text-green-700 hover:bg-green-100"
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            toast.promise(
+                                                                new Promise((resolve, reject) => {
+                                                                    setTimeout(() => {
+                                                                        // Simulating 80% success rate for being within 500m
+                                                                        Math.random() > 0.2 ? resolve(true) : reject();
+                                                                    }, 1500);
+                                                                }),
+                                                                {
+                                                                    loading: 'Acquiring GPS Signal...',
+                                                                    success: 'Visit Geo-Verified! (Within 350m of Site). Log Started.',
+                                                                    error: 'Location Mismatch! You must be within 500m of the site to check-in.',
+                                                                }
+                                                            );
+                                                        }}
+                                                    >
+                                                        <Icons.location className="h-4 w-4 sm:mr-1.5 sm:h-3 sm:w-3" />
+                                                        <span className="hidden sm:inline">Check-in</span>
+                                                    </Button>
+                                                    <DropdownMenu>
+                                                        <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
+                                                            <Button variant="ghost" className="h-8 w-8 p-0">
+                                                                <span className="sr-only">Open menu</span>
+                                                                <Icons.menu className="h-4 w-4" />
+                                                            </Button>
+                                                        </DropdownMenuTrigger>
+                                                        <DropdownMenuContent align="end">
+                                                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                                                            <DropdownMenuItem onClick={() => handleLeadClick(lead.id)}>View Details</DropdownMenuItem>
+                                                            <DropdownMenuItem onClick={() => router.push('/quotes/create')}>Create Quote</DropdownMenuItem>
+                                                            <div className="px-2 py-1">
+                                                                <ScheduleVisitDialog leadName={lead.companyName} />
+                                                            </div>
+                                                            <DropdownMenuSeparator />
+                                                            <DropdownMenuItem className="text-destructive" onClick={() => handleArchiveLead(lead.id)}>Archive Lead</DropdownMenuItem>
+                                                        </DropdownMenuContent>
+                                                    </DropdownMenu>
+                                                </div>
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </div>
                     </CardContent>
                 </Card>
             )}

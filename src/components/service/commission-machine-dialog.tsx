@@ -27,12 +27,12 @@ export function CommissionMachineDialog({ machineId }: { machineId: string }) {
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                <Button className="bg-primary hover:bg-primary/90">
+                <Button size="sm" className="h-8 text-xs w-full sm:w-auto bg-primary hover:bg-primary/90">
                     <Icons.logo className="mr-2 h-4 w-4" />
                     Commission Machine
                 </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[500px]">
+            <DialogContent className="sm:max-w-[500px] max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
                     <DialogTitle>Machine Commissioning & Warranty Activation</DialogTitle>
                     <DialogDescription>

@@ -109,12 +109,12 @@ export default function AuditLogsPage() {
                         <Table>
                             <TableHeader>
                                 <TableRow>
-                                    <TableHead>Timestamp</TableHead>
-                                    <TableHead>User</TableHead>
-                                    <TableHead>Action</TableHead>
-                                    <TableHead>Detail</TableHead>
-                                    <TableHead>Source IP</TableHead>
-                                    <TableHead className="text-right">Category</TableHead>
+                                    <TableHead className="min-w-[150px]">Timestamp</TableHead>
+                                    <TableHead className="min-w-[120px]">User</TableHead>
+                                    <TableHead className="min-w-[140px]">Action</TableHead>
+                                    <TableHead className="min-w-[200px]">Detail</TableHead>
+                                    <TableHead className="min-w-[120px]">Source IP</TableHead>
+                                    <TableHead className="text-right min-w-[100px]">Category</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>

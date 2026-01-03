@@ -61,24 +61,24 @@ export default function CreateQuotePage() {
 
     return (
         <div className="flex-1 p-4 md:p-8 pt-6 space-y-6 max-w-4xl mx-auto">
-            <div className="flex items-center gap-4">
-                <Button variant="ghost" size="icon" onClick={() => router.back()}>
+            <div className="flex items-center gap-3 sm:gap-4">
+                <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => router.back()}>
                     <Icons.arrowRight className="h-4 w-4 rotate-180" />
                 </Button>
                 <div>
-                    <h2 className="text-3xl font-bold tracking-tight">Create Quotation</h2>
-                    <p className="text-muted-foreground">Enforcing 3-Section Business Logic</p>
+                    <h2 className="text-xl md:text-3xl font-bold tracking-tight">Create Quotation</h2>
+                    <p className="text-xs md:text-sm text-muted-foreground">Enforcing 3-Section Business Logic</p>
                 </div>
             </div>
 
             {/* Step Progress */}
-            <div className="flex items-center gap-4 mb-8">
+            <div className="flex items-center justify-between gap-2 sm:gap-4 mb-8">
                 {[1, 2, 3, 4].map((i) => (
-                    <div key={i} className="flex items-center gap-2">
-                        <div className={`h-8 w-8 rounded-full flex items-center justify-center font-bold ${step >= i ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'}`}>
+                    <div key={i} className="flex items-center gap-1 sm:gap-2 flex-1 last:flex-none">
+                        <div className={`h-6 w-6 sm:h-8 sm:w-8 rounded-full flex items-center justify-center text-xs sm:text-sm font-bold shrink-0 ${step >= i ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'}`}>
                             {i}
                         </div>
-                        {i < 4 && <div className={`h-1 w-12 rounded ${step > i ? 'bg-primary' : 'bg-muted'}`} />}
+                        {i < 4 && <div className={`h-1 w-full sm:w-12 rounded ${step > i ? 'bg-primary' : 'bg-muted'}`} />}
                     </div>
                 ))}
             </div>
@@ -128,7 +128,7 @@ export default function CreateQuotePage() {
                         <CardDescription>Select printheads and widths.</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
-                        <div className="grid grid-cols-3 gap-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                             <div className="grid gap-2">
                                 <Label>Printhead Type</Label>
                                 <Select defaultValue="k512">
@@ -196,7 +196,7 @@ export default function CreateQuotePage() {
                             </div>
                         </CardHeader>
                         <CardContent className="pt-6 space-y-4">
-                            <div className="grid grid-cols-2 gap-4">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div className="grid gap-2">
                                     <Label>Base Body Price (₹)</Label>
                                     <Input type="number" value={quote.sections.body.price} readOnly className="bg-muted" />
@@ -237,7 +237,7 @@ export default function CreateQuotePage() {
                             </div>
                         </CardHeader>
                         <CardContent className="pt-6">
-                            <div className="grid grid-cols-2 gap-4">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div className="grid gap-2">
                                     <Label>Package Price (₹)</Label>
                                     <Input type="number" value={quote.sections.service.price} readOnly className="bg-muted" />

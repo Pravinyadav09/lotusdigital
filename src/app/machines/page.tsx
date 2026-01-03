@@ -69,19 +69,19 @@ export default function MachinesPage() {
 
     return (
         <div className="flex-1 space-y-6 p-4 md:p-8 pt-6 h-full overflow-y-auto">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div>
-                    <h2 className="text-3xl font-bold tracking-tight">
+                    <h2 className="text-2xl md:text-3xl font-bold tracking-tight">
                         {isCustomer ? "My Machines" : "Machine Inventory"}
                     </h2>
-                    <p className="text-muted-foreground">
-                        {isCustomer ? "Monitor your installed machines and their status." : "Overview of all installed machines across the region."}
+                    <p className="text-muted-foreground text-sm">
+                        {isCustomer ? "Monitor your installed machines." : "Overview of all installed machines across the region."}
                     </p>
                 </div>
                 {isCustomer && <CreateTicketDialog />}
             </div>
 
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
                 {filteredMachines.map((machine) => (
                     <Card key={machine.id} className={machine.status === 'Locked' ? 'border-red-200 bg-red-50/10' : ''}>
                         <CardHeader>
@@ -127,13 +127,13 @@ export default function MachinesPage() {
                                 </div>
                             )}
 
-                            <div className="pt-4 border-t flex justify-between items-center">
+                            <div className="pt-4 border-t flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                                 <span className="text-xs text-muted-foreground italic">Last Service: {machine.lastService}</span>
-                                <div className="flex gap-2">
+                                <div className="flex flex-wrap gap-2 justify-start sm:justify-end w-full sm:w-auto">
                                     <Button
                                         variant="outline"
                                         size="sm"
-                                        className="h-8"
+                                        className="h-8 text-xs flex-1 sm:flex-none"
                                         onClick={() => {
                                             setSelectedMachine(machine.id);
                                             setIsLogsOpen(true);
@@ -145,7 +145,7 @@ export default function MachinesPage() {
                                     <Button
                                         variant="outline"
                                         size="sm"
-                                        className="h-8"
+                                        className="h-8 text-xs flex-1 sm:flex-none"
                                         onClick={() => {
                                             setSelectedMachine(machine.id);
                                             setIsDetailsOpen(true);
@@ -155,17 +155,19 @@ export default function MachinesPage() {
                                         Details
                                     </Button>
                                     {(user?.role === 'service_engineer' || user?.role === 'super_admin') && (
-                                        <CommissionMachineDialog machineId={machine.id} />
+                                        <div className="flex-1 sm:flex-none">
+                                            <CommissionMachineDialog machineId={machine.id} />
+                                        </div>
                                     )}
                                     {isCustomer && (
                                         <Button
                                             variant="ghost"
                                             size="sm"
-                                            className="h-8 text-blue-600 hover:text-blue-700 hover:bg-blue-50"
+                                            className="h-8 text-[10px] sm:text-xs text-blue-600 hover:text-blue-700 hover:bg-blue-50 flex-1 sm:flex-none"
                                             onClick={() => {
                                                 toast.promise(new Promise(r => setTimeout(r, 4000)), {
-                                                    loading: `Querying BIOS for ${machine.id}... Checking Printhead Logic...`,
-                                                    success: `System Check Complete: All sub-systems healthy. Temperature: 24°C. Voltage: Stable.`,
+                                                    loading: `Querying BIOS for ${machine.id}...`,
+                                                    success: `System Check Complete: Healthy.`,
                                                     error: 'Diagnostics Failed'
                                                 })
                                             }}
@@ -178,9 +180,9 @@ export default function MachinesPage() {
                                         <Button
                                             variant="outline"
                                             size="sm"
-                                            className="h-8 border-green-200 text-green-700 bg-green-50"
+                                            className="h-8 text-xs border-green-200 text-green-700 bg-green-50 flex-1 sm:flex-none"
                                             onClick={() => {
-                                                toast.success(`Service request logged for machine ${machine.id}. Engineer will be assigned shortly.`);
+                                                toast.success(`Service request logged for machine ${machine.id}.`);
                                             }}
                                         >
                                             <Icons.add className="h-3 w-3 mr-1" />
@@ -191,10 +193,10 @@ export default function MachinesPage() {
                                         <Button
                                             variant={machine.status === 'Locked' ? 'outline' : 'destructive'}
                                             size="sm"
-                                            className="h-8"
+                                            className="h-8 text-xs flex-1 sm:flex-none"
                                             onClick={() => {
                                                 const action = machine.status === 'Locked' ? 'Unlocked' : 'Locked';
-                                                toast.success(`Administrative Action: Machine ${machine.id} has been ${action}. Auth: Master Key.`);
+                                                toast.success(`Machine ${machine.id} has been ${action}.`);
                                             }}
                                         >
                                             <Icons.settings className="h-3 w-3 mr-1" />

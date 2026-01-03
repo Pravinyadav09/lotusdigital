@@ -11,17 +11,17 @@ import { toast } from "sonner";
 export default function GSTReportsPage() {
     return (
         <div className="flex-1 space-y-6 p-4 md:p-8 pt-6 h-full overflow-y-auto">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                    <h2 className="text-3xl font-bold tracking-tight">GST Compliance Dashboard</h2>
-                    <p className="text-muted-foreground">GST Analytics, GSTR-1 Prep, and Tax Liabilities.</p>
+                    <h2 className="text-2xl md:text-3xl font-bold tracking-tight">GST Compliance Dashboard</h2>
+                    <p className="text-muted-foreground text-sm md:text-base">GST Analytics, GSTR-1 Prep, and Tax Liabilities.</p>
                 </div>
-                <div className="flex gap-2">
-                    <Button variant="outline" onClick={() => toast.success("GSTR-1 JSON generated and downloading...")}>
+                <div className="flex items-center gap-2">
+                    <Button variant="outline" className="flex-1 md:flex-none text-xs h-9" onClick={() => toast.success("GSTR-1 JSON generated and downloading...")}>
                         <Icons.reports className="mr-2 h-4 w-4" />
                         Download GSTR-1 JSON
                     </Button>
-                    <Button onClick={() => {
+                    <Button className="flex-1 md:flex-none text-xs h-9" onClick={() => {
                         toast.info("Preparing GST Summary for print...");
                         window.print();
                     }}>
@@ -71,10 +71,10 @@ export default function GSTReportsPage() {
             </div>
 
             <Tabs defaultValue="gstr1" className="space-y-4">
-                <TabsList>
-                    <TabsTrigger value="gstr1">B2B (GSTR-1)</TabsTrigger>
-                    <TabsTrigger value="hsn">HSN Summary</TabsTrigger>
-                    <TabsTrigger value="b2c">B2C Small</TabsTrigger>
+                <TabsList className="w-full h-auto bg-muted p-1 rounded-lg flex overflow-x-auto whitespace-nowrap">
+                    <TabsTrigger value="gstr1" className="flex-1 px-4 py-2">B2B (GSTR-1)</TabsTrigger>
+                    <TabsTrigger value="hsn" className="flex-1 px-4 py-2">HSN Summary</TabsTrigger>
+                    <TabsTrigger value="b2c" className="flex-1 px-4 py-2">B2C Small</TabsTrigger>
                 </TabsList>
 
                 <TabsContent value="gstr1">
@@ -83,39 +83,41 @@ export default function GSTReportsPage() {
                             <CardTitle>B2B Invoices (Registered Customers)</CardTitle>
                         </CardHeader>
                         <CardContent className="p-0">
-                            <Table>
-                                <TableHeader>
-                                    <TableRow>
-                                        <TableHead>GSTIN</TableHead>
-                                        <TableHead>Customer</TableHead>
-                                        <TableHead>Inv #</TableHead>
-                                        <TableHead>Taxable Val</TableHead>
-                                        <TableHead>IGST</TableHead>
-                                        <TableHead>CGST/SGST</TableHead>
-                                        <TableHead className="text-right">Total GST</TableHead>
-                                    </TableRow>
-                                </TableHeader>
-                                <TableBody>
-                                    <TableRow>
-                                        <TableCell className="text-xs font-mono">07AAACP1234A1Z1</TableCell>
-                                        <TableCell className="text-xs font-bold">Pixel Printers</TableCell>
-                                        <TableCell className="text-xs">TI-2024-001</TableCell>
-                                        <TableCell className="text-xs">₹ 8,50,000</TableCell>
-                                        <TableCell className="text-xs">₹ 0</TableCell>
-                                        <TableCell className="text-xs">₹ 76,500 x 2</TableCell>
-                                        <TableCell className="text-right font-bold">₹ 1,53,000</TableCell>
-                                    </TableRow>
-                                    <TableRow>
-                                        <TableCell className="text-xs font-mono">03BBBCP5678B1Z2</TableCell>
-                                        <TableCell className="text-xs font-bold">Singh Graphics</TableCell>
-                                        <TableCell className="text-xs">TI-2024-005</TableCell>
-                                        <TableCell className="text-xs">₹ 12,50,000</TableCell>
-                                        <TableCell className="text-xs">₹ 2,25,000</TableCell>
-                                        <TableCell className="text-xs">₹ 0</TableCell>
-                                        <TableCell className="text-right font-bold">₹ 2,25,000</TableCell>
-                                    </TableRow>
-                                </TableBody>
-                            </Table>
+                            <div className="overflow-x-auto">
+                                <Table>
+                                    <TableHeader>
+                                        <TableRow>
+                                            <TableHead className="min-w-[140px]">GSTIN</TableHead>
+                                            <TableHead className="min-w-[180px]">Customer</TableHead>
+                                            <TableHead className="min-w-[100px]">Inv #</TableHead>
+                                            <TableHead className="min-w-[120px]">Taxable Val</TableHead>
+                                            <TableHead className="min-w-[100px]">IGST</TableHead>
+                                            <TableHead className="min-w-[120px]">CGST/SGST</TableHead>
+                                            <TableHead className="text-right min-w-[120px]">Total GST</TableHead>
+                                        </TableRow>
+                                    </TableHeader>
+                                    <TableBody>
+                                        <TableRow>
+                                            <TableCell className="text-xs font-mono">07AAACP1234A1Z1</TableCell>
+                                            <TableCell className="text-xs font-bold">Pixel Printers</TableCell>
+                                            <TableCell className="text-xs">TI-2024-001</TableCell>
+                                            <TableCell className="text-xs">₹ 8,50,000</TableCell>
+                                            <TableCell className="text-xs">₹ 0</TableCell>
+                                            <TableCell className="text-xs">₹ 76,500 x 2</TableCell>
+                                            <TableCell className="text-right font-bold">₹ 1,53,000</TableCell>
+                                        </TableRow>
+                                        <TableRow>
+                                            <TableCell className="text-xs font-mono">03BBBCP5678B1Z2</TableCell>
+                                            <TableCell className="text-xs font-bold">Singh Graphics</TableCell>
+                                            <TableCell className="text-xs">TI-2024-005</TableCell>
+                                            <TableCell className="text-xs">₹ 12,50,000</TableCell>
+                                            <TableCell className="text-xs">₹ 2,25,000</TableCell>
+                                            <TableCell className="text-xs">₹ 0</TableCell>
+                                            <TableCell className="text-right font-bold">₹ 2,25,000</TableCell>
+                                        </TableRow>
+                                    </TableBody>
+                                </Table>
+                            </div>
                         </CardContent>
                     </Card>
                 </TabsContent>
@@ -133,36 +135,38 @@ export default function GSTReportsPage() {
                             </Button>
                         </CardHeader>
                         <CardContent className="p-0">
-                            <Table>
-                                <TableHeader>
-                                    <TableRow>
-                                        <TableHead>HSN/SAC</TableHead>
-                                        <TableHead>Description</TableHead>
-                                        <TableHead>UOM</TableHead>
-                                        <TableHead>Quantity</TableHead>
-                                        <TableHead>Taxable Val</TableHead>
-                                        <TableHead className="text-right">Total Tax</TableHead>
-                                    </TableRow>
-                                </TableHeader>
-                                <TableBody>
-                                    <TableRow className="cursor-pointer hover:bg-muted/30" onClick={() => toast.info("Opening breakdown for Printing Machinery...")}>
-                                        <TableCell className="font-mono text-xs">84433210</TableCell>
-                                        <TableCell className="text-xs">Inkjet Printing Machinery</TableCell>
-                                        <TableCell className="text-xs">NOS</TableCell>
-                                        <TableCell className="text-xs font-bold">4</TableCell>
-                                        <TableCell className="text-xs">₹ 34,20,000</TableCell>
-                                        <TableCell className="text-right font-bold text-green-700">₹ 6,15,600</TableCell>
-                                    </TableRow>
-                                    <TableRow className="cursor-pointer hover:bg-muted/30" onClick={() => toast.info("Opening breakdown for Services...")}>
-                                        <TableCell className="font-mono text-xs">998733</TableCell>
-                                        <TableCell className="text-xs">Maintenance & Repair Services</TableCell>
-                                        <TableCell className="text-xs">OTH</TableCell>
-                                        <TableCell className="text-xs font-bold">5</TableCell>
-                                        <TableCell className="text-xs">₹ 2,50,000</TableCell>
-                                        <TableCell className="text-right font-bold text-green-700">₹ 45,000</TableCell>
-                                    </TableRow>
-                                </TableBody>
-                            </Table>
+                            <div className="overflow-x-auto">
+                                <Table>
+                                    <TableHeader>
+                                        <TableRow>
+                                            <TableHead className="min-w-[120px]">HSN/SAC</TableHead>
+                                            <TableHead className="min-w-[200px]">Description</TableHead>
+                                            <TableHead className="min-w-[80px]">UOM</TableHead>
+                                            <TableHead className="min-w-[80px]">Quantity</TableHead>
+                                            <TableHead className="min-w-[120px]">Taxable Val</TableHead>
+                                            <TableHead className="text-right min-w-[120px]">Total Tax</TableHead>
+                                        </TableRow>
+                                    </TableHeader>
+                                    <TableBody>
+                                        <TableRow className="cursor-pointer hover:bg-muted/30" onClick={() => toast.info("Opening breakdown for Printing Machinery...")}>
+                                            <TableCell className="font-mono text-xs">84433210</TableCell>
+                                            <TableCell className="text-xs">Inkjet Printing Machinery</TableCell>
+                                            <TableCell className="text-xs">NOS</TableCell>
+                                            <TableCell className="text-xs font-bold">4</TableCell>
+                                            <TableCell className="text-xs">₹ 34,20,000</TableCell>
+                                            <TableCell className="text-right font-bold text-green-700">₹ 6,15,600</TableCell>
+                                        </TableRow>
+                                        <TableRow className="cursor-pointer hover:bg-muted/30" onClick={() => toast.info("Opening breakdown for Services...")}>
+                                            <TableCell className="font-mono text-xs">998733</TableCell>
+                                            <TableCell className="text-xs">Maintenance & Repair Services</TableCell>
+                                            <TableCell className="text-xs">OTH</TableCell>
+                                            <TableCell className="text-xs font-bold">5</TableCell>
+                                            <TableCell className="text-xs">₹ 2,50,000</TableCell>
+                                            <TableCell className="text-right font-bold text-green-700">₹ 45,000</TableCell>
+                                        </TableRow>
+                                    </TableBody>
+                                </Table>
+                            </div>
                         </CardContent>
                     </Card>
                 </TabsContent>

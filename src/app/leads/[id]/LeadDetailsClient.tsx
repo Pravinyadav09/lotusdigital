@@ -124,22 +124,22 @@ export function LeadDetailsClient({ id }: LeadDetailsProps) {
     return (
         <div className="flex-1 space-y-6 p-4 md:p-8 pt-6 h-full overflow-y-auto">
             {/* Header */}
-            <div className="flex items-center justify-between">
-                <div className="flex items-center gap-4">
-                    <Button variant="ghost" size="icon" onClick={() => router.back()}>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div className="flex items-center gap-3 sm:gap-4">
+                    <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => router.back()}>
                         <Icons.arrowRight className="h-5 w-5 rotate-180" />
                     </Button>
                     <div>
-                        <h2 className="text-3xl font-bold tracking-tight">{lead.customerName}</h2>
-                        <p className="text-muted-foreground">{lead.companyName} • {lead.id}</p>
+                        <h2 className="text-xl md:text-3xl font-bold tracking-tight">{lead.customerName}</h2>
+                        <p className="text-xs md:text-sm text-muted-foreground">{lead.companyName} • {lead.id}</p>
                     </div>
                 </div>
                 <div className="flex gap-2">
-                    <Button variant="outline" onClick={handlePlanVisit}>
+                    <Button variant="outline" size="sm" className="flex-1 sm:flex-none" onClick={handlePlanVisit}>
                         <Icons.location className="mr-2 h-4 w-4" />
                         Plan Visit
                     </Button>
-                    <Button onClick={handleCreateQuote}>
+                    <Button size="sm" className="flex-1 sm:flex-none" onClick={handleCreateQuote}>
                         <Icons.quotes className="mr-2 h-4 w-4" />
                         Create Quote
                     </Button>
@@ -147,7 +147,7 @@ export function LeadDetailsClient({ id }: LeadDetailsProps) {
             </div>
 
             {/* Score Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 xl:gap-8">
                 <Card className="md:col-span-1 border-blue-200 bg-blue-50/10">
                     <CardContent className="pt-6">
                         <div className="flex flex-col items-center text-center">
@@ -165,11 +165,11 @@ export function LeadDetailsClient({ id }: LeadDetailsProps) {
                         </div>
                     </CardContent>
                 </Card>
-                <div className="md:col-span-3 grid grid-cols-3 gap-4">
+                <div className="md:col-span-3 grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-4">
                     <div className="p-4 border rounded-lg bg-white shadow-sm flex flex-col justify-center">
                         <p className="text-[10px] font-bold text-muted-foreground uppercase">Machine Interest</p>
                         <p className="text-lg font-bold">85/100</p>
-                        <p className="text-[10px] text-muted-foreground mt-1">High-end Production Units</p>
+                        <p className="text-[10px] text-muted-foreground mt-1 text-blue-600">High-end Production Units</p>
                     </div>
                     <div className="p-4 border rounded-lg bg-white shadow-sm flex flex-col justify-center">
                         <p className="text-[10px] font-bold text-muted-foreground uppercase">Business Vintage</p>
@@ -202,15 +202,15 @@ export function LeadDetailsClient({ id }: LeadDetailsProps) {
 
             {/* Tabs */}
             <Tabs defaultValue="details" className="space-y-4">
-                <TabsList>
-                    <TabsTrigger value="details">Details</TabsTrigger>
-                    <TabsTrigger value="activities">
+                <TabsList className="w-full justify-start overflow-x-auto h-auto p-1 bg-muted/20">
+                    <TabsTrigger value="details" className="flex-1 sm:flex-none">Details</TabsTrigger>
+                    <TabsTrigger value="activities" className="flex-1 sm:flex-none">
                         Activities
-                        <Badge variant="secondary" className="ml-2">{activities.length}</Badge>
+                        <Badge variant="secondary" className="ml-1.5 sm:ml-2 text-[10px] px-1">{activities.length}</Badge>
                     </TabsTrigger>
-                    <TabsTrigger value="quotes">
+                    <TabsTrigger value="quotes" className="flex-1 sm:flex-none">
                         Quotes
-                        <Badge variant="secondary" className="ml-2">{QUOTES.length}</Badge>
+                        <Badge variant="secondary" className="ml-1.5 sm:ml-2 text-[10px] px-1">{QUOTES.length}</Badge>
                     </TabsTrigger>
                 </TabsList>
 
@@ -366,15 +366,15 @@ export function LeadDetailsClient({ id }: LeadDetailsProps) {
                     {QUOTES.map((quote) => (
                         <Card key={quote.id}>
                             <CardHeader>
-                                <div className="flex items-center justify-between">
-                                    <div>
-                                        <CardTitle>{quote.id} (v{quote.version})</CardTitle>
-                                        <p className="text-sm text-muted-foreground mt-1">{quote.date}</p>
+                                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                                    <div className="space-y-1">
+                                        <CardTitle className="text-lg">{quote.id} (v{quote.version})</CardTitle>
+                                        <p className="text-sm text-muted-foreground">{quote.date}</p>
                                     </div>
-                                    <div className="text-right">
-                                        <div className="text-2xl font-bold">₹ {quote.amount.toLocaleString()}</div>
-                                        <Badge variant={quote.status === 'pending_approval' ? 'default' : 'destructive'}>
-                                            {quote.status.replace(/_/g, ' ').toUpperCase()}
+                                    <div className="flex sm:flex-col items-center sm:items-end justify-between sm:justify-center gap-2">
+                                        <div className="text-xl sm:text-2xl font-bold">₹{quote.amount.toLocaleString()}</div>
+                                        <Badge variant={quote.status === 'pending_approval' ? 'default' : 'destructive'} className="text-[10px] uppercase">
+                                            {quote.status.replace(/_/g, ' ')}
                                         </Badge>
                                     </div>
                                 </div>

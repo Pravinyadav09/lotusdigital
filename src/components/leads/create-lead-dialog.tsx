@@ -84,7 +84,7 @@ export function CreateLeadDialog({ onLeadCreate }: CreateLeadDialogProps) {
                     New Lead
                 </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[600px]">
+            <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
                     <DialogTitle>Create New Lead</DialogTitle>
                     <DialogDescription>
@@ -92,7 +92,7 @@ export function CreateLeadDialog({ onLeadCreate }: CreateLeadDialogProps) {
                     </DialogDescription>
                 </DialogHeader>
                 <form onSubmit={handleSubmit} className="grid gap-4 py-4">
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="grid gap-2">
                             <Label htmlFor="name">Customer Name *</Label>
                             <Input
@@ -113,7 +113,7 @@ export function CreateLeadDialog({ onLeadCreate }: CreateLeadDialogProps) {
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="grid gap-2">
                             <Label htmlFor="mobile">Mobile Number *</Label>
                             <div className="relative">
@@ -147,7 +147,7 @@ export function CreateLeadDialog({ onLeadCreate }: CreateLeadDialogProps) {
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-3 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div className="grid gap-2">
                             <Label>Lead Source</Label>
                             <Select onValueChange={(v) => setFormData({ ...formData, source: v })}>
@@ -201,7 +201,7 @@ export function CreateLeadDialog({ onLeadCreate }: CreateLeadDialogProps) {
                         />
                     </div>
 
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="grid gap-2">
                             <Label htmlFor="followUp">First Follow-up Date *</Label>
                             <Input

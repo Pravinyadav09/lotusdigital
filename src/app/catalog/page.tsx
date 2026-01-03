@@ -48,17 +48,17 @@ export default function CatalogPage() {
 
     return (
         <div className="flex-1 space-y-6 p-4 md:p-8 pt-6 h-full overflow-y-auto">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                    <h2 className="text-3xl font-bold tracking-tight">Master Price Catalog</h2>
-                    <p className="text-muted-foreground">Configure global base prices and component rates.</p>
+                    <h2 className="text-2xl md:text-3xl font-bold tracking-tight">Master Price Catalog</h2>
+                    <p className="text-muted-foreground text-sm md:text-base">Configure global base prices and component rates.</p>
                 </div>
-                <div className="flex gap-2">
-                    <Button variant="outline" onClick={() => toast.info("Exporting Master Price List...")}>
+                <div className="flex items-center gap-2">
+                    <Button variant="outline" className="flex-1 md:flex-none" onClick={() => toast.info("Exporting Master Price List...")}>
                         <Icons.reports className="mr-2 h-4 w-4" />
                         Export PDF
                     </Button>
-                    <Button className="bg-primary">
+                    <Button className="bg-primary flex-1 md:flex-none">
                         <Icons.add className="mr-2 h-4 w-4" />
                         Add New Item
                     </Button>
@@ -66,121 +66,127 @@ export default function CatalogPage() {
             </div>
 
             <Tabs defaultValue="machines" className="space-y-6">
-                <TabsList>
-                    <TabsTrigger value="machines">Machines (Base Models)</TabsTrigger>
-                    <TabsTrigger value="heads">Printheads</TabsTrigger>
-                    <TabsTrigger value="accessories">Accessories & Spares</TabsTrigger>
+                <TabsList className="w-full flex-col h-auto md:flex-row md:h-10 bg-muted p-1 rounded-lg">
+                    <TabsTrigger value="machines" className="flex-1">Machines</TabsTrigger>
+                    <TabsTrigger value="heads" className="flex-1">Printheads</TabsTrigger>
+                    <TabsTrigger value="accessories" className="flex-1">Accessories</TabsTrigger>
                 </TabsList>
 
                 <TabsContent value="machines">
                     <Card>
-                        <CardContent className="pt-6">
-                            <Table>
-                                <TableHeader>
-                                    <TableRow>
-                                        <TableHead>Model ID</TableHead>
-                                        <TableHead>Name</TableHead>
-                                        <TableHead>Type</TableHead>
-                                        <TableHead>HSN Code</TableHead>
-                                        <TableHead className="text-right">Base Price (₹)</TableHead>
-                                        <TableHead>Status</TableHead>
-                                        <TableHead className="text-right">Actions</TableHead>
-                                    </TableRow>
-                                </TableHeader>
-                                <TableBody>
-                                    {CATALOG_DATA.machines.map((m) => (
-                                        <TableRow key={m.id}>
-                                            <TableCell className="font-mono text-xs">{m.id}</TableCell>
-                                            <TableCell className="font-bold">{m.name}</TableCell>
-                                            <TableCell>{m.type}</TableCell>
-                                            <TableCell>{m.hsn}</TableCell>
-                                            <TableCell className="text-right font-medium">{m.basePrice.toLocaleString()}</TableCell>
-                                            <TableCell>
-                                                <Badge variant={m.status === 'Active' ? 'default' : 'outline'} className={m.status === 'Active' ? 'bg-green-600' : ''}>
-                                                    {m.status}
-                                                </Badge>
-                                            </TableCell>
-                                            <TableCell className="text-right">
-                                                <Button variant="ghost" size="sm" onClick={() => toast.info(`Editing ${m.name}...`)}>
-                                                    <Icons.settings className="h-4 w-4" />
-                                                </Button>
-                                            </TableCell>
+                        <CardContent className="pt-6 p-0 md:p-6">
+                            <div className="overflow-x-auto">
+                                <Table>
+                                    <TableHeader>
+                                        <TableRow>
+                                            <TableHead className="min-w-[100px]">Model ID</TableHead>
+                                            <TableHead className="min-w-[180px]">Name</TableHead>
+                                            <TableHead className="min-w-[100px]">Type</TableHead>
+                                            <TableHead className="min-w-[100px]">HSN Code</TableHead>
+                                            <TableHead className="text-right min-w-[120px]">Base Price (₹)</TableHead>
+                                            <TableHead className="min-w-[100px]">Status</TableHead>
+                                            <TableHead className="text-right min-w-[80px]">Actions</TableHead>
                                         </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
+                                    </TableHeader>
+                                    <TableBody>
+                                        {CATALOG_DATA.machines.map((m) => (
+                                            <TableRow key={m.id}>
+                                                <TableCell className="font-mono text-xs">{m.id}</TableCell>
+                                                <TableCell className="font-bold">{m.name}</TableCell>
+                                                <TableCell>{m.type}</TableCell>
+                                                <TableCell>{m.hsn}</TableCell>
+                                                <TableCell className="text-right font-medium">{m.basePrice.toLocaleString()}</TableCell>
+                                                <TableCell>
+                                                    <Badge variant={m.status === 'Active' ? 'default' : 'outline'} className={m.status === 'Active' ? 'bg-green-600' : ''}>
+                                                        {m.status}
+                                                    </Badge>
+                                                </TableCell>
+                                                <TableCell className="text-right">
+                                                    <Button variant="ghost" size="sm" onClick={() => toast.info(`Editing ${m.name}...`)}>
+                                                        <Icons.settings className="h-4 w-4" />
+                                                    </Button>
+                                                </TableCell>
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                            </div>
                         </CardContent>
                     </Card>
                 </TabsContent>
 
                 <TabsContent value="heads">
                     <Card>
-                        <CardContent className="pt-6">
-                            <Table>
-                                <TableHeader>
-                                    <TableRow>
-                                        <TableHead>Head ID</TableHead>
-                                        <TableHead>Name</TableHead>
-                                        <TableHead>Resolution</TableHead>
-                                        <TableHead className="text-right">Unit Price (₹)</TableHead>
-                                        <TableHead>Inventory</TableHead>
-                                        <TableHead className="text-right">Actions</TableHead>
-                                    </TableRow>
-                                </TableHeader>
-                                <TableBody>
-                                    {CATALOG_DATA.heads.map((h) => (
-                                        <TableRow key={h.id}>
-                                            <TableCell className="font-mono text-xs">{h.id}</TableCell>
-                                            <TableCell className="font-bold">{h.name}</TableCell>
-                                            <TableCell>{h.resolution}</TableCell>
-                                            <TableCell className="text-right font-medium">{h.price.toLocaleString()}</TableCell>
-                                            <TableCell>
-                                                <Badge variant="outline" className={h.status === 'In-Stock' ? 'text-green-600 border-green-200' : 'text-orange-600 border-orange-200'}>
-                                                    {h.status}
-                                                </Badge>
-                                            </TableCell>
-                                            <TableCell className="text-right">
-                                                <Button variant="ghost" size="sm">
-                                                    <Icons.settings className="h-4 w-4" />
-                                                </Button>
-                                            </TableCell>
+                        <CardContent className="pt-6 p-0 md:p-6">
+                            <div className="overflow-x-auto">
+                                <Table>
+                                    <TableHeader>
+                                        <TableRow>
+                                            <TableHead className="min-w-[100px]">Head ID</TableHead>
+                                            <TableHead className="min-w-[180px]">Name</TableHead>
+                                            <TableHead className="min-w-[120px]">Resolution</TableHead>
+                                            <TableHead className="text-right min-w-[120px]">Unit Price (₹)</TableHead>
+                                            <TableHead className="min-w-[120px]">Inventory</TableHead>
+                                            <TableHead className="text-right min-w-[80px]">Actions</TableHead>
                                         </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
+                                    </TableHeader>
+                                    <TableBody>
+                                        {CATALOG_DATA.heads.map((h) => (
+                                            <TableRow key={h.id}>
+                                                <TableCell className="font-mono text-xs">{h.id}</TableCell>
+                                                <TableCell className="font-bold">{h.name}</TableCell>
+                                                <TableCell>{h.resolution}</TableCell>
+                                                <TableCell className="text-right font-medium">{h.price.toLocaleString()}</TableCell>
+                                                <TableCell>
+                                                    <Badge variant="outline" className={h.status === 'In-Stock' ? 'text-green-600 border-green-200' : 'text-orange-600 border-orange-200'}>
+                                                        {h.status}
+                                                    </Badge>
+                                                </TableCell>
+                                                <TableCell className="text-right">
+                                                    <Button variant="ghost" size="sm">
+                                                        <Icons.settings className="h-4 w-4" />
+                                                    </Button>
+                                                </TableCell>
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                            </div>
                         </CardContent>
                     </Card>
                 </TabsContent>
 
                 <TabsContent value="accessories">
                     <Card>
-                        <CardContent className="pt-6">
-                            <Table>
-                                <TableHeader>
-                                    <TableRow>
-                                        <TableHead>Part ID</TableHead>
-                                        <TableHead>Name</TableHead>
-                                        <TableHead>Category</TableHead>
-                                        <TableHead className="text-right">Price (₹)</TableHead>
-                                        <TableHead className="text-right">Actions</TableHead>
-                                    </TableRow>
-                                </TableHeader>
-                                <TableBody>
-                                    {CATALOG_DATA.accessories.map((a) => (
-                                        <TableRow key={a.id}>
-                                            <TableCell className="font-mono text-xs">{a.id}</TableCell>
-                                            <TableCell className="font-bold">{a.name}</TableCell>
-                                            <TableCell>{a.category}</TableCell>
-                                            <TableCell className="text-right font-medium">{a.price.toLocaleString()}</TableCell>
-                                            <TableCell className="text-right">
-                                                <Button variant="ghost" size="sm">
-                                                    <Icons.settings className="h-4 w-4" />
-                                                </Button>
-                                            </TableCell>
+                        <CardContent className="pt-6 p-0 md:p-6">
+                            <div className="overflow-x-auto">
+                                <Table>
+                                    <TableHeader>
+                                        <TableRow>
+                                            <TableHead className="min-w-[100px]">Part ID</TableHead>
+                                            <TableHead className="min-w-[200px]">Name</TableHead>
+                                            <TableHead className="min-w-[120px]">Category</TableHead>
+                                            <TableHead className="text-right min-w-[120px]">Price (₹)</TableHead>
+                                            <TableHead className="text-right min-w-[80px]">Actions</TableHead>
                                         </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
+                                    </TableHeader>
+                                    <TableBody>
+                                        {CATALOG_DATA.accessories.map((a) => (
+                                            <TableRow key={a.id}>
+                                                <TableCell className="font-mono text-xs">{a.id}</TableCell>
+                                                <TableCell className="font-bold">{a.name}</TableCell>
+                                                <TableCell>{a.category}</TableCell>
+                                                <TableCell className="text-right font-medium">{a.price.toLocaleString()}</TableCell>
+                                                <TableCell className="text-right">
+                                                    <Button variant="ghost" size="sm">
+                                                        <Icons.settings className="h-4 w-4" />
+                                                    </Button>
+                                                </TableCell>
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                            </div>
                         </CardContent>
                     </Card>
                 </TabsContent>

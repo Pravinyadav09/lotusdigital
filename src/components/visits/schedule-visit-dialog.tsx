@@ -30,7 +30,7 @@ export function ScheduleVisitDialog({ leadName, leadLocation }: { leadName?: str
                     Schedule Visit
                 </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[500px]">
+            <DialogContent className="sm:max-w-[500px] max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
                     <DialogTitle>Schedule Field Visit</DialogTitle>
                     <DialogDescription>

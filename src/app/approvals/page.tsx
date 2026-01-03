@@ -122,9 +122,9 @@ export default function ApprovalsPage() {
     const QuoteCard = ({ quote }: { quote: PendingQuote }) => (
         <Card key={quote.id} className="hover:shadow-md transition-shadow">
             <CardHeader>
-                <div className="flex items-start justify-between">
+                <div className="flex flex-col sm:flex-row items-start justify-between gap-4">
                     <div className="flex-1">
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-2 flex-wrap">
                             <CardTitle className="text-lg">{quote.quoteNumber}</CardTitle>
                             {quote.discount > 10 ? (
                                 <Badge variant="destructive" className="animate-pulse">High Risk</Badge>
@@ -139,17 +139,19 @@ export default function ApprovalsPage() {
                             Requested by: {quote.requestedBy} • {quote.submittedDate}
                         </p>
                     </div>
-                    {quote.status === "pending" && (
-                        <Badge variant="outline" className="bg-amber-50 text-amber-700 border-amber-200">
-                            Pending Review
-                        </Badge>
-                    )}
-                    {quote.status === "approved" && (
-                        <Badge className="bg-green-500">Approved</Badge>
-                    )}
-                    {quote.status === "rejected" && (
-                        <Badge variant="destructive">Rejected</Badge>
-                    )}
+                    <div className="flex items-center gap-2">
+                        {quote.status === "pending" && (
+                            <Badge variant="outline" className="bg-amber-50 text-amber-700 border-amber-200">
+                                Pending Review
+                            </Badge>
+                        )}
+                        {quote.status === "approved" && (
+                            <Badge className="bg-green-500">Approved</Badge>
+                        )}
+                        {quote.status === "rejected" && (
+                            <Badge variant="destructive">Rejected</Badge>
+                        )}
+                    </div>
                 </div>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -198,10 +200,10 @@ export default function ApprovalsPage() {
                 </div>
 
                 {quote.status === "pending" && (
-                    <div className="flex gap-2 pt-2">
+                    <div className="flex flex-col sm:flex-row gap-2 pt-2">
                         <Button
                             variant="outline"
-                            className="flex-1"
+                            className="flex-1 h-9 text-xs"
                             onClick={() => {
                                 toast.info(`Viewing transaction history for ${quote.quoteNumber}`);
                                 router.push(`/quotes/${quote.id}`);
@@ -212,14 +214,14 @@ export default function ApprovalsPage() {
                         </Button>
                         <Button
                             variant="outline"
-                            className="text-red-500 hover:text-red-600 hover:bg-red-50"
+                            className="flex-1 h-9 text-xs text-red-500 hover:text-red-600 hover:bg-red-50"
                             onClick={() => openRejectDialog(quote)}
                         >
                             <Icons.warning className="mr-2 h-4 w-4" />
                             Reject
                         </Button>
                         <Button
-                            className="bg-green-600 hover:bg-green-700"
+                            className="flex-1 h-9 text-xs bg-green-600 hover:bg-green-700"
                             onClick={() => handleApprove(quote)}
                         >
                             <Icons.check className="mr-2 h-4 w-4" />
@@ -248,27 +250,27 @@ export default function ApprovalsPage() {
 
     return (
         <div className="flex-1 space-y-6 p-4 md:p-8 pt-6 h-full overflow-y-auto">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                    <h2 className="text-3xl font-bold tracking-tight">Approval Queue</h2>
-                    <p className="text-muted-foreground">Review and approve discount requests</p>
+                    <h2 className="text-2xl md:text-3xl font-bold tracking-tight">Approval Queue</h2>
+                    <p className="text-muted-foreground text-sm">Review and approve discount requests</p>
                 </div>
-                <Badge variant="outline" className="text-lg px-4 py-2">
+                <Badge variant="outline" className="w-fit text-sm md:text-lg px-4 py-2">
                     {pendingQuotes.length} Pending
                 </Badge>
             </div>
 
             <Tabs defaultValue="pending" className="space-y-4">
-                <TabsList>
-                    <TabsTrigger value="pending">
+                <TabsList className="w-full h-auto flex flex-wrap bg-muted p-1 rounded-lg">
+                    <TabsTrigger value="pending" className="flex-1 py-2">
                         Pending
                         <Badge variant="secondary" className="ml-2">{pendingQuotes.length}</Badge>
                     </TabsTrigger>
-                    <TabsTrigger value="approved">
+                    <TabsTrigger value="approved" className="flex-1 py-2">
                         Approved
                         <Badge variant="secondary" className="ml-2">{approvedQuotes.length}</Badge>
                     </TabsTrigger>
-                    <TabsTrigger value="rejected">
+                    <TabsTrigger value="rejected" className="flex-1 py-2">
                         Rejected
                         <Badge variant="secondary" className="ml-2">{rejectedQuotes.length}</Badge>
                     </TabsTrigger>
@@ -313,7 +315,7 @@ export default function ApprovalsPage() {
 
             {/* Rejection Dialog */}
             <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-                <DialogContent>
+                <DialogContent className="sm:max-w-[425px] max-h-[90vh] overflow-y-auto">
                     <DialogHeader>
                         <DialogTitle>Reject Quote</DialogTitle>
                         <DialogDescription>

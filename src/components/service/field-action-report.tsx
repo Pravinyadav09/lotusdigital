@@ -35,7 +35,7 @@ export function FieldActionReport({ ticketId }: { ticketId: string }) {
                     Complete Field Report (FAR)
                 </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[500px]">
+            <DialogContent className="sm:max-w-[500px] max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
                     <DialogTitle>Field Action Report: {ticketId}</DialogTitle>
                     <DialogDescription>

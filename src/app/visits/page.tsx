@@ -56,16 +56,16 @@ export default function VisitsPage() {
 
     return (
         <div className="flex-1 space-y-6 p-4 md:p-8 pt-6 h-full overflow-y-auto">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                    <h2 className="text-3xl font-bold tracking-tight">Daily Visits & Check-ins</h2>
-                    <p className="text-muted-foreground">Manage your field schedule with Geo-verification.</p>
+                    <h2 className="text-xl md:text-3xl font-bold tracking-tight">Daily Visits & Check-ins</h2>
+                    <p className="text-xs md:text-sm text-muted-foreground">Manage your field schedule with Geo-verification.</p>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 flex-wrap">
                     <ScheduleVisitDialog />
-                    <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
-                        <div className="h-2 w-2 bg-green-500 rounded-full mr-2 animate-pulse" />
-                        Online: GPS Active
+                    <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200 py-1 text-[10px] sm:text-xs">
+                        <div className="h-2 w-2 bg-green-500 rounded-full mr-2 animate-pulse shrink-0" />
+                        <span className="truncate">Online: GPS Active</span>
                     </Badge>
                 </div>
             </div>
