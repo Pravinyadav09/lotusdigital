@@ -11,6 +11,7 @@ import { CreateInvoiceDialog } from "@/components/accounting/create-invoice-dial
 import { EmiCalculator } from "@/components/accounting/emi-calculator";
 import { RecordPaymentDialog } from "@/components/accounting/record-payment-dialog";
 import { CustomerLedger } from "@/components/accounting/customer-ledger";
+import { AgingReport } from "@/components/accounting/aging-report";
 
 import { toast } from "sonner";
 import { useAuth } from "@/providers/auth-provider";
@@ -119,6 +120,7 @@ export default function AccountingPage() {
                             <TabsTrigger value="pi">Proforma Invoices</TabsTrigger>
                             <TabsTrigger value="payments">Payment History</TabsTrigger>
                             <TabsTrigger value="ledger">Detailed Ledger</TabsTrigger>
+                            <TabsTrigger value="aging">Aging Report</TabsTrigger>
                         </TabsList>
                         {!isCustomer && (
                             <TabsContent value="workflow">
@@ -253,6 +255,9 @@ export default function AccountingPage() {
                         </TabsContent>
                         <TabsContent value="ledger">
                             <CustomerLedger customerName={isCustomer ? user?.name : "Pixel Printers"} />
+                        </TabsContent>
+                        <TabsContent value="aging">
+                            <AgingReport />
                         </TabsContent>
                     </Tabs>
                 </div>

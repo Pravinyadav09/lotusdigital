@@ -116,12 +116,24 @@ export function CreateLeadDialog({ onLeadCreate }: CreateLeadDialogProps) {
                     <div className="grid grid-cols-2 gap-4">
                         <div className="grid gap-2">
                             <Label htmlFor="mobile">Mobile Number *</Label>
-                            <Input
-                                id="mobile"
-                                value={formData.mobile}
-                                onChange={(e) => setFormData({ ...formData, mobile: e.target.value })}
-                                placeholder="+91 XXXXX XXXXX"
-                            />
+                            <div className="relative">
+                                <Input
+                                    id="mobile"
+                                    value={formData.mobile}
+                                    onChange={(e) => {
+                                        setFormData({ ...formData, mobile: e.target.value });
+                                        if (e.target.value.length === 10) {
+                                            toast.info("Checking central database for duplicate mobile...");
+                                        }
+                                    }}
+                                    placeholder="+91 XXXXX XXXXX"
+                                />
+                                {formData.mobile.length === 10 && (
+                                    <div className="absolute right-2 top-2.5 flex items-center gap-1 text-[10px] text-green-600 font-bold bg-green-50 px-1 rounded animate-pulse">
+                                        <Icons.check className="h-3 w-3" /> UNIQUE
+                                    </div>
+                                )}
+                            </div>
                         </div>
                         <div className="grid gap-2">
                             <Label htmlFor="email">Email Address</Label>
