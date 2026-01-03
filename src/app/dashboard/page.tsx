@@ -442,16 +442,16 @@ export default function DashboardPage() {
                                     </div>
                                 ))}
                             </div>
-                            <div className="grid grid-cols-3 gap-4 border-t pt-4 text-center">
-                                <div>
+                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 border-t pt-4 text-center">
+                                <div className="p-2 bg-muted/30 rounded-lg">
                                     <p className="text-[10px] text-muted-foreground uppercase font-bold">Conv. Rate</p>
                                     <p className="text-lg font-bold">6.2%</p>
                                 </div>
-                                <div>
+                                <div className="p-2 bg-muted/30 rounded-lg">
                                     <p className="text-[10px] text-muted-foreground uppercase font-bold">Avg Deal Size</p>
                                     <p className="text-lg font-bold">₹ 14.2L</p>
                                 </div>
-                                <div>
+                                <div className="p-2 bg-muted/30 rounded-lg">
                                     <p className="text-[10px] text-muted-foreground uppercase font-bold">Sales Cycle</p>
                                     <p className="text-lg font-bold">24 Days</p>
                                 </div>
@@ -469,31 +469,51 @@ export default function DashboardPage() {
                             <CardDescription>GPS Verified Sites & Check-ins (500m radius)</CardDescription>
                         </CardHeader>
                         <CardContent className="space-y-4">
-                            {[
-                                { name: "Rahul Singh", loc: "Okhla Ph-III", task: "Demo", status: "Verified", time: "10:15 AM", dist: "12m" },
-                                { name: "Amit Kumar", loc: "Naraina Ind.", task: "Closing", status: "Verified", time: "11:30 AM", dist: "45m" },
-                                { name: "Neha Sharma", loc: "Sector 62, Noida", task: "Payment", status: "Warning", time: "12:10 PM", dist: "850m" },
-                                { name: "Vikram Ad.", loc: "Manesar", task: "Installation", status: "Verified", time: "12:45 PM", dist: "5m" },
-                            ].map((rep, i) => (
-                                <div key={i} className="flex items-center gap-3 p-2 border rounded hover:bg-muted transition-colors">
-                                    <div className={`h-2 w-2 rounded-full ${rep.status === 'Verified' ? 'bg-green-500' : 'bg-red-500 animate-ping'}`} />
-                                    <div className="flex-1 min-w-0">
-                                        <div className="flex justify-between items-center">
-                                            <p className="text-sm font-medium truncate">{rep.name}</p>
-                                            <span className="text-[10px] text-muted-foreground">{rep.time}</span>
-                                        </div>
-                                        <p className="text-[10px] text-muted-foreground truncate">{rep.loc} • {rep.task}</p>
-                                    </div>
-                                    <Badge className={`text-[8px] h-4 ${rep.status === 'Verified' ? 'bg-green-100 text-green-700 hover:bg-green-100' : 'bg-red-100 text-red-700 hover:bg-red-100'}`}>
-                                        {rep.dist}
-                                    </Badge>
-                                </div>
-                            ))}
+                            <div className="overflow-x-auto -mx-2 px-2 sm:mx-0 sm:px-0">
+                                <Table>
+                                    <TableHeader>
+                                        <TableRow className="text-[10px] uppercase">
+                                            <TableHead>Rep Name</TableHead>
+                                            <TableHead>Location / Task</TableHead>
+                                            <TableHead>Status</TableHead>
+                                            <TableHead className="text-right">Distance</TableHead>
+                                        </TableRow>
+                                    </TableHeader>
+                                    <TableBody>
+                                        {[
+                                            { name: "Rahul Singh", loc: "Okhla Ph-III", task: "Demo", status: "Verified", time: "10:15 AM", dist: "12m" },
+                                            { name: "Amit Kumar", loc: "Naraina Ind.", task: "Closing", status: "Verified", time: "11:30 AM", dist: "45m" },
+                                            { name: "Neha Sharma", loc: "Sector 62, Noida", task: "Payment", status: "Warning", time: "12:10 PM", dist: "850m" },
+                                            { name: "Vikram Ad.", loc: "Manesar", task: "Installation", status: "Verified", time: "12:45 PM", dist: "5m" },
+                                        ].map((rep, i) => (
+                                            <TableRow key={i} className="text-xs">
+                                                <TableCell className="font-bold whitespace-nowrap">
+                                                    <div className="flex items-center gap-2">
+                                                        <div className={`h-1.5 w-1.5 rounded-full ${rep.status === 'Verified' ? 'bg-green-500' : 'bg-red-500 animate-ping'}`} />
+                                                        {rep.name}
+                                                    </div>
+                                                </TableCell>
+                                                <TableCell className="whitespace-nowrap">
+                                                    <p className="font-medium text-[10px]">{rep.loc}</p>
+                                                    <p className="text-[9px] text-muted-foreground">{rep.task} • {rep.time}</p>
+                                                </TableCell>
+                                                <TableCell>
+                                                    <Badge variant="outline" className={`text-[8px] px-1 h-4 ${rep.status === 'Verified' ? 'text-green-700 bg-green-50 border-green-200' : 'text-red-700 bg-red-50 border-red-200'}`}>
+                                                        {rep.status}
+                                                    </Badge>
+                                                </TableCell>
+                                                <TableCell className="text-right font-mono text-[10px]">{rep.dist}</TableCell>
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                            </div>
                             <Button
                                 variant="ghost"
                                 className="w-full text-xs text-blue-600 h-8 hover:bg-blue-50"
                                 onClick={() => setIsMapOpen(true)}
                             >
+                                <Icons.view className="mr-2 h-3 w-3" />
                                 View Master Field Map
                             </Button>
                         </CardContent>
@@ -607,8 +627,8 @@ export default function DashboardPage() {
                         </CardHeader>
                         <CardContent>
                             <div className="space-y-4">
-                                <div className="overflow-x-auto">
-                                    <Table>
+                                <div className="overflow-x-auto -mx-2 px-2 sm:mx-0 sm:px-0">
+                                    <Table className="min-w-[600px] sm:min-w-full">
                                         <TableHeader>
                                             <TableRow className="text-[10px]">
                                                 <TableHead>TIMESTAMP</TableHead>
