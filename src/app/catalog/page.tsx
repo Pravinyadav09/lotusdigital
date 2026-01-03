@@ -12,7 +12,7 @@ import { Icons } from "@/components/icons";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { useAuth } from "@/providers/auth-provider";
-import { useSidebar } from "@/components/ui/sidebar";
+import { useRouter } from "next/navigation";
 
 // Mock Data Types
 interface ProductModel {
@@ -60,6 +60,7 @@ const INITIAL_ACCESSORIES: Accessory[] = [
 
 export default function CatalogPage() {
     const { user } = useAuth();
+    const router = useRouter();
     const [models, setModels] = useState(INITIAL_MODELS);
     const [printheads, setPrintheads] = useState(INITIAL_PRINTHEADS);
     const [accessories, setAccessories] = useState(INITIAL_ACCESSORIES);
@@ -73,10 +74,26 @@ export default function CatalogPage() {
     const [editingItem, setEditingItem] = useState<any>(null);
     const [modelFilter, setModelFilter] = useState("all");
 
-    if (user?.role !== "super_admin") {
+    if (user === null) {
         return (
-            <div className="flex-1 p-8 text-center text-muted-foreground">
-                Access Denied. Admin privileges required.
+            <div className="flex-1 flex items-center justify-center h-full text-muted-foreground animate-pulse">
+                <Icons.logo className="mr-2 h-6 w-6 animate-spin" />
+                Validating Catalog Credentials...
+            </div>
+        );
+    }
+
+    if (user.role !== "super_admin") {
+        return (
+            <div className="flex-1 flex flex-col items-center justify-center p-8 text-center space-y-4 h-full">
+                <Icons.warning className="h-12 w-12 text-amber-500" />
+                <div className="space-y-2">
+                    <h3 className="text-xl font-bold">Access Restricted</h3>
+                    <p className="text-muted-foreground max-w-sm mx-auto">
+                        This section requires Super Admin privileges. Please contact the system administrator if you believe this is an error.
+                    </p>
+                </div>
+                <Button variant="outline" onClick={() => router.push("/dashboard")}>Return to Safety</Button>
             </div>
         );
     }
