@@ -21,9 +21,9 @@ const MOCK_LEADS = [
 
 export function LeadKanban() {
     return (
-        <div className="flex gap-4 overflow-x-auto pb-4 h-[calc(100vh-250px)]">
+        <div className="flex gap-2 sm:gap-4 overflow-x-auto lg:overflow-x-hidden pb-6 h-[calc(100vh-280px)] min-h-[500px]">
             {COLUMNS.map((col) => (
-                <div key={col.id} className="flex-1 min-w-[280px] sm:min-w-[320px] bg-slate-50/50 rounded-lg p-3 border border-slate-100 flex flex-col">
+                <div key={col.id} className="flex-1 min-w-[200px] max-w-[450px] bg-slate-50/50 rounded-lg p-2 sm:p-3 border border-slate-100 flex flex-col">
                     <div className="flex items-center justify-between mb-4">
                         <div className="flex items-center gap-2">
                             <div className={`h-2 w-2 rounded-full ${col.color}`} />

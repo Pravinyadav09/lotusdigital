@@ -24,24 +24,24 @@ export default function AccountStatementPage() {
     };
 
     return (
-        <div className="flex-1 space-y-6 p-4 md:p-8 pt-6 h-full overflow-y-auto">
-            <div className="flex items-center justify-between">
+        <div className="flex-1 space-y-6 p-4 md:p-8 pt-6 w-full">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                    <h2 className="text-3xl font-bold tracking-tight">Financial Statement</h2>
-                    <p className="text-muted-foreground">{isCustomer ? "My Account Balance & Interest Dues" : "Customer Aging & Interest Ledger"}</p>
+                    <h2 className="text-xl md:text-3xl font-bold tracking-tight">Financial Statement</h2>
+                    <p className="text-xs md:text-sm text-muted-foreground">{isCustomer ? "My Account Balance & Interest Dues" : "Customer Aging & Interest Ledger"}</p>
                 </div>
-                <div className="flex gap-2">
-                    <Button variant="outline" size="sm" onClick={() => toast.success("Statement PDF generated and downloading...")}>
+                <div className="flex flex-wrap items-center gap-2">
+                    <Button variant="outline" size="sm" className="flex-1 sm:flex-none h-8" onClick={() => toast.success("Statement PDF generated and downloading...")}>
                         <Icons.reports className="mr-2 h-4 w-4" />
                         Download Statement
                     </Button>
-                    <Badge variant="destructive" className="h-8 px-4 text-xs font-bold uppercase animate-pulse">
-                        Rule: 18% P.A. Penalty Active
+                    <Badge variant="destructive" className="flex-1 sm:flex-none h-8 px-4 text-[10px] font-bold uppercase animate-pulse justify-center">
+                        Rule: 18% P.A. Penalty
                     </Badge>
                 </div>
             </div>
 
-            <div className="grid gap-4 md:grid-cols-4">
+            <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
                 <Card>
                     <CardHeader className="pb-2"><CardTitle className="text-sm">Total Outstanding</CardTitle></CardHeader>
                     <CardContent><div className="text-2xl font-bold text-red-600">₹ 4,25,000</div></CardContent>
@@ -63,51 +63,53 @@ export default function AccountStatementPage() {
             <Card>
                 <CardHeader>
                     <CardTitle>Aging Ledger & Penalty Tracker</CardTitle>
-                    <CardDescription>Daily interest calculation for payments delayed beyond the 7th of the month.</CardDescription>
+                    <CardDescription>Daily interest calculation for delayed payments.</CardDescription>
                 </CardHeader>
                 <CardContent className="p-0">
-                    <Table>
-                        <TableHeader>
-                            <TableRow>
-                                <TableHead>Invoice #</TableHead>
-                                <TableHead>Due Date</TableHead>
-                                <TableHead>Principal Bal</TableHead>
-                                <TableHead>Delay (Days)</TableHead>
-                                <TableHead>Daily Interest</TableHead>
-                                <TableHead className="text-right">Total Penalty</TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {OVERDUE_INVOICES.map((inv) => {
-                                const principal = inv.base - inv.paid;
-                                const interest = calculateInterest(principal, inv.delayDays, inv.interestRate);
-                                const daily = calculateInterest(principal, 1, inv.interestRate);
-                                return (
-                                    <TableRow key={inv.id}>
-                                        <TableCell className="font-mono text-xs">{inv.id}</TableCell>
-                                        <TableCell className="text-xs text-red-600 font-bold">{inv.due}</TableCell>
-                                        <TableCell className="font-medium">₹ {principal.toLocaleString()}</TableCell>
-                                        <TableCell>
-                                            <Badge variant="secondary" className="bg-red-50 text-red-700">{inv.delayDays} Days</Badge>
-                                        </TableCell>
-                                        <TableCell className="text-xs">₹ {daily.toFixed(2)} / day</TableCell>
-                                        <TableCell className="text-right font-bold text-amber-700">₹ {interest.toFixed(2)}</TableCell>
-                                    </TableRow>
-                                );
-                            })}
-                        </TableBody>
-                    </Table>
+                    <div className="overflow-x-auto">
+                        <Table>
+                            <TableHeader>
+                                <TableRow>
+                                    <TableHead className="min-w-[100px]">Invoice #</TableHead>
+                                    <TableHead className="min-w-[100px]">Due Date</TableHead>
+                                    <TableHead className="min-w-[120px]">Principal Bal</TableHead>
+                                    <TableHead className="min-w-[100px]">Delay</TableHead>
+                                    <TableHead className="min-w-[140px]">Daily Interest</TableHead>
+                                    <TableHead className="text-right min-w-[120px]">Total Penalty</TableHead>
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                                {OVERDUE_INVOICES.map((inv) => {
+                                    const principal = inv.base - inv.paid;
+                                    const interest = calculateInterest(principal, inv.delayDays, inv.interestRate);
+                                    const daily = calculateInterest(principal, 1, inv.interestRate);
+                                    return (
+                                        <TableRow key={inv.id}>
+                                            <TableCell className="font-mono text-xs">{inv.id}</TableCell>
+                                            <TableCell className="text-xs text-red-600 font-bold">{inv.due}</TableCell>
+                                            <TableCell className="font-medium">₹ {principal.toLocaleString()}</TableCell>
+                                            <TableCell>
+                                                <Badge variant="secondary" className="bg-red-50 text-red-700 text-[10px]">{inv.delayDays} Days</Badge>
+                                            </TableCell>
+                                            <TableCell className="text-xs">₹ {daily.toFixed(2)} / day</TableCell>
+                                            <TableCell className="text-right font-bold text-amber-700">₹ {interest.toFixed(2)}</TableCell>
+                                        </TableRow>
+                                    );
+                                })}
+                            </TableBody>
+                        </Table>
+                    </div>
                 </CardContent>
             </Card>
 
-            <div className="flex justify-end p-4 border-t bg-muted/20 rounded-lg">
-                <div className="text-right space-y-1">
-                    <p className="text-xs text-muted-foreground uppercase">Grand Total Payable</p>
-                    <p className="text-3xl font-black text-red-700 tracking-tighter">₹ 4,39,850.00</p>
+            <div className="flex flex-col sm:flex-row sm:justify-end p-4 border-t bg-muted/20 rounded-lg gap-4">
+                <div className="text-left sm:text-right space-y-1">
+                    <p className="text-[10px] text-muted-foreground uppercase">Grand Total Payable</p>
+                    <p className="text-2xl sm:text-3xl font-black text-red-700 tracking-tighter">₹ 4,39,850.00</p>
                 </div>
             </div>
 
-            <div className="grid gap-4 md:grid-cols-2">
+            <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
                 <div className="p-4 border rounded-lg bg-blue-50/30">
                     <div className="flex items-center gap-2 mb-2">
                         <Icons.message className="h-4 w-4 text-blue-600" />

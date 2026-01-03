@@ -55,7 +55,7 @@ export default function VisitsPage() {
     };
 
     return (
-        <div className="flex-1 space-y-6 p-4 md:p-8 pt-6 h-full overflow-y-auto">
+        <div className="flex-1 space-y-6 p-4 md:p-8 pt-6 w-full">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
                     <h2 className="text-xl md:text-3xl font-bold tracking-tight">Daily Visits & Check-ins</h2>
@@ -70,7 +70,7 @@ export default function VisitsPage() {
                 </div>
             </div>
 
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
                 {filteredVisits.map((visit) => (
                     <Card key={visit.id} className={visit.status === 'checked-in' ? 'border-green-200 bg-green-50/20 shadow-sm' : ''}>
                         <CardHeader className="pb-3">

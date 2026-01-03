@@ -38,10 +38,8 @@ export function LayoutWrapper({ children }: { children: React.ReactNode }) {
                         </div>
                     </div>
                 </header>
-                <main className="flex-1 overflow-auto h-[calc(100vh-3.5rem)] flex flex-col bg-muted/5">
-                    <div className="flex-1 w-full max-w-[1600px] mx-auto">
-                        {children}
-                    </div>
+                <main className="flex-1 overflow-x-hidden overflow-y-auto h-[calc(100vh-3.5rem)] flex flex-col bg-muted/5">
+                    {children}
                 </main>
                 <Toaster />
             </SidebarInset>

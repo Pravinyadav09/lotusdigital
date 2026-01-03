@@ -35,14 +35,14 @@ export default function AccountingPage() {
     }
 
     return (
-        <div className="flex-1 space-y-6 p-4 md:p-8 pt-6 h-full overflow-y-auto">
-            <div className="flex items-center justify-between">
-                <h2 className="text-3xl font-bold tracking-tight">
+        <div className="flex-1 space-y-6 p-4 md:p-8 pt-6 w-full">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <h2 className="text-xl md:text-3xl font-bold tracking-tight">
                     {isCustomer ? "Invoices & Payments" : "Accounting & GST"}
                 </h2>
-                <div className="flex gap-2">
+                <div className="flex flex-wrap gap-2">
                     {isAdmin && (
-                        <Button variant="outline" onClick={() => router.push("/reports")}>
+                        <Button variant="outline" size="sm" className="flex-1 sm:flex-none" onClick={() => router.push("/reports")}>
                             <Icons.reports className="mr-2 h-4 w-4" />
                             GST Reports
                         </Button>
@@ -51,7 +51,8 @@ export default function AccountingPage() {
                     {isAdmin && (
                         <Button
                             variant="outline"
-                            className="bg-purple-50 text-purple-700 border-purple-200"
+                            size="sm"
+                            className="bg-purple-50 text-purple-700 border-purple-200 flex-1 sm:flex-none"
                             onClick={() => toast.promise(new Promise(r => setTimeout(r, 2000)), {
                                 loading: 'Triggering Monthly EMI Alerts (1st of Month)...',
                                 success: 'WhatsApp/SMS broadcasts dispatched to all customers with active EMI plans.',
@@ -59,17 +60,17 @@ export default function AccountingPage() {
                             })}
                         >
                             <Icons.message className="mr-2 h-4 w-4" />
-                            Send EMI Alerts
+                            Alerts
                         </Button>
                     )}
                     {isCustomer && (
-                        <Button variant="outline" onClick={() => toast.promise(new Promise(r => setTimeout(r, 2000)), {
+                        <Button variant="outline" size="sm" className="flex-1 sm:flex-none" onClick={() => toast.promise(new Promise(r => setTimeout(r, 2000)), {
                             loading: 'Generating Full Ledger Statement...',
                             success: 'Customer Account Statement downloaded (PDF)',
                             error: 'Export failed'
                         })}>
                             <Icons.reports className="mr-2 h-4 w-4" />
-                            Download Statement
+                            Statement
                         </Button>
                     )}
                 </div>
@@ -78,52 +79,35 @@ export default function AccountingPage() {
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 h-full">
                 {/* Financial Overview Column */}
                 <div className="space-y-6 md:col-span-2">
-                    <div className="grid gap-4 md:grid-cols-3">
+                    <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
                         <Card>
-                            <CardHeader className="pb-2">
-                                <CardTitle className="text-sm font-medium">
-                                    {isCustomer ? "Outstanding Balance" : "Outstanding Balances"}
-                                </CardTitle>
-                            </CardHeader>
-                            <CardContent>
-                                <div className="text-2xl font-bold text-red-600">₹ {isCustomer ? "2,50,000" : "24,50,000"}</div>
-                                <p className="text-xs text-muted-foreground">{isCustomer ? "Across 2 invoices" : "Across 8 invoices"}</p>
-                            </CardContent>
+                            <CardHeader className="pb-2"><CardTitle className="text-sm font-medium">Total Outstanding</CardTitle></CardHeader>
+                            <CardContent><div className="text-2xl font-bold text-red-600">₹ 4,25,000</div></CardContent>
+                        </Card>
+                        <Card className="border-amber-200 bg-amber-50/20">
+                            <CardHeader className="pb-2"><CardTitle className="text-sm font-medium">Accrued Interest</CardTitle></CardHeader>
+                            <CardContent><div className="text-2xl font-bold text-amber-700">₹ 14,850</div></CardContent>
                         </Card>
                         <Card>
-                            <CardHeader className="pb-2">
-                                <CardTitle className="text-sm font-medium">
-                                    {isCustomer ? "Total Paid" : "Collected This Month"}
-                                </CardTitle>
-                            </CardHeader>
-                            <CardContent>
-                                <div className="text-2xl font-bold text-green-600">₹ {isCustomer ? "15,70,000" : "12,80,000"}</div>
-                                <p className="text-xs text-muted-foreground">{isCustomer ? "Till Date" : "Target: ₹ 15L"}</p>
-                            </CardContent>
+                            <CardHeader className="pb-2"><CardTitle className="text-sm font-medium">Paid Till Date</CardTitle></CardHeader>
+                            <CardContent><div className="text-2xl font-bold text-green-600">₹ 8,75,000</div></CardContent>
                         </Card>
-                        {!isCustomer && (
-                            <Card>
-                                <CardHeader className="pb-2">
-                                    <CardTitle className="text-sm font-medium">GST Payable</CardTitle>
-                                </CardHeader>
-                                <CardContent>
-                                    <div className="text-2xl font-bold">₹ 4,30,500</div>
-                                    <p className="text-xs text-muted-foreground">Due by 20th</p>
-                                </CardContent>
-                            </Card>
-                        )}
+                        <Card>
+                            <CardHeader className="pb-2"><CardTitle className="text-sm font-medium">Credit Limit</CardTitle></CardHeader>
+                            <CardContent><div className="text-2xl font-bold">₹ 15,00,000</div></CardContent>
+                        </Card>
                     </div>
 
                     <Tabs defaultValue="invoices" className="space-y-4">
-                        <TabsList>
-                            {!isCustomer && <TabsTrigger value="workflow">Deals Workflow</TabsTrigger>}
-                            <TabsTrigger value="pi">Proforma Invoices</TabsTrigger>
-                            <TabsTrigger value="so">Sales Orders (SO)</TabsTrigger>
-                            <TabsTrigger value="invoices">Tax Invoices</TabsTrigger>
-                            <TabsTrigger value="payments">Payment History</TabsTrigger>
-                            <TabsTrigger value="ledger">Detailed Ledger</TabsTrigger>
-                            <TabsTrigger value="aging">Aging Report</TabsTrigger>
-                            <TabsTrigger value="credit">Credit Notes</TabsTrigger>
+                        <TabsList className="w-full justify-start overflow-x-auto h-auto p-1 bg-muted/20">
+                            {!isCustomer && <TabsTrigger value="workflow" className="flex-1 sm:flex-none">Deals Workflow</TabsTrigger>}
+                            <TabsTrigger value="pi" className="flex-1 sm:flex-none">Proforma</TabsTrigger>
+                            <TabsTrigger value="so" className="flex-1 sm:flex-none">SO</TabsTrigger>
+                            <TabsTrigger value="invoices" className="flex-1 sm:flex-none">Invoices</TabsTrigger>
+                            <TabsTrigger value="payments" className="flex-1 sm:flex-none">Payments</TabsTrigger>
+                            <TabsTrigger value="ledger" className="flex-1 sm:flex-none">Ledger</TabsTrigger>
+                            <TabsTrigger value="aging" className="flex-1 sm:flex-none">Aging</TabsTrigger>
+                            <TabsTrigger value="credit" className="flex-1 sm:flex-none">Credit</TabsTrigger>
                         </TabsList>
                         {!isCustomer && (
                             <TabsContent value="workflow">
@@ -180,14 +164,14 @@ export default function AccountingPage() {
                                             { id: "SO-2024-042", customer: "Pixel Printers", machine: "Lotus Max 5000", status: "Production", emi: "Tagged (12 Months)" },
                                             { id: "SO-2024-039", customer: "Singh Graphics", machine: "Lotus Pro 2000", status: "QC Check", emi: "Direct Payment" },
                                         ].map((so) => (
-                                            <div key={so.id} className="flex items-center justify-between border-b pb-4 last:border-0">
+                                            <div key={so.id} className="flex flex-col sm:flex-row sm:items-center justify-between border-b pb-4 last:border-0 gap-4">
                                                 <div>
-                                                    <p className="font-medium">{so.id} • {so.machine}</p>
-                                                    <p className="text-sm text-muted-foreground">{so.customer} • {so.emi}</p>
+                                                    <p className="font-bold text-sm">{so.id} • {so.machine}</p>
+                                                    <p className="text-xs text-muted-foreground">{so.customer} • {so.emi}</p>
                                                 </div>
-                                                <div className="flex items-center gap-4">
-                                                    <Badge variant="secondary">{so.status}</Badge>
-                                                    <Button variant="ghost" size="sm" onClick={() => toast.info("Viewing SO Tracking Log...")}>Track</Button>
+                                                <div className="flex items-center gap-4 justify-between sm:justify-end">
+                                                    <Badge variant="secondary" className="text-[10px]">{so.status}</Badge>
+                                                    <Button variant="ghost" size="sm" className="h-7 text-xs" onClick={() => toast.info("Viewing SO Tracking Log...")}>Track</Button>
                                                 </div>
                                             </div>
                                         ))}
@@ -210,16 +194,18 @@ export default function AccountingPage() {
                                             { id: "TI-2024-002", customer: "Sharma Graphics", amount: "₹ 1,20,000", status: "Overdue", date: "Due 2 Days ago" },
                                             { id: "TI-2024-001", customer: "Pixel Printers", amount: "₹ 4,50,000", status: "Paid", date: "Paid" }
                                         ]).map((invoice) => (
-                                            <div key={invoice.id} className="flex items-center justify-between border-b pb-4 last:border-0">
+                                            <div key={invoice.id} className="flex flex-col sm:flex-row sm:items-center justify-between border-b pb-4 last:border-0 gap-4">
                                                 <div>
                                                     <p className="font-medium">{invoice.id}</p>
                                                     <p className="text-sm text-muted-foreground">{!isCustomer && `${invoice.customer} • `}{invoice.date}</p>
                                                 </div>
-                                                <div className="flex items-center gap-4">
-                                                    <span className="font-bold">{invoice.amount}</span>
-                                                    <Badge variant={invoice.status === 'Paid' ? 'outline' : 'destructive'} className={invoice.status === 'Paid' ? 'text-green-600 border-green-200 bg-green-50' : ''}>
-                                                        {invoice.status}
-                                                    </Badge>
+                                                <div className="flex items-center gap-4 justify-between sm:justify-end">
+                                                    <div className="flex flex-col items-end gap-1">
+                                                        <span className="font-bold">{invoice.amount}</span>
+                                                        <Badge variant={invoice.status === 'Paid' ? 'outline' : 'destructive'} className={`text-[10px] ${invoice.status === 'Paid' ? 'text-green-600 border-green-200 bg-green-50' : ''}`}>
+                                                            {invoice.status}
+                                                        </Badge>
+                                                    </div>
                                                     <Button variant="ghost" size="sm" onClick={() => toast.success("Sending to printer...")}>
                                                         <Icons.printer className="h-4 w-4" />
                                                     </Button>

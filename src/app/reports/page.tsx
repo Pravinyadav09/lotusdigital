@@ -10,18 +10,18 @@ import { toast } from "sonner";
 
 export default function GSTReportsPage() {
     return (
-        <div className="flex-1 space-y-6 p-4 md:p-8 pt-6 h-full overflow-y-auto">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="flex-1 space-y-6 p-4 md:p-8 pt-6 w-full">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                    <h2 className="text-2xl md:text-3xl font-bold tracking-tight">GST Compliance Dashboard</h2>
-                    <p className="text-muted-foreground text-sm md:text-base">GST Analytics, GSTR-1 Prep, and Tax Liabilities.</p>
+                    <h2 className="text-xl md:text-3xl font-bold tracking-tight">GST Compliance Dashboard</h2>
+                    <p className="text-xs md:text-sm text-muted-foreground">GST Analytics, GSTR-1 Prep, and Tax Liabilities.</p>
                 </div>
-                <div className="flex items-center gap-2">
-                    <Button variant="outline" className="flex-1 md:flex-none text-xs h-9" onClick={() => toast.success("GSTR-1 JSON generated and downloading...")}>
+                <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap">
+                    <Button variant="outline" className="flex-1 sm:flex-none text-xs h-9" onClick={() => toast.success("GSTR-1 JSON generated and downloading...")}>
                         <Icons.reports className="mr-2 h-4 w-4" />
                         Download GSTR-1 JSON
                     </Button>
-                    <Button className="flex-1 md:flex-none text-xs h-9" onClick={() => {
+                    <Button className="flex-1 sm:flex-none text-xs h-9" onClick={() => {
                         toast.info("Preparing GST Summary for print...");
                         window.print();
                     }}>
@@ -31,7 +31,7 @@ export default function GSTReportsPage() {
                 </div>
             </div>
 
-            <div className="grid gap-4 md:grid-cols-4">
+            <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
                 <Card className="border-green-100 bg-green-50/10">
                     <CardHeader className="pb-2">
                         <CardTitle className="text-sm">Output GST (Total)</CardTitle>

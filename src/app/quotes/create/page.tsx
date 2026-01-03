@@ -72,13 +72,13 @@ export default function CreateQuotePage() {
             </div>
 
             {/* Step Progress */}
-            <div className="flex items-center justify-between gap-2 sm:gap-4 mb-8">
+            <div className="flex items-center justify-between gap-1 sm:gap-4 mb-8">
                 {[1, 2, 3, 4].map((i) => (
                     <div key={i} className="flex items-center gap-1 sm:gap-2 flex-1 last:flex-none">
-                        <div className={`h-6 w-6 sm:h-8 sm:w-8 rounded-full flex items-center justify-center text-xs sm:text-sm font-bold shrink-0 ${step >= i ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'}`}>
+                        <div className={`h-6 w-6 sm:h-8 sm:w-8 rounded-full flex items-center justify-center text-[10px] sm:text-sm font-bold shrink-0 ${step >= i ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'}`}>
                             {i}
                         </div>
-                        {i < 4 && <div className={`h-1 w-full sm:w-12 rounded ${step > i ? 'bg-primary' : 'bg-muted'}`} />}
+                        {i < 4 && <div className={`h-0.5 sm:h-1 w-full rounded ${step > i ? 'bg-primary' : 'bg-muted'}`} />}
                     </div>
                 ))}
             </div>

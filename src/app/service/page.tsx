@@ -49,10 +49,14 @@ export default function ServicePage() {
     };
 
     return (
-        <div className="flex-1 space-y-6 p-4 md:p-8 pt-6 h-full overflow-y-auto">
-            <div className="flex items-center justify-between">
-                <h2 className="text-3xl font-bold tracking-tight">Service & Support</h2>
-                {canCreateTicket && <CreateTicketDialog />}
+        <div className="flex-1 space-y-6 p-4 md:p-8 pt-6 w-full">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <h2 className="text-xl md:text-3xl font-bold tracking-tight">Service & Support</h2>
+                {canCreateTicket && (
+                    <div className="w-full sm:w-auto">
+                        <CreateTicketDialog />
+                    </div>
+                )}
             </div>
 
             <Card>
@@ -60,64 +64,66 @@ export default function ServicePage() {
                     <CardTitle>Service Requests</CardTitle>
                 </CardHeader>
                 <CardContent className="p-0">
-                    <Table>
-                        <TableHeader>
-                            <TableRow>
-                                <TableHead>Ticket ID</TableHead>
-                                <TableHead>Customer</TableHead>
-                                <TableHead>Issue</TableHead>
-                                <TableHead>Status</TableHead>
-                                <TableHead>Engineer</TableHead>
-                                <TableHead>Date</TableHead>
-                                <TableHead className="text-right">Action</TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {filteredTickets.map((ticket) => (
-                                <TableRow key={ticket.id}>
-                                    <TableCell className="font-medium">{ticket.id}</TableCell>
-                                    <TableCell>{ticket.customer}</TableCell>
-                                    <TableCell>{ticket.issue}</TableCell>
-                                    <TableCell>
-                                        <Badge variant={
-                                            ticket.status === 'open' ? 'destructive' :
-                                                ticket.status === 'assigned' ? 'outline' : 'secondary'
-                                        }>
-                                            {ticket.status.toUpperCase()}
-                                        </Badge>
-                                    </TableCell>
-                                    <TableCell>{ticket.engineer}</TableCell>
-                                    <TableCell>{new Date(ticket.date).toLocaleDateString()}</TableCell>
-                                    <TableCell className="text-right flex justify-end gap-2">
-                                        <Button variant="ghost" size="sm" onClick={() => toast.info(`Opening Ticket Details: ${ticket.id}`)}>Manage</Button>
-
-                                        {isEngineer && ticket.status === 'open' && (
-                                            <Button variant="outline" size="sm" className="bg-blue-50 text-blue-700 border-blue-200" onClick={() => handleAction(ticket.id, 'start')}>
-                                                Start Work
-                                            </Button>
-                                        )}
-
-                                        {isEngineer && ticket.status === 'assigned' && (
-                                            <Button variant="outline" size="sm" className="bg-green-50 text-green-700 border-green-200" onClick={() => handleAction(ticket.id, 'complete')}>
-                                                Fix & Complete
-                                            </Button>
-                                        )}
-
-                                        {isCustomer && ticket.status === 'assigned' && (
-                                            <Button variant="outline" size="sm" className="text-green-600 border-green-200" onClick={() => toast.success("Confirmation Received: Ticket marked for closure. Thank you!")}>
-                                                Confirm Fixed
-                                            </Button>
-                                        )}
-                                        {isCustomer && ticket.status === 'closed' && (
-                                            <Button variant="ghost" size="sm" className="text-red-600" onClick={() => toast.warning("Re-opening ticket. Engineer informed of persistent issue.")}>
-                                                Re-open
-                                            </Button>
-                                        )}
-                                    </TableCell>
+                    <div className="overflow-x-auto">
+                        <Table>
+                            <TableHeader>
+                                <TableRow className="bg-muted/30 hover:bg-muted/30 border-b-2">
+                                    <TableHead className="w-[100px] font-bold">Ticket ID</TableHead>
+                                    <TableHead className="min-w-[150px] font-bold">Customer</TableHead>
+                                    <TableHead className="min-w-[200px] font-bold">Issue Details</TableHead>
+                                    <TableHead className="min-w-[100px] font-bold">Status</TableHead>
+                                    <TableHead className="min-w-[120px] font-bold">Engineer</TableHead>
+                                    <TableHead className="min-w-[100px] font-bold">Date</TableHead>
+                                    <TableHead className="text-right min-w-[150px] font-bold">Actions</TableHead>
                                 </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
+                            </TableHeader>
+                            <TableBody>
+                                {filteredTickets.map((ticket) => (
+                                    <TableRow key={ticket.id}>
+                                        <TableCell className="font-medium">{ticket.id}</TableCell>
+                                        <TableCell>{ticket.customer}</TableCell>
+                                        <TableCell>{ticket.issue}</TableCell>
+                                        <TableCell>
+                                            <Badge variant={
+                                                ticket.status === 'open' ? 'destructive' :
+                                                    ticket.status === 'assigned' ? 'outline' : 'secondary'
+                                            }>
+                                                {ticket.status.toUpperCase()}
+                                            </Badge>
+                                        </TableCell>
+                                        <TableCell>{ticket.engineer}</TableCell>
+                                        <TableCell>{new Date(ticket.date).toLocaleDateString()}</TableCell>
+                                        <TableCell className="text-right flex justify-end gap-2">
+                                            <Button variant="ghost" size="sm" onClick={() => toast.info(`Opening Ticket Details: ${ticket.id}`)}>Manage</Button>
+
+                                            {isEngineer && ticket.status === 'open' && (
+                                                <Button variant="outline" size="sm" className="bg-blue-50 text-blue-700 border-blue-200" onClick={() => handleAction(ticket.id, 'start')}>
+                                                    Start Work
+                                                </Button>
+                                            )}
+
+                                            {isEngineer && ticket.status === 'assigned' && (
+                                                <Button variant="outline" size="sm" className="bg-green-50 text-green-700 border-green-200" onClick={() => handleAction(ticket.id, 'complete')}>
+                                                    Fix & Complete
+                                                </Button>
+                                            )}
+
+                                            {isCustomer && ticket.status === 'assigned' && (
+                                                <Button variant="outline" size="sm" className="text-green-600 border-green-200" onClick={() => toast.success("Confirmation Received: Ticket marked for closure. Thank you!")}>
+                                                    Confirm Fixed
+                                                </Button>
+                                            )}
+                                            {isCustomer && ticket.status === 'closed' && (
+                                                <Button variant="ghost" size="sm" className="text-red-600" onClick={() => toast.warning("Re-opening ticket. Engineer informed of persistent issue.")}>
+                                                    Re-open
+                                                </Button>
+                                            )}
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </div>
                 </CardContent>
             </Card>
         </div>

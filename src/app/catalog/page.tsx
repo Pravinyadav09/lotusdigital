@@ -47,18 +47,18 @@ export default function CatalogPage() {
     }
 
     return (
-        <div className="flex-1 space-y-6 p-4 md:p-8 pt-6 h-full overflow-y-auto">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="flex-1 space-y-6 p-4 md:p-8 pt-6 w-full">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                    <h2 className="text-2xl md:text-3xl font-bold tracking-tight">Master Price Catalog</h2>
-                    <p className="text-muted-foreground text-sm md:text-base">Configure global base prices and component rates.</p>
+                    <h2 className="text-xl md:text-3xl font-bold tracking-tight">Master Price Catalog</h2>
+                    <p className="text-xs md:text-sm text-muted-foreground">Configure global base prices and component rates.</p>
                 </div>
-                <div className="flex items-center gap-2">
-                    <Button variant="outline" className="flex-1 md:flex-none" onClick={() => toast.info("Exporting Master Price List...")}>
+                <div className="flex items-center gap-2 w-full sm:w-auto">
+                    <Button variant="outline" className="flex-1 sm:flex-none" onClick={() => toast.info("Exporting Master Price List...")}>
                         <Icons.reports className="mr-2 h-4 w-4" />
                         Export PDF
                     </Button>
-                    <Button className="bg-primary flex-1 md:flex-none">
+                    <Button className="bg-primary flex-1 sm:flex-none">
                         <Icons.add className="mr-2 h-4 w-4" />
                         Add New Item
                     </Button>
@@ -66,10 +66,10 @@ export default function CatalogPage() {
             </div>
 
             <Tabs defaultValue="machines" className="space-y-6">
-                <TabsList className="w-full flex-col h-auto md:flex-row md:h-10 bg-muted p-1 rounded-lg">
-                    <TabsTrigger value="machines" className="flex-1">Machines</TabsTrigger>
-                    <TabsTrigger value="heads" className="flex-1">Printheads</TabsTrigger>
-                    <TabsTrigger value="accessories" className="flex-1">Accessories</TabsTrigger>
+                <TabsList className="w-full flex h-auto overflow-x-auto bg-muted p-1 rounded-lg justify-start">
+                    <TabsTrigger value="machines" className="flex-1 py-2 text-xs sm:text-sm">Machines</TabsTrigger>
+                    <TabsTrigger value="heads" className="flex-1 py-2 text-xs sm:text-sm">Printheads</TabsTrigger>
+                    <TabsTrigger value="accessories" className="flex-1 py-2 text-xs sm:text-sm">Accessories</TabsTrigger>
                 </TabsList>
 
                 <TabsContent value="machines">

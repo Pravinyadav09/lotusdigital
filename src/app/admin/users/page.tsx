@@ -57,11 +57,11 @@ export default function UserManagementPage() {
     };
 
     return (
-        <div className="flex-1 space-y-6 p-4 md:p-8 pt-6 h-full overflow-y-auto">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="flex-1 space-y-6 p-4 md:p-8 pt-6 w-full">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                    <h2 className="text-2xl md:text-3xl font-bold tracking-tight">User Management</h2>
-                    <p className="text-muted-foreground text-sm md:text-base">Manage organizational roles and access control.</p>
+                    <h2 className="text-xl md:text-3xl font-bold tracking-tight">User Management</h2>
+                    <p className="text-xs md:text-sm text-muted-foreground">Manage organizational roles and access control.</p>
                 </div>
                 <Dialog open={isAddOpen} onOpenChange={setIsAddOpen}>
                     <DialogTrigger asChild>
@@ -128,12 +128,12 @@ export default function UserManagementPage() {
                     <div className="overflow-x-auto -mx-4 md:mx-0">
                         <Table>
                             <TableHeader>
-                                <TableRow>
-                                    <TableHead className="min-w-[120px]">Name</TableHead>
-                                    <TableHead className="min-w-[180px]">Email</TableHead>
-                                    <TableHead className="min-w-[140px]">Role</TableHead>
-                                    <TableHead className="min-w-[100px]">Status</TableHead>
-                                    <TableHead className="text-right min-w-[120px]">Actions</TableHead>
+                                <TableRow className="bg-muted/30 hover:bg-muted/30 border-b-2">
+                                    <TableHead className="w-[150px] font-bold">Name</TableHead>
+                                    <TableHead className="min-w-[200px] font-bold">Email</TableHead>
+                                    <TableHead className="min-w-[120px] font-bold">Role</TableHead>
+                                    <TableHead className="min-w-[100px] font-bold">Status</TableHead>
+                                    <TableHead className="text-right min-w-[120px] font-bold">Actions</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>

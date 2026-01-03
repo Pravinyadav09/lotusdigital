@@ -71,20 +71,24 @@ export default function DashboardPage() {
     const stats = getStatsForRole();
 
     return (
-        <div className="flex-1 space-y-4 md:space-y-6 p-2 sm:p-4 md:p-8 pt-4 md:pt-6 w-full max-w-full overflow-x-hidden">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="flex-1 space-y-6 p-4 md:p-8 pt-6 w-full">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
                     <h2 className="text-xl md:text-3xl font-bold tracking-tight">Welcome, {user?.name}!</h2>
-                    <p className="text-muted-foreground">
-                        <Badge variant="outline" className="mt-1">
+                    <div className="flex items-center gap-2 mt-1">
+                        <Badge variant="outline" className="text-[10px] sm:text-xs">
                             {user?.role?.replace(/_/g, " ").toUpperCase()}
                         </Badge>
-                    </p>
+                        <div className="hidden sm:flex items-center gap-1 text-[10px] text-muted-foreground">
+                            <div className="h-1.5 w-1.5 rounded-full bg-green-500" />
+                            Session Active
+                        </div>
+                    </div>
                 </div>
                 <div className="flex items-center gap-2">
                     {/* Date Range Filter Mock */}
                     {(user?.role === "super_admin" || user?.role === "sales_manager") && (
-                        <div className="hidden md:flex items-center space-x-2 mr-2">
+                        <div className="hidden lg:flex items-center space-x-2 mr-2">
                             <Button variant="outline" size="sm" className="h-8">
                                 <Icons.calendar className="mr-2 h-3 w-3" />
                                 This Month
@@ -96,29 +100,29 @@ export default function DashboardPage() {
                         </div>
                     )}
 
-                    <Button variant="outline" size="icon" className="relative shrink-0" onClick={() => toast.info("No new notifications")}>
+                    <Button variant="outline" size="icon" className="h-9 w-9 relative shrink-0" onClick={() => toast.info("No new notifications")}>
                         <Icons.bell className="h-4 w-4" />
-                        <span className="absolute -top-1 -right-1 h-3 w-3 rounded-full bg-red-600 border-2 border-background" />
+                        <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-red-600 border border-background" />
                     </Button>
-                    <Button variant="outline" className="flex-1 md:flex-none" onClick={() => router.push("/reports")}>
+                    <Button variant="outline" size="sm" className="flex-1 md:flex-none h-9" onClick={() => router.push("/reports")}>
                         <Icons.reports className="mr-2 h-4 w-4" />
-                        Reports
+                        <span className="text-xs sm:text-sm">Reports</span>
                     </Button>
                 </div>
             </div>
 
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            <div className="grid gap-4 grid-cols-2 lg:grid-cols-4">
                 {stats.map((stat, i) => (
-                    <Card key={i}>
-                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">
+                    <Card key={i} className="shadow-sm border-blue-50/50">
+                        <CardHeader className="flex flex-row items-center justify-between space-y-0 p-3 sm:p-4 pb-1 sm:pb-2">
+                            <CardTitle className="text-[10px] sm:text-sm font-medium">
                                 {stat.title}
                             </CardTitle>
-                            <stat.icon className={`h-4 w-4 ${stat.color}`} />
+                            <stat.icon className={`h-3 w-3 sm:h-4 sm:w-4 ${stat.color}`} />
                         </CardHeader>
-                        <CardContent>
-                            <div className="text-2xl font-bold">{stat.value}</div>
-                            <p className="text-xs text-muted-foreground">
+                        <CardContent className="p-3 sm:p-4 pt-1 sm:pt-2">
+                            <div className="text-base sm:text-2xl font-bold">{stat.value}</div>
+                            <p className="text-[8px] sm:text-xs text-muted-foreground truncate">
                                 {stat.description}
                             </p>
                         </CardContent>
@@ -261,14 +265,14 @@ export default function DashboardPage() {
                                         { stage: "Final Deal Closed", count: 28, value: "₹ 1.2 Cr", width: "20%", color: "bg-emerald-500", icon: Icons.check },
                                     ].map((step) => (
                                         <div key={step.stage} className="space-y-1">
-                                            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center text-[10px] sm:text-xs">
+                                            <div className="flex justify-between items-center text-[10px] sm:text-xs">
                                                 <div className="flex items-center gap-2 font-medium overflow-hidden">
                                                     <step.icon className="h-3 w-3 shrink-0" />
-                                                    <span className="truncate whitespace-nowrap">{step.stage} <span className="text-muted-foreground text-[8px] sm:text-[10px]">({step.count})</span></span>
+                                                    <span className="truncate whitespace-nowrap">{step.stage} <span className="text-muted-foreground text-[8px] sm:text-[10px] hidden sm:inline">({step.count})</span></span>
                                                 </div>
-                                                <span className="font-bold sm:ml-auto text-[10px] sm:text-xs">{step.value}</span>
+                                                <span className="font-bold ml-2 text-[10px] sm:text-xs">{step.value}</span>
                                             </div>
-                                            <div className="h-2.5 sm:h-4 w-full bg-muted rounded-full overflow-hidden">
+                                            <div className="h-2 sm:h-3 w-full bg-muted rounded-full overflow-hidden">
                                                 <div
                                                     className={`h-full ${step.color} transition-all duration-1000 ease-in-out`}
                                                     style={{ width: step.width }}
@@ -425,24 +429,23 @@ export default function DashboardPage() {
                             </CardHeader>
                             <CardContent className="pt-2 sm:pt-4 h-auto min-h-[250px] relative p-2 sm:p-6">
                                 {/* Mock Multi-Series Chart */}
-                                <div className="flex items-end justify-between h-40 gap-2 mt-4 px-2">
+                                <div className="flex items-end justify-between h-32 sm:h-40 gap-2 mt-4 px-2">
                                     {[
                                         { label: "Body", val: "75%", color: "bg-blue-600", amount: "₹3.2Cr" },
                                         { label: "Service", val: "15%", color: "bg-emerald-600", amount: "₹65L" },
                                         { label: "Acc.", val: "10%", color: "bg-amber-600", amount: "₹42L" },
                                     ].map((bar) => (
-                                        <div key={bar.label} className="flex-1 flex flex-col items-center gap-2 group cursor-pointer">
-                                            <div className="w-full bg-slate-100 rounded-md relative h-32 sm:h-40 flex items-end overflow-hidden max-w-[50px] mx-auto">
+                                        <div key={bar.label} className="flex-1 flex flex-col items-center gap-1 sm:gap-2 group cursor-pointer">
+                                            <div className="w-full bg-slate-100 rounded-md relative h-24 sm:h-40 flex items-end overflow-hidden max-w-[50px] mx-auto">
                                                 <div
                                                     className={`w-full ${bar.color} rounded-t-md transition-all group-hover:opacity-80`}
                                                     style={{ height: bar.val }}
                                                 />
-                                                <div className="absolute top-1 w-full text-center text-[7px] font-bold md:opacity-100 transition-opacity whitespace-nowrap">
+                                                <div className="absolute top-1 w-full text-center text-[7px] font-bold opacity-0 group-hover:opacity-100 sm:opacity-100 transition-opacity whitespace-nowrap">
                                                     {bar.amount}
                                                 </div>
                                             </div>
-                                            <span className="text-[10px] sm:text-xs font-medium truncate">{bar.label}</span>
-                                            <span className="text-[9px] text-muted-foreground">{bar.val}</span>
+                                            <span className="text-[8px] sm:text-xs font-medium truncate w-full text-center">{bar.label}</span>
                                         </div>
                                     ))}
                                 </div>

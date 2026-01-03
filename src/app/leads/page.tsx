@@ -56,7 +56,7 @@ export default function LeadsPage() {
     };
 
     return (
-        <div className="flex-1 space-y-6 p-4 md:p-8 pt-6 h-full overflow-y-auto">
+        <div className="flex-1 space-y-6 p-4 md:p-8 pt-6 w-full">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <h2 className="text-2xl md:text-3xl xl:text-4xl font-bold tracking-tight">Leads & Sales</h2>
                 <div className="flex items-center gap-2">
@@ -84,21 +84,27 @@ export default function LeadsPage() {
                 </div>
             </div>
 
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
-                <div className="relative flex-1 md:max-w-md">
-                    <Icons.search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+            <div className="flex flex-col xl:flex-row items-stretch xl:items-center gap-4">
+                <div className="relative flex-1 max-w-2xl">
+                    <Icons.search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                     <Input
                         type="search"
-                        placeholder="Search leads..."
-                        className="pl-8 h-9"
+                        placeholder="Search leads by name, company, or interest..."
+                        className="pl-10 h-10 lg:h-11 shadow-sm border-slate-200 focus-visible:ring-blue-500"
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                     />
                 </div>
-                <Button variant="outline" size="sm" className="h-9 gap-2" onClick={() => toast.info("Column visibility and filter settings opened.")}>
-                    <Icons.settings className="h-4 w-4" />
-                    <span className="sm:hidden text-xs">Filters</span>
-                </Button>
+                <div className="flex items-center gap-2">
+                    <Button variant="outline" size="sm" className="h-10 lg:h-11 px-4 gap-2 border-slate-200 hover:bg-slate-50 transition-all font-medium text-slate-700" onClick={() => toast.info("Column visibility settings opened.")}>
+                        <Icons.settings className="h-4 w-4" />
+                        <span>Filter Columns</span>
+                    </Button>
+                    <Button variant="outline" size="sm" className="h-10 lg:h-11 px-4 gap-2 border-slate-200 hover:bg-slate-50 transition-all font-medium text-slate-700" onClick={() => toast.info("Exporting to CSV...")}>
+                        <Icons.reports className="h-4 w-4" />
+                        <span>Export CSV</span>
+                    </Button>
+                </div>
             </div>
 
             {viewMode === "kanban" ? (
@@ -113,13 +119,13 @@ export default function LeadsPage() {
                         <div className="overflow-x-auto">
                             <Table>
                                 <TableHeader>
-                                    <TableRow>
-                                        <TableHead className="min-w-[80px]">Lead ID</TableHead>
-                                        <TableHead className="min-w-[180px]">Customer</TableHead>
-                                        <TableHead className="min-w-[100px]">Status</TableHead>
-                                        <TableHead className="min-w-[150px]">Interest</TableHead>
-                                        <TableHead className="min-w-[100px]">Created</TableHead>
-                                        <TableHead className="text-right min-w-[160px]">Actions</TableHead>
+                                    <TableRow className="bg-muted/30 hover:bg-muted/30 border-b-2">
+                                        <TableHead className="w-[70px] font-bold">ID</TableHead>
+                                        <TableHead className="min-w-[180px] font-bold">Customer Details</TableHead>
+                                        <TableHead className="min-w-[100px] font-bold">Stage</TableHead>
+                                        <TableHead className="min-w-[150px] font-bold">Product Interests</TableHead>
+                                        <TableHead className="min-w-[120px] font-bold">Date</TableHead>
+                                        <TableHead className="text-right min-w-[140px] font-bold">Actions</TableHead>
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>

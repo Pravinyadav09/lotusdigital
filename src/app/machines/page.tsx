@@ -68,17 +68,17 @@ export default function MachinesPage() {
         : MOCK_MACHINES;
 
     return (
-        <div className="flex-1 space-y-6 p-4 md:p-8 pt-6 h-full overflow-y-auto">
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                <div>
-                    <h2 className="text-2xl md:text-3xl font-bold tracking-tight">
+        <div className="flex-1 space-y-6 p-4 md:p-8 pt-6 w-full">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div className="flex-1">
+                    <h2 className="text-xl md:text-3xl font-bold tracking-tight">
                         {isCustomer ? "My Machines" : "Machine Inventory"}
                     </h2>
-                    <p className="text-muted-foreground text-sm">
+                    <p className="text-xs md:text-sm text-muted-foreground">
                         {isCustomer ? "Monitor your installed machines." : "Overview of all installed machines across the region."}
                     </p>
                 </div>
-                {isCustomer && <CreateTicketDialog />}
+                {isCustomer && <div className="w-full sm:w-auto"><CreateTicketDialog /></div>}
             </div>
 
             <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
@@ -212,7 +212,7 @@ export default function MachinesPage() {
                 {selectedMachine && (
                     <>
                         <MachineLogsDialog
-                            machineId={selectedMachine}
+                            machineId={selectedMachine || ""}
                             open={isLogsOpen}
                             onOpenChange={setIsLogsOpen}
                         />
@@ -253,7 +253,7 @@ export default function MachinesPage() {
                                         </div>
                                     </TabsContent>
                                     <TabsContent value="history">
-                                        <MachineServiceTimeline machineId={selectedMachine} />
+                                        <MachineServiceTimeline machineId={selectedMachine || ""} />
                                     </TabsContent>
                                 </Tabs>
                                 <div className="flex justify-end gap-2 mt-4">

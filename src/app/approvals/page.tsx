@@ -249,28 +249,28 @@ export default function ApprovalsPage() {
     );
 
     return (
-        <div className="flex-1 space-y-6 p-4 md:p-8 pt-6 h-full overflow-y-auto">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="flex-1 space-y-6 p-4 md:p-8 pt-6 w-full">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                    <h2 className="text-2xl md:text-3xl font-bold tracking-tight">Approval Queue</h2>
-                    <p className="text-muted-foreground text-sm">Review and approve discount requests</p>
+                    <h2 className="text-xl md:text-3xl font-bold tracking-tight">Approval Queue</h2>
+                    <p className="text-xs md:text-sm text-muted-foreground">Review and approve discount requests</p>
                 </div>
-                <Badge variant="outline" className="w-fit text-sm md:text-lg px-4 py-2">
-                    {pendingQuotes.length} Pending
+                <Badge variant="outline" className="w-fit text-sm md:text-lg px-4 py-2 border-amber-200 bg-amber-50 text-amber-700 animate-pulse">
+                    {pendingQuotes.length} Pending Actions
                 </Badge>
             </div>
 
             <Tabs defaultValue="pending" className="space-y-4">
-                <TabsList className="w-full h-auto flex flex-wrap bg-muted p-1 rounded-lg">
-                    <TabsTrigger value="pending" className="flex-1 py-2">
+                <TabsList className="w-full h-auto flex overflow-x-auto bg-muted p-1 rounded-lg justify-start">
+                    <TabsTrigger value="pending" className="flex-1 py-2 text-xs sm:text-sm">
                         Pending
                         <Badge variant="secondary" className="ml-2">{pendingQuotes.length}</Badge>
                     </TabsTrigger>
-                    <TabsTrigger value="approved" className="flex-1 py-2">
+                    <TabsTrigger value="approved" className="flex-1 py-2 text-xs sm:text-sm">
                         Approved
                         <Badge variant="secondary" className="ml-2">{approvedQuotes.length}</Badge>
                     </TabsTrigger>
-                    <TabsTrigger value="rejected" className="flex-1 py-2">
+                    <TabsTrigger value="rejected" className="flex-1 py-2 text-xs sm:text-sm">
                         Rejected
                         <Badge variant="secondary" className="ml-2">{rejectedQuotes.length}</Badge>
                     </TabsTrigger>
