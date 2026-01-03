@@ -12,6 +12,7 @@ import { EmiCalculator } from "@/components/accounting/emi-calculator";
 import { RecordPaymentDialog } from "@/components/accounting/record-payment-dialog";
 import { CustomerLedger } from "@/components/accounting/customer-ledger";
 import { AgingReport } from "@/components/accounting/aging-report";
+import { CreditNoteDialog } from "@/components/accounting/credit-note-dialog";
 
 import { toast } from "sonner";
 import { useAuth } from "@/providers/auth-provider";
@@ -116,11 +117,13 @@ export default function AccountingPage() {
                     <Tabs defaultValue="invoices" className="space-y-4">
                         <TabsList>
                             {!isCustomer && <TabsTrigger value="workflow">Deals Workflow</TabsTrigger>}
-                            <TabsTrigger value="invoices">Tax Invoices</TabsTrigger>
                             <TabsTrigger value="pi">Proforma Invoices</TabsTrigger>
+                            <TabsTrigger value="so">Sales Orders (SO)</TabsTrigger>
+                            <TabsTrigger value="invoices">Tax Invoices</TabsTrigger>
                             <TabsTrigger value="payments">Payment History</TabsTrigger>
                             <TabsTrigger value="ledger">Detailed Ledger</TabsTrigger>
                             <TabsTrigger value="aging">Aging Report</TabsTrigger>
+                            <TabsTrigger value="credit">Credit Notes</TabsTrigger>
                         </TabsList>
                         {!isCustomer && (
                             <TabsContent value="workflow">
@@ -165,6 +168,33 @@ export default function AccountingPage() {
                                 </Card>
                             </TabsContent>
                         )}
+                        <TabsContent value="so">
+                            <Card>
+                                <CardHeader>
+                                    <CardTitle>Manufacturing & Sales Orders</CardTitle>
+                                    <CardDescription>Orders confirmed after PI payment. Manufacturing release stage.</CardDescription>
+                                </CardHeader>
+                                <CardContent>
+                                    <div className="space-y-4">
+                                        {[
+                                            { id: "SO-2024-042", customer: "Pixel Printers", machine: "Lotus Max 5000", status: "Production", emi: "Tagged (12 Months)" },
+                                            { id: "SO-2024-039", customer: "Singh Graphics", machine: "Lotus Pro 2000", status: "QC Check", emi: "Direct Payment" },
+                                        ].map((so) => (
+                                            <div key={so.id} className="flex items-center justify-between border-b pb-4 last:border-0">
+                                                <div>
+                                                    <p className="font-medium">{so.id} • {so.machine}</p>
+                                                    <p className="text-sm text-muted-foreground">{so.customer} • {so.emi}</p>
+                                                </div>
+                                                <div className="flex items-center gap-4">
+                                                    <Badge variant="secondary">{so.status}</Badge>
+                                                    <Button variant="ghost" size="sm" onClick={() => toast.info("Viewing SO Tracking Log...")}>Track</Button>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </CardContent>
+                            </Card>
+                        </TabsContent>
                         <TabsContent value="invoices">
                             <Card>
                                 <CardHeader>
@@ -258,6 +288,35 @@ export default function AccountingPage() {
                         </TabsContent>
                         <TabsContent value="aging">
                             <AgingReport />
+                        </TabsContent>
+                        <TabsContent value="credit">
+                            <Card>
+                                <CardHeader className="flex flex-row items-center justify-between">
+                                    <div>
+                                        <CardTitle>Credit Notes & Adjustments</CardTitle>
+                                        <CardDescription>Sales returns and billing corrections.</CardDescription>
+                                    </div>
+                                    {isAdmin && <CreditNoteDialog />}
+                                </CardHeader>
+                                <CardContent>
+                                    <div className="space-y-4">
+                                        {[
+                                            { id: "CN-2024-001", customer: "Pixel Printers", amount: "₹ 15,000", reason: "Billing Correction", date: "15 May" },
+                                        ].map((cn) => (
+                                            <div key={cn.id} className="flex items-center justify-between border-b pb-4 last:border-0">
+                                                <div>
+                                                    <p className="font-medium">{cn.id}</p>
+                                                    <p className="text-sm text-muted-foreground">{cn.customer} • {cn.reason} • {cn.date}</p>
+                                                </div>
+                                                <div className="flex items-center gap-4">
+                                                    <span className="font-bold text-red-600">- {cn.amount}</span>
+                                                    <Button variant="ghost" size="sm">View</Button>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </CardContent>
+                            </Card>
                         </TabsContent>
                     </Tabs>
                 </div>

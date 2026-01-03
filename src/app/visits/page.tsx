@@ -8,6 +8,7 @@ import { Icons } from "@/components/icons";
 import { toast } from "sonner";
 import { useAuth } from "@/providers/auth-provider";
 import { Progress } from "@/components/ui/progress";
+import { ScheduleVisitDialog } from "@/components/visits/schedule-visit-dialog";
 
 const MOCK_VISITS = [
     { id: "V-201", rep: "Rahul Singh", customer: "Pixel Printers", location: "Okhla Phase III, New Delhi", targetLat: 28.5355, targetLng: 77.2732, time: "10:30 AM", type: "Installation", status: "planned" },
@@ -61,6 +62,7 @@ export default function VisitsPage() {
                     <p className="text-muted-foreground">Manage your field schedule with Geo-verification.</p>
                 </div>
                 <div className="flex items-center gap-2">
+                    <ScheduleVisitDialog />
                     <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
                         <div className="h-2 w-2 bg-green-500 rounded-full mr-2 animate-pulse" />
                         Online: GPS Active

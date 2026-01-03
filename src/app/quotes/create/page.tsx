@@ -37,21 +37,24 @@ export default function CreateQuotePage() {
 
     const handleSubmit = () => {
         const total = calculateTotal();
-        const discountPercent = (quote.sections.body.discount / quote.sections.body.price) * 100;
+        const basePrice = quote.sections.body.price;
+        const discountVal = quote.sections.body.discount;
+        const discountPercent = (discountVal / basePrice) * 100;
 
-        if (discountPercent > 10) {
-            toast.warning("High Discount Detected! This quote will require Sales Manager approval.");
-        }
+        // Business Rule: Auto-approve if discount <= 5% (Example threshold)
+        const isAutoApproved = discountPercent <= 5;
 
         toast.promise(
             new Promise((resolve) => setTimeout(resolve, 1500)),
             {
-                loading: 'Generating Quote Version V1...',
+                loading: 'Freezing Configuration & Running Discount Compliance Check...',
                 success: () => {
                     setTimeout(() => router.push("/quotes"), 500);
-                    return 'Quote Generated and Frozen. Sent for Approval.';
+                    return isAutoApproved
+                        ? 'Quote Approved! Discount is within threshold (Auto-Approved State).'
+                        : 'Quote Submitted! Discount requires Managerial Approval (Section 4.2.4).';
                 },
-                error: 'Submission Failed',
+                error: 'Compliance Engine Timeout',
             }
         );
     };

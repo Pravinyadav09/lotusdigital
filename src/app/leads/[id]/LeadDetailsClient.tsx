@@ -44,6 +44,17 @@ const ACTIVITIES = [
     { id: 3, type: "note", date: "2024-05-05", user: "Rahul Sales", note: "Initial contact. Very interested in Konica series." },
 ];
 
+const SCORING_DATA = {
+    machineInterest: 85, // Scale 0-100
+    businessVintage: 12, // Years
+    urgency: "Immediate", // Immediate, 1 Month, Exploration
+    calcScore: (interest: number, vintage: number, urgency: string) => {
+        const uScore = urgency === "Immediate" ? 100 : urgency === "1 Month" ? 60 : 20;
+        const vScore = Math.min(vintage * 5, 100); // Max score for 20+ years
+        return Math.round((interest * 0.4) + (vScore * 0.3) + (uScore * 0.3));
+    }
+};
+
 const QUOTES = [
     { id: "Q-2024-045", version: 1, amount: 850000, status: "pending_approval", date: "2024-05-12" },
     { id: "Q-2024-032", version: 1, amount: 920000, status: "rejected", date: "2024-05-08" },
@@ -132,6 +143,44 @@ export function LeadDetailsClient({ id }: LeadDetailsProps) {
                         <Icons.quotes className="mr-2 h-4 w-4" />
                         Create Quote
                     </Button>
+                </div>
+            </div>
+
+            {/* Score Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <Card className="md:col-span-1 border-blue-200 bg-blue-50/10">
+                    <CardContent className="pt-6">
+                        <div className="flex flex-col items-center text-center">
+                            <p className="text-[10px] font-bold text-muted-foreground uppercase mb-1">Conversion Confidence</p>
+                            <div className="relative h-24 w-24">
+                                <svg className="h-full w-full" viewBox="0 0 100 100">
+                                    <circle className="text-slate-200" strokeWidth="10" stroke="currentColor" fill="transparent" r="40" cx="50" cy="50" />
+                                    <circle className="text-blue-600 transition-all duration-1000" strokeWidth="10" strokeDasharray={`${SCORING_DATA.calcScore(85, 12, "Immediate") * 2.51}, 251`} strokeLinecap="round" stroke="currentColor" fill="transparent" r="40" cx="50" cy="50" />
+                                </svg>
+                                <div className="absolute inset-0 flex items-center justify-center font-bold text-xl">
+                                    {SCORING_DATA.calcScore(85, 12, "Immediate")}%
+                                </div>
+                            </div>
+                            <Badge className="mt-2 bg-blue-600">HIGH PROBABILITY</Badge>
+                        </div>
+                    </CardContent>
+                </Card>
+                <div className="md:col-span-3 grid grid-cols-3 gap-4">
+                    <div className="p-4 border rounded-lg bg-white shadow-sm flex flex-col justify-center">
+                        <p className="text-[10px] font-bold text-muted-foreground uppercase">Machine Interest</p>
+                        <p className="text-lg font-bold">85/100</p>
+                        <p className="text-[10px] text-muted-foreground mt-1">High-end Production Units</p>
+                    </div>
+                    <div className="p-4 border rounded-lg bg-white shadow-sm flex flex-col justify-center">
+                        <p className="text-[10px] font-bold text-muted-foreground uppercase">Business Vintage</p>
+                        <p className="text-lg font-bold">12 Years</p>
+                        <p className="text-[10px] text-muted-foreground mt-1 text-green-600 font-bold">Established Player</p>
+                    </div>
+                    <div className="p-4 border rounded-lg bg-white shadow-sm flex flex-col justify-center">
+                        <p className="text-[10px] font-bold text-muted-foreground uppercase">Requirement Urgency</p>
+                        <p className="text-lg font-bold">Immediate</p>
+                        <p className="text-[10px] text-muted-foreground mt-1 text-orange-600 font-bold">Closure within 7 days</p>
+                    </div>
                 </div>
             </div>
 

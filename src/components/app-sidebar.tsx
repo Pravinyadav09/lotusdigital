@@ -21,6 +21,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/providers/auth-provider";
 import { UserRole } from "@/lib/types";
+import { SyncQueue } from "./sync-queue";
 
 // Define allowed roles for each module
 const NAV_CONFIG: {
@@ -171,12 +172,8 @@ export function AppSidebar() {
                     </div>
                 </div>
                 {(user?.role === 'service_engineer' || user?.role === 'senior_sales_rep') && (
-                    <div className="mb-4 p-2 bg-blue-50 border border-blue-100 rounded-md flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                            <div className="h-2 w-2 bg-green-500 rounded-full animate-pulse" />
-                            <span className="text-[10px] font-bold text-blue-700 uppercase">Field Sync Active</span>
-                        </div>
-                        <Icons.check className="h-3 w-3 text-blue-500" />
+                    <div className="mb-4">
+                        <SyncQueue />
                     </div>
                 )}
                 <Button variant="ghost" className="w-full justify-start text-red-500 hover:text-red-600 hover:bg-red-50" onClick={logout}>

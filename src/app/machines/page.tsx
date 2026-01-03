@@ -6,7 +6,11 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/icons";
 import { CreateTicketDialog } from "@/components/service/create-ticket-dialog";
+import { RecordPaymentDialog } from "@/components/accounting/record-payment-dialog";
 import { MachineLogsDialog } from "@/components/service/machine-logs-dialog";
+import { MachineServiceTimeline } from "@/components/service/machine-service-timeline";
+import { CommissionMachineDialog } from "@/components/service/commission-machine-dialog";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { useState } from "react";
 import {
@@ -24,6 +28,7 @@ const MOCK_MACHINES = [
         owner: "Singh Graphics",
         status: "Running",
         warrantyTill: "2024-12-15",
+        serviceType: "Standard Warranty",
         health: "98%",
         lastService: "2024-03-10"
     },
@@ -34,6 +39,7 @@ const MOCK_MACHINES = [
         status: "Locked",
         reason: "Payment Overdue (EMI #4)",
         warrantyTill: "2025-02-20",
+        serviceType: "AMC Active",
         health: "75%",
         lastService: "2024-04-05"
     },
@@ -43,6 +49,7 @@ const MOCK_MACHINES = [
         owner: "Pixel Printers",
         status: "Running",
         warrantyTill: "2025-01-10",
+        serviceType: "AMC Active",
         health: "100%",
         lastService: "2024-05-01"
     }
@@ -96,6 +103,12 @@ export default function MachinesPage() {
                                     <p className="font-bold text-blue-600">{machine.health}</p>
                                 </div>
                                 <div>
+                                    <p className="text-muted-foreground">Type</p>
+                                    <Badge variant="secondary" className="text-[10px] bg-blue-50 text-blue-700 border-blue-100">
+                                        {machine.serviceType}
+                                    </Badge>
+                                </div>
+                                <div>
                                     <p className="text-muted-foreground">Warranty Till</p>
                                     <p className="font-semibold">{machine.warrantyTill}</p>
                                 </div>
@@ -141,6 +154,9 @@ export default function MachinesPage() {
                                         <Icons.view className="h-3 w-3 mr-1" />
                                         Details
                                     </Button>
+                                    {(user?.role === 'service_engineer' || user?.role === 'super_admin') && (
+                                        <CommissionMachineDialog machineId={machine.id} />
+                                    )}
                                     {isCustomer && (
                                         <Button
                                             variant="ghost"
@@ -200,34 +216,48 @@ export default function MachinesPage() {
                         />
 
                         <Dialog open={isDetailsOpen} onOpenChange={setIsDetailsOpen}>
-                            <DialogContent className="max-w-xl">
+                            <DialogContent className="max-w-xl max-h-[90vh] overflow-y-auto">
                                 <DialogHeader>
-                                    <DialogTitle>Technical Specs: {selectedMachine}</DialogTitle>
-                                    <DialogDescription>Engineering and configuration master data.</DialogDescription>
+                                    <DialogTitle>Machine Master File: {selectedMachine}</DialogTitle>
+                                    <DialogDescription>Full technical specs and service history.</DialogDescription>
                                 </DialogHeader>
-                                <div className="grid grid-cols-2 gap-6 p-4 border rounded-lg bg-slate-50">
-                                    <div>
-                                        <p className="text-[10px] uppercase text-muted-foreground font-bold">Printheads</p>
-                                        <p className="text-sm font-semibold">Konica Minolta 512i (High Density)</p>
-                                    </div>
-                                    <div>
-                                        <p className="text-[10px] uppercase text-muted-foreground font-bold">Printing Width</p>
-                                        <p className="text-sm font-semibold">3.2 Meters (10.5 ft)</p>
-                                    </div>
-                                    <div>
-                                        <p className="text-[10px] uppercase text-muted-foreground font-bold">Max Resolution</p>
-                                        <p className="text-sm font-semibold">1440 DPI (Variable Drop)</p>
-                                    </div>
-                                    <div>
-                                        <p className="text-[10px] uppercase text-muted-foreground font-bold">Ink Type</p>
-                                        <p className="text-sm font-semibold">Certified Solvent / Eco-Solvent</p>
-                                    </div>
-                                    <div className="col-span-2">
-                                        <p className="text-[10px] uppercase text-muted-foreground font-bold">Mainboard Firmware</p>
-                                        <p className="text-sm font-semibold font-mono">v4.2.1-stable-LX-2024</p>
-                                    </div>
-                                </div>
+                                <Tabs defaultValue="specs">
+                                    <TabsList className="mb-4">
+                                        <TabsTrigger value="specs">Specifications</TabsTrigger>
+                                        <TabsTrigger value="history">Service History</TabsTrigger>
+                                    </TabsList>
+                                    <TabsContent value="specs">
+                                        <div className="grid grid-cols-2 gap-6 p-4 border rounded-lg bg-slate-50">
+                                            <div>
+                                                <p className="text-[10px] uppercase text-muted-foreground font-bold">Printheads</p>
+                                                <p className="text-sm font-semibold">Konica Minolta 512i (High Density)</p>
+                                            </div>
+                                            <div>
+                                                <p className="text-[10px] uppercase text-muted-foreground font-bold">Printing Width</p>
+                                                <p className="text-sm font-semibold">3.2 Meters (10.5 ft)</p>
+                                            </div>
+                                            <div>
+                                                <p className="text-[10px] uppercase text-muted-foreground font-bold">Max Resolution</p>
+                                                <p className="text-sm font-semibold">1440 DPI (Variable Drop)</p>
+                                            </div>
+                                            <div>
+                                                <p className="text-[10px] uppercase text-muted-foreground font-bold">Ink Type</p>
+                                                <p className="text-sm font-semibold">Certified Solvent / Eco-Solvent</p>
+                                            </div>
+                                            <div className="col-span-2">
+                                                <p className="text-[10px] uppercase text-muted-foreground font-bold">Mainboard Firmware</p>
+                                                <p className="text-sm font-semibold font-mono">v4.2.1-stable-LX-2024</p>
+                                            </div>
+                                        </div>
+                                    </TabsContent>
+                                    <TabsContent value="history">
+                                        <MachineServiceTimeline machineId={selectedMachine} />
+                                    </TabsContent>
+                                </Tabs>
                                 <div className="flex justify-end gap-2 mt-4">
+                                    <Button size="sm" variant="outline" onClick={() => toast.info("Downloading full history report...")}>
+                                        <Icons.reports className="mr-2 h-3 w-3" /> Export Ledger
+                                    </Button>
                                     <Button size="sm" variant="outline" onClick={() => toast.info("Downloading technical manual...")}>
                                         <Icons.reports className="mr-2 h-3 w-3" /> Manual
                                     </Button>

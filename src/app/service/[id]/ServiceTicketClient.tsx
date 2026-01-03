@@ -20,6 +20,8 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
+import { MachineServiceTimeline } from "@/components/service/machine-service-timeline";
+import { FieldActionReport } from "@/components/service/field-action-report";
 
 // Mock Data
 const TICKET = {
@@ -118,24 +120,35 @@ export function ServiceTicketClient({ id }: { id: string }) {
                     </div>
 
                     <Card>
-                        <CardHeader className="pb-2">
-                            <CardTitle>Issue Overview</CardTitle>
+                        <CardHeader className="pb-0">
+                            <Tabs defaultValue="overview" className="w-full">
+                                <TabsList className="grid w-full grid-cols-2">
+                                    <TabsTrigger value="overview">Issue Overview</TabsTrigger>
+                                    <TabsTrigger value="history">Machine History</TabsTrigger>
+                                </TabsList>
+                                <TabsContent value="overview" className="pt-4">
+                                    <div className="space-y-4">
+                                        <div>
+                                            <Label className="text-muted-foreground">Machine Details</Label>
+                                            <p className="text-sm font-semibold">{ticket.machineId} (KONICA-MINOLTA C3070)</p>
+                                            <p className="text-xs text-muted-foreground mt-1">Warranty Status: <span className="text-green-600 font-bold">ACTIVE (Till Dec 2024)</span></p>
+                                        </div>
+                                        <div>
+                                            <Label className="text-muted-foreground">Reported Problem</Label>
+                                            <p className="text-sm font-medium border-l-4 border-red-500 pl-3 py-1 bg-red-50/50">{ticket.issue}</p>
+                                        </div>
+                                        <div>
+                                            <Label className="text-muted-foreground">Detailed Description</Label>
+                                            <p className="text-sm text-muted-foreground">{ticket.description}</p>
+                                        </div>
+                                    </div>
+                                </TabsContent>
+                                <TabsContent value="history" className="pt-4">
+                                    <MachineServiceTimeline machineId={ticket.machineId} />
+                                </TabsContent>
+                            </Tabs>
                         </CardHeader>
-                        <Separator />
-                        <CardContent className="pt-4 space-y-4">
-                            <div>
-                                <Label className="text-muted-foreground">Machine Details</Label>
-                                <p className="text-sm font-semibold">{ticket.machineId} (KONICA-MINOLTA C3070)</p>
-                                <p className="text-xs text-muted-foreground mt-1">Warranty Status: <span className="text-green-600 font-bold">ACTIVE (Till Dec 2024)</span></p>
-                            </div>
-                            <div>
-                                <Label className="text-muted-foreground">Reported Problem</Label>
-                                <p className="text-sm font-medium border-l-4 border-red-500 pl-3 py-1 bg-red-50/50">{ticket.issue}</p>
-                            </div>
-                            <div>
-                                <Label className="text-muted-foreground">Detailed Description</Label>
-                                <p className="text-sm text-muted-foreground">{ticket.description}</p>
-                            </div>
+                        <CardContent className="pt-4">
                         </CardContent>
                     </Card>
 
@@ -255,6 +268,32 @@ export function ServiceTicketClient({ id }: { id: string }) {
                         </Card>
                     )}
 
+                    <Card>
+                        <CardHeader className="pb-3">
+                            <CardTitle className="text-sm">Parts & Inventory Lookup</CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-3">
+                            <div className="relative">
+                                <Icons.search className="absolute left-2 top-2 h-3 w-3 text-muted-foreground" />
+                                <Input className="h-7 text-[10px] pl-7" placeholder="Search HSN/Part Code..." />
+                            </div>
+                            <div className="space-y-1">
+                                <div className="flex justify-between text-[10px]">
+                                    <span className="font-medium">Filter Kit (LX-9)</span>
+                                    <span className="text-green-600 font-bold">In-Stock</span>
+                                </div>
+                                <div className="flex justify-between text-[10px]">
+                                    <span className="font-medium">Magenta Ink (1L)</span>
+                                    <span className="text-red-600 font-bold">Out of Stock</span>
+                                </div>
+                                <div className="flex justify-between text-[10px]">
+                                    <span className="font-medium">Wiper Blade (Konica)</span>
+                                    <span className="text-orange-600 font-bold">2 Left</span>
+                                </div>
+                            </div>
+                        </CardContent>
+                    </Card>
+
                     <Card className={status === 'closed' ? 'bg-muted/30' : 'border-blue-200 bg-blue-50/20'}>
                         <CardHeader className="pb-3">
                             <CardTitle className="text-sm">Execution Controls</CardTitle>
@@ -267,19 +306,15 @@ export function ServiceTicketClient({ id }: { id: string }) {
                                 </Button>
                             )}
                             {status === "in_progress" && (
-                                <Button
-                                    className="w-full bg-green-600 hover:bg-green-700"
-                                    onClick={() => handleStatusChange("closed")}
-                                    disabled={ticket.isMachineLocked}
-                                >
-                                    <Icons.check className="mr-2 h-4 w-4" />
-                                    Close Call
-                                </Button>
+                                <div className="space-y-2">
+                                    <FieldActionReport ticketId={id} />
+                                    <p className="text-[9px] text-center text-muted-foreground uppercase">Next Step: Mandatory Customer Signature</p>
+                                </div>
                             )}
                             {status === "closed" && (
                                 <Button variant="outline" className="w-full bg-background" disabled>
                                     <Icons.check className="mr-2 h-4 w-4 text-green-600" />
-                                    Resolved
+                                    Resolved (FAR Signed)
                                 </Button>
                             )}
 

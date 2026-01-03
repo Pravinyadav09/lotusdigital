@@ -175,27 +175,36 @@ export default function DashboardPage() {
 
                                 {/* Team Performance Table */}
                                 <div className="pt-4 border-t">
-                                    <h4 className="font-semibold mb-3">Team Performance</h4>
-                                    <div className="space-y-3">
-                                        <div className="flex items-center justify-between text-sm">
-                                            <div className="flex items-center gap-2">
-                                                <div className="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center font-bold text-xs">RS</div>
-                                                <div>
-                                                    <p className="font-medium">Rahul Sales</p>
-                                                    <p className="text-xs text-muted-foreground">8 Leads • 3 Quotes</p>
+                                    <div className="space-y-4">
+                                        <div className="space-y-1">
+                                            <div className="flex items-center justify-between text-sm">
+                                                <div className="flex items-center gap-2">
+                                                    <div className="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center font-bold text-xs text-blue-700">RS</div>
+                                                    <div>
+                                                        <p className="font-medium">Rahul Sales</p>
+                                                        <p className="text-[10px] text-muted-foreground italic">Target: ₹25L / Month</p>
+                                                    </div>
                                                 </div>
+                                                <Badge variant="outline" className="text-green-600 bg-green-50">112% Achiev.</Badge>
                                             </div>
-                                            <Badge variant="outline" className="text-green-600 bg-green-50">Top Performer</Badge>
+                                            <div className="h-1.5 w-full bg-muted rounded-full overflow-hidden">
+                                                <div className="h-full bg-green-500 w-[100%]" />
+                                            </div>
                                         </div>
-                                        <div className="flex items-center justify-between text-sm">
-                                            <div className="flex items-center gap-2">
-                                                <div className="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center font-bold text-xs">AJ</div>
-                                                <div>
-                                                    <p className="font-medium">Amit Jain</p>
-                                                    <p className="text-xs text-muted-foreground">5 Leads • 1 Quote</p>
+                                        <div className="space-y-1">
+                                            <div className="flex items-center justify-between text-sm">
+                                                <div className="flex items-center gap-2">
+                                                    <div className="h-8 w-8 rounded-full bg-slate-100 flex items-center justify-center font-bold text-xs text-slate-700">AJ</div>
+                                                    <div>
+                                                        <p className="font-medium">Amit Jain</p>
+                                                        <p className="text-[10px] text-muted-foreground italic">Target: ₹20L / Month</p>
+                                                    </div>
                                                 </div>
+                                                <span className="text-muted-foreground text-[10px]">45% Achiev.</span>
                                             </div>
-                                            <span className="text-muted-foreground text-xs">Target: 60%</span>
+                                            <div className="h-1.5 w-full bg-muted rounded-full overflow-hidden">
+                                                <div className="h-full bg-amber-500 w-[45%]" />
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

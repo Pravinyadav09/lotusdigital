@@ -147,7 +147,7 @@ export function CreateLeadDialog({ onLeadCreate }: CreateLeadDialogProps) {
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-3 gap-4">
                         <div className="grid gap-2">
                             <Label>Lead Source</Label>
                             <Select onValueChange={(v) => setFormData({ ...formData, source: v })}>
@@ -163,16 +163,29 @@ export function CreateLeadDialog({ onLeadCreate }: CreateLeadDialogProps) {
                             </Select>
                         </div>
                         <div className="grid gap-2">
-                            <Label>Primary Product Interest</Label>
+                            <Label>Product Interest</Label>
                             <Select onValueChange={(v) => setFormData({ ...formData, interest: v })}>
                                 <SelectTrigger>
                                     <SelectValue placeholder="Select Product" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="Konica 512i">Konica 512i Series</SelectItem>
+                                    <SelectItem value="Konica 512i">Konica 512i</SelectItem>
                                     <SelectItem value="Starfire 1024">Starfire 1024</SelectItem>
                                     <SelectItem value="Ricoh Gen5">Ricoh Gen5 UV</SelectItem>
-                                    <SelectItem value="Laser Cutter">Laser Cutter Co2</SelectItem>
+                                    <SelectItem value="Laser Cutter">Laser Cutter</SelectItem>
+                                </SelectContent>
+                            </Select>
+                        </div>
+                        <div className="grid gap-2">
+                            <Label>Lead Temperature</Label>
+                            <Select onValueChange={(v) => toast.info(`Lead marked as ${v.toUpperCase()}`)}>
+                                <SelectTrigger>
+                                    <SelectValue placeholder="Select Temp" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="hot" className="text-red-600 font-bold">HOT (Buy in 7d)</SelectItem>
+                                    <SelectItem value="warm" className="text-orange-600 font-bold">WARM (Buy in 30d)</SelectItem>
+                                    <SelectItem value="cold" className="text-blue-600 font-bold">COLD (Exploring)</SelectItem>
                                 </SelectContent>
                             </Select>
                         </div>
