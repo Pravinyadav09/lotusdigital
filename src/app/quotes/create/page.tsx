@@ -125,7 +125,7 @@ export default function CreateQuotePage() {
                         <CardDescription>Select printheads and widths.</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
-                        <div className="grid grid-cols-2 gap-4">
+                        <div className="grid grid-cols-3 gap-4">
                             <div className="grid gap-2">
                                 <Label>Printhead Type</Label>
                                 <Select defaultValue="k512">
@@ -133,6 +133,17 @@ export default function CreateQuotePage() {
                                     <SelectContent>
                                         <SelectItem value="k512">Konica 512i (High Speed)</SelectItem>
                                         <SelectItem value="k1024">Konica 1024 (High Res)</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                            <div className="grid gap-2">
+                                <Label>Quantity</Label>
+                                <Select defaultValue="4">
+                                    <SelectTrigger><SelectValue /></SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="2">2 Heads</SelectItem>
+                                        <SelectItem value="4">4 Heads</SelectItem>
+                                        <SelectItem value="8">8 Heads</SelectItem>
                                     </SelectContent>
                                 </Select>
                             </div>

@@ -28,7 +28,8 @@ export function CreateLeadDialog({ onLeadCreate }: CreateLeadDialogProps) {
         source: "",
         interest: "",
         address: "",
-        notes: ""
+        notes: "",
+        followUpDate: ""
     });
 
     const handleSubmit = (e: React.FormEvent) => {
@@ -36,8 +37,8 @@ export function CreateLeadDialog({ onLeadCreate }: CreateLeadDialogProps) {
         setIsLoading(true);
 
         // Validate
-        if (!formData.name || !formData.mobile || !formData.company) {
-            toast.error("Please fill in all mandatory fields (Name, Mobile, Company)");
+        if (!formData.name || !formData.mobile || !formData.company || !formData.followUpDate) {
+            toast.error("Please fill in all mandatory fields (Name, Mobile, Company, Follow-up Date)");
             setIsLoading(false);
             return;
         }
@@ -70,7 +71,7 @@ export function CreateLeadDialog({ onLeadCreate }: CreateLeadDialogProps) {
             setOpen(false);
             setIsLoading(false);
             setFormData({
-                name: "", company: "", mobile: "", email: "", source: "", interest: "", address: "", notes: ""
+                name: "", company: "", mobile: "", email: "", source: "", interest: "", address: "", notes: "", followUpDate: ""
             });
         }, 1000);
     };
@@ -175,14 +176,25 @@ export function CreateLeadDialog({ onLeadCreate }: CreateLeadDialogProps) {
                         />
                     </div>
 
-                    <div className="grid gap-2">
-                        <Label htmlFor="notes">Initial Notes</Label>
-                        <Textarea
-                            id="notes"
-                            value={formData.notes}
-                            onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-                            placeholder="Budget range, urgency, special requirements..."
-                        />
+                    <div className="grid grid-cols-2 gap-4">
+                        <div className="grid gap-2">
+                            <Label htmlFor="followUp">First Follow-up Date *</Label>
+                            <Input
+                                id="followUp"
+                                type="date"
+                                value={formData.followUpDate}
+                                onChange={(e) => setFormData({ ...formData, followUpDate: e.target.value })}
+                            />
+                        </div>
+                        <div className="grid gap-2">
+                            <Label htmlFor="notes">Initial Notes</Label>
+                            <Textarea
+                                id="notes"
+                                value={formData.notes}
+                                onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+                                placeholder="Budget range, urgency, special requirements..."
+                            />
+                        </div>
                     </div>
 
                     <DialogFooter>

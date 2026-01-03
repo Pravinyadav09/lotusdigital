@@ -315,19 +315,21 @@ export default function DashboardPage() {
                             {user?.role === "finance_user" ? "Recent Collections" :
                                 user?.role === "service_engineer" ? "Critical Machine Alerts" :
                                     user?.role === "customer" ? "Payment & EMI Alerts" :
-                                        "Recent Activity"}
+                                        (user?.role === "senior_sales_rep" || user?.role === "sales_manager") ? "Follow-up Reminders" :
+                                            "Recent Activity"}
                         </CardTitle>
                         <CardDescription>
                             {user?.role === "finance_user" ? "Latest payments received" :
                                 user?.role === "service_engineer" ? "Machines requiring immediate attention" :
                                     user?.role === "customer" ? "Upcoming dues and pending service calls" :
-                                        "Latest updates in your workspace"}
+                                        (user?.role === "senior_sales_rep" || user?.role === "sales_manager") ? "Action required within 48 hours" :
+                                            "Latest updates in your workspace"}
                         </CardDescription>
                     </CardHeader>
                     <CardContent>
                         <div className="space-y-4">
-                            {/* Live Map Placeholder - Hide for Finance/Customer */}
-                            {user?.role !== "finance_user" && user?.role !== "customer" && (
+                            {/* Live Map Placeholder - Hide for Finance/Customer/Follow-ups */}
+                            {user?.role !== "finance_user" && user?.role !== "customer" && !["senior_sales_rep", "sales_manager"].includes(user?.role || "") && (
                                 <div
                                     className="h-[150px] w-full bg-slate-100 rounded-md border flex items-center justify-center relative overflow-hidden group cursor-pointer"
                                     onClick={() => setIsMapOpen(true)}
@@ -350,7 +352,27 @@ export default function DashboardPage() {
 
                             {/* Role Specific Right Card Content */}
                             <div className="space-y-4">
-                                {user?.role === "customer" ? (
+                                {(user?.role === "senior_sales_rep" || user?.role === "sales_manager") ? (
+                                    <div className="space-y-3">
+                                        {[
+                                            { lead: "Pixel Printers", task: "Demo Follow-up", date: "Today, 4:00 PM", status: "Overdue" },
+                                            { lead: "Sharma Graphics", task: "Proposal Call", date: "Tomorrow, 11:00 AM", status: "Upcoming" },
+                                            { lead: "Kailash Press", task: "Payment Inquiry", date: "Tomorrow, 2:30 PM", status: "Upcoming" },
+                                        ].map((item, i) => (
+                                            <div key={i} className={`p-2 border rounded-md flex items-center justify-between ${item.status === 'Overdue' ? 'bg-red-50/50 border-red-100' : 'bg-blue-50/50 border-blue-100'}`}>
+                                                <div>
+                                                    <p className="text-xs font-bold">{item.lead}</p>
+                                                    <p className="text-[10px] text-muted-foreground">{item.task}</p>
+                                                </div>
+                                                <div className="text-right">
+                                                    <p className={`text-[10px] font-medium ${item.status === 'Overdue' ? 'text-red-600' : 'text-blue-600'}`}>{item.date}</p>
+                                                    <Badge className="text-[8px] px-1 h-3" variant={item.status === 'Overdue' ? 'destructive' : 'outline'}>{item.status}</Badge>
+                                                </div>
+                                            </div>
+                                        ))}
+                                        <Button variant="link" className="w-full text-xs h-6 text-muted-foreground" onClick={() => router.push("/leads")}>View All Lead Activities</Button>
+                                    </div>
+                                ) : user?.role === "customer" ? (
                                     <div className="space-y-4">
                                         <div className="p-3 bg-red-50 border border-red-100 rounded-lg">
                                             <div className="flex items-center gap-2 mb-1">

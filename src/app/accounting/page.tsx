@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { CreateInvoiceDialog } from "@/components/accounting/create-invoice-dialog";
 import { EmiCalculator } from "@/components/accounting/emi-calculator";
 import { RecordPaymentDialog } from "@/components/accounting/record-payment-dialog";
+import { CustomerLedger } from "@/components/accounting/customer-ledger";
 
 import { toast } from "sonner";
 import { useAuth } from "@/providers/auth-provider";
@@ -45,6 +46,20 @@ export default function AccountingPage() {
                         </Button>
                     )}
                     {isAdmin && <CreateInvoiceDialog />}
+                    {isAdmin && (
+                        <Button
+                            variant="outline"
+                            className="bg-purple-50 text-purple-700 border-purple-200"
+                            onClick={() => toast.promise(new Promise(r => setTimeout(r, 2000)), {
+                                loading: 'Triggering Monthly EMI Alerts (1st of Month)...',
+                                success: 'WhatsApp/SMS broadcasts dispatched to all customers with active EMI plans.',
+                                error: 'Service Unavailable'
+                            })}
+                        >
+                            <Icons.message className="mr-2 h-4 w-4" />
+                            Send EMI Alerts
+                        </Button>
+                    )}
                     {isCustomer && (
                         <Button variant="outline" onClick={() => toast.promise(new Promise(r => setTimeout(r, 2000)), {
                             loading: 'Generating Full Ledger Statement...',
@@ -103,6 +118,7 @@ export default function AccountingPage() {
                             <TabsTrigger value="invoices">Tax Invoices</TabsTrigger>
                             <TabsTrigger value="pi">Proforma Invoices</TabsTrigger>
                             <TabsTrigger value="payments">Payment History</TabsTrigger>
+                            <TabsTrigger value="ledger">Detailed Ledger</TabsTrigger>
                         </TabsList>
                         {!isCustomer && (
                             <TabsContent value="workflow">
@@ -234,6 +250,9 @@ export default function AccountingPage() {
                                     </div>
                                 </CardContent>
                             </Card>
+                        </TabsContent>
+                        <TabsContent value="ledger">
+                            <CustomerLedger customerName={isCustomer ? user?.name : "Pixel Printers"} />
                         </TabsContent>
                     </Tabs>
                 </div>
