@@ -70,12 +70,12 @@ export default function AccountStatementPage() {
                         <Table>
                             <TableHeader>
                                 <TableRow>
-                                    <TableHead className="min-w-[100px]">Invoice #</TableHead>
-                                    <TableHead className="min-w-[100px]">Due Date</TableHead>
-                                    <TableHead className="min-w-[120px]">Principal Bal</TableHead>
-                                    <TableHead className="min-w-[100px]">Delay</TableHead>
-                                    <TableHead className="min-w-[140px]">Daily Interest</TableHead>
-                                    <TableHead className="text-right min-w-[120px]">Total Penalty</TableHead>
+                                    <TableHead className="min-w-[100px] bg-muted/30 font-bold">Invoice #</TableHead>
+                                    <TableHead className="min-w-[100px] bg-muted/30 font-bold">Due Date</TableHead>
+                                    <TableHead className="min-w-[120px] bg-muted/30 font-bold">Principal Bal</TableHead>
+                                    <TableHead className="min-w-[100px] bg-muted/30 font-bold">Delay</TableHead>
+                                    <TableHead className="min-w-[140px] bg-muted/30 font-bold">Daily Interest</TableHead>
+                                    <TableHead className="text-right min-w-[120px] bg-muted/30 font-bold">Total Penalty</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>

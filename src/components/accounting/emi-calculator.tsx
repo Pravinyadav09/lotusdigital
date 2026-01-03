@@ -33,7 +33,7 @@ export function EmiCalculator() {
                 </CardTitle>
                 <CardDescription>Plan EMI structure and calculate late fees.</CardDescription>
             </CardHeader>
-            <CardContent className="space-y-6">
+            <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
                 <div className="space-y-2">
                     <Label>Loan/Principal Amount (₹)</Label>
                     <Input
@@ -72,7 +72,7 @@ export function EmiCalculator() {
 
                 <div className="space-y-2 pt-2 border-t">
                     <Label>Late Payment Simulator</Label>
-                    <div className="flex gap-4">
+                    <div className="flex flex-col sm:flex-row gap-4">
                         <div className="flex-1 space-y-1">
                             <Label className="text-xs text-muted-foreground">Days Delayed</Label>
                             <Input
@@ -86,9 +86,19 @@ export function EmiCalculator() {
                             <span className="font-bold text-red-700">₹ {Math.round(penaltyInterest).toLocaleString()}</span>
                         </div>
                     </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div className="p-3 bg-blue-50 rounded-lg border border-blue-100">
+                            <p className="text-[10px] text-blue-600 font-bold uppercase">Monthly EMI</p>
+                            <p className="text-base sm:text-lg font-black text-blue-900">₹ {Math.round(emi).toLocaleString()}</p>
+                        </div>
+                        <div className="p-3 bg-slate-50 rounded-lg border border-slate-200">
+                            <p className="text-[10px] text-muted-foreground font-bold uppercase">Total Interest</p>
+                            <p className="text-base sm:text-lg font-black text-slate-900">₹ {Math.round(totalInterest).toLocaleString()}</p>
+                        </div>
+                    </div>
                     <p className="text-xs text-muted-foreground mt-2">*18% p.a. simple interest applied on delayed EMI amount.</p>
                 </div>
-            </CardContent>
+            </DialogContent>
         </Card>
     );
 }

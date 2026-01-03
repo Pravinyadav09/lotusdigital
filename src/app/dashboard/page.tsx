@@ -313,11 +313,11 @@ export default function DashboardPage() {
                                 <div className="overflow-x-auto -mx-2 px-2 sm:mx-0 sm:px-0">
                                     <Table>
                                         <TableHeader>
-                                            <TableRow className="text-[10px] uppercase">
-                                                <TableHead className="min-w-[100px]">Rep Name</TableHead>
-                                                <TableHead className="min-w-[140px]">Location / Task</TableHead>
-                                                <TableHead className="min-w-[80px]">Status</TableHead>
-                                                <TableHead className="text-right min-w-[70px]">Dist.</TableHead>
+                                            <TableRow className="text-[10px] uppercase bg-muted/30">
+                                                <TableHead className="min-w-[120px] font-bold">Rep Name</TableHead>
+                                                <TableHead className="min-w-[150px] font-bold">Location / Task</TableHead>
+                                                <TableHead className="min-w-[100px] font-bold">Status</TableHead>
+                                                <TableHead className="text-right min-w-[80px] font-bold">Dist.</TableHead>
                                             </TableRow>
                                         </TableHeader>
                                         <TableBody>
@@ -472,11 +472,11 @@ export default function DashboardPage() {
                                     <div className="overflow-x-auto -mx-2 px-2 sm:mx-0 sm:px-0">
                                         <Table className="min-w-[600px] sm:min-w-full">
                                             <TableHeader>
-                                                <TableRow className="text-[10px]">
-                                                    <TableHead>TIMESTAMP</TableHead>
-                                                    <TableHead>ACTION</TableHead>
-                                                    <TableHead>REASON / DETAIL</TableHead>
-                                                    <TableHead className="text-right">APPROVAL</TableHead>
+                                                <TableRow className="text-[10px] uppercase bg-muted/30">
+                                                    <TableHead className="min-w-[120px] font-bold">TIMESTAMP</TableHead>
+                                                    <TableHead className="min-w-[150px] font-bold">ACTION</TableHead>
+                                                    <TableHead className="min-w-[200px] font-bold">REASON / DETAIL</TableHead>
+                                                    <TableHead className="text-right min-w-[120px] font-bold">APPROVAL</TableHead>
                                                 </TableRow>
                                             </TableHeader>
                                             <TableBody>

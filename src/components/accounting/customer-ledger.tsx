@@ -24,32 +24,32 @@ export function CustomerLedger({ customerName = "Pixel Printers" }) {
 
     return (
         <Card className="w-full">
-            <CardHeader className="flex flex-row items-center justify-between">
+            <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
                     <CardTitle>Customer Ledger & Statement</CardTitle>
                     <CardDescription>Consolidated financial history for {customerName}</CardDescription>
                 </div>
-                <div className="flex gap-2">
-                    <Button variant="outline" size="sm" onClick={() => toast.success("WhatsApp Statement Sent to Customer")}>
+                <div className="flex w-full sm:w-auto gap-2">
+                    <Button variant="outline" size="sm" className="flex-1 sm:flex-none h-8 text-xs" onClick={() => toast.success("WhatsApp Statement Sent to Customer")}>
                         <Icons.message className="mr-2 h-4 w-4 text-green-600" />
                         Send WhatsApp
                     </Button>
-                    <Button variant="outline" size="sm" onClick={() => toast.success("PDF Downloaded")}>
+                    <Button variant="outline" size="sm" className="flex-1 sm:flex-none h-8 text-xs" onClick={() => toast.success("PDF Downloaded")}>
                         <Icons.printer className="mr-2 h-4 w-4" />
                         Download
                     </Button>
                 </div>
             </CardHeader>
             <CardContent>
-                <div className="rounded-md border">
+                <div className="rounded-md border overflow-x-auto">
                     <Table>
-                        <TableHeader className="bg-muted/50">
+                        <TableHeader>
                             <TableRow>
-                                <TableHead className="w-[120px]">Date</TableHead>
-                                <TableHead>Description</TableHead>
-                                <TableHead className="text-right">Debit (₹)</TableHead>
-                                <TableHead className="text-right">Credit (₹)</TableHead>
-                                <TableHead className="text-right">Balance (₹)</TableHead>
+                                <TableHead className="w-[120px] bg-muted/30 font-bold">Date</TableHead>
+                                <TableHead className="min-w-[200px] bg-muted/30 font-bold">Description</TableHead>
+                                <TableHead className="text-right bg-muted/30 font-bold">Debit (₹)</TableHead>
+                                <TableHead className="text-right bg-muted/30 font-bold">Credit (₹)</TableHead>
+                                <TableHead className="text-right bg-muted/30 font-bold">Balance (₹)</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>

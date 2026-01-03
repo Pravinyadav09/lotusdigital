@@ -48,7 +48,7 @@ export function CreditNoteDialog() {
                         </Select>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div className="grid gap-2">
                             <Label>Reference Tax Invoice</Label>
                             <Input placeholder="e.g. TI-2024-001" />

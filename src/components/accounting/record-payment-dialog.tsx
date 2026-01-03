@@ -63,7 +63,7 @@ export function RecordPaymentDialog({ trigger }: { trigger?: React.ReactNode }) 
                     </DialogDescription>
                 </DialogHeader>
                 <form onSubmit={handleSubmit} className="space-y-4 py-4">
-                    <div className="grid gap-4 md:grid-cols-2">
+                    <div className="grid gap-4 sm:grid-cols-2">
                         <div className="grid gap-2">
                             <Label htmlFor="customer">Customer</Label>
                             <Select
@@ -98,7 +98,7 @@ export function RecordPaymentDialog({ trigger }: { trigger?: React.ReactNode }) 
                         </div>
                     </div>
 
-                    <div className="grid gap-4 md:grid-cols-2">
+                    <div className="grid gap-4 sm:grid-cols-2">
                         <div className="grid gap-2">
                             <Label htmlFor="amount">Amount Received (₹)</Label>
                             <Input
@@ -122,7 +122,7 @@ export function RecordPaymentDialog({ trigger }: { trigger?: React.ReactNode }) 
                         </div>
                     </div>
 
-                    <div className="grid gap-4 md:grid-cols-2">
+                    <div className="grid gap-4 sm:grid-cols-2">
                         <div className="grid gap-2">
                             <Label htmlFor="mode">Payment Mode</Label>
                             <Select

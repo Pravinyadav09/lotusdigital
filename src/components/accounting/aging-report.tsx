@@ -18,17 +18,17 @@ export function AgingReport() {
                 <CardDescription>Overview of outstanding dues by aging buckets.</CardDescription>
             </CardHeader>
             <CardContent>
-                <div className="rounded-md border overflow-hidden">
+                <div className="rounded-md border overflow-x-auto">
                     <Table>
-                        <TableHeader className="bg-muted/50">
+                        <TableHeader>
                             <TableRow>
-                                <TableHead>Customer</TableHead>
-                                <TableHead className="text-right">Total (₹)</TableHead>
-                                <TableHead className="text-right">Current</TableHead>
-                                <TableHead className="text-right">1-30 Days</TableHead>
-                                <TableHead className="text-right">31-60 Days</TableHead>
-                                <TableHead className="text-right">60+ Days</TableHead>
-                                <TableHead className="text-right">Risk Status</TableHead>
+                                <TableHead className="min-w-[150px] bg-muted/30 font-bold">Customer</TableHead>
+                                <TableHead className="text-right min-w-[120px] bg-muted/30 font-bold">Total (₹)</TableHead>
+                                <TableHead className="text-right min-w-[120px] bg-muted/30 font-bold">Current</TableHead>
+                                <TableHead className="text-right min-w-[120px] bg-muted/30 font-bold">1-30 Days</TableHead>
+                                <TableHead className="text-right min-w-[120px] bg-muted/30 font-bold">31-60 Days</TableHead>
+                                <TableHead className="text-right min-w-[120px] bg-muted/30 font-bold">60+ Days</TableHead>
+                                <TableHead className="text-right min-w-[150px] bg-muted/30 font-bold">Risk Status</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>

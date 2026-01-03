@@ -36,7 +36,7 @@ export function CreateInvoiceDialog() {
                     </DialogDescription>
                 </DialogHeader>
                 <form onSubmit={handleSubmit} className="space-y-4 py-4">
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="grid gap-2">
                             <Label>Invoice Type</Label>
                             <Select value={type} onValueChange={setType}>
@@ -55,7 +55,7 @@ export function CreateInvoiceDialog() {
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="grid gap-2">
                             <Label>Customer / Lead</Label>
                             <Select>
@@ -84,32 +84,38 @@ export function CreateInvoiceDialog() {
                     </div>
 
                     {type === "tax" && (
-                        <div className="space-y-4 border rounded-lg p-4 bg-muted/30">
+                        <div className="space-y-4 border rounded-lg p-3 md:p-4 bg-muted/30">
                             <h4 className="text-sm font-semibold border-b pb-2">3-Section GST Mapping</h4>
 
-                            <div className="space-y-3">
+                            <div className="space-y-6 md:space-y-3">
                                 {/* Section 1: Goods */}
-                                <div className="grid grid-cols-4 items-center gap-4">
-                                    <Label className="col-span-1 text-xs">Body Billable</Label>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 items-center gap-2 md:gap-4">
+                                    <Label className="text-xs font-bold md:font-normal">Body Billable</Label>
                                     <Badge variant="outline" className="text-[10px] w-fit">SUPPLY OF GOODS</Badge>
-                                    <Input className="col-span-1 h-8 text-xs" placeholder="HSN: 8443" defaultValue="HSN: 8443" readOnly />
-                                    <Input className="col-span-1 h-8 text-xs" placeholder="GST: 18%" defaultValue="GST: 18%" readOnly />
+                                    <div className="flex gap-2 w-full">
+                                        <Input className="h-8 text-[10px] md:text-xs flex-1" placeholder="HSN: 8443" defaultValue="HSN: 8443" readOnly />
+                                        <Input className="h-8 text-[10px] md:text-xs flex-1" placeholder="GST: 18%" defaultValue="GST: 18%" readOnly />
+                                    </div>
                                 </div>
 
                                 {/* Section 2: Service */}
-                                <div className="grid grid-cols-4 items-center gap-4">
-                                    <Label className="col-span-1 text-xs">Service Clause</Label>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 items-center gap-2 md:gap-4">
+                                    <Label className="text-xs font-bold md:font-normal">Service Clause</Label>
                                     <Badge variant="outline" className="text-[10px] w-fit bg-blue-50">SUPPLY OF SERVICE</Badge>
-                                    <Input className="col-span-1 h-8 text-xs" placeholder="SAC: 9987" defaultValue="SAC: 9987" readOnly />
-                                    <Input className="col-span-1 h-8 text-xs" placeholder="GST: 18%" defaultValue="GST: 18%" readOnly />
+                                    <div className="flex gap-2 w-full">
+                                        <Input className="h-8 text-[10px] md:text-xs flex-1" placeholder="SAC: 9987" defaultValue="SAC: 9987" readOnly />
+                                        <Input className="h-8 text-[10px] md:text-xs flex-1" placeholder="GST: 18%" defaultValue="GST: 18%" readOnly />
+                                    </div>
                                 </div>
 
                                 {/* Section 3: Accessories */}
-                                <div className="grid grid-cols-4 items-center gap-4">
-                                    <Label className="col-span-1 text-xs">Accessories</Label>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 items-center gap-2 md:gap-4">
+                                    <Label className="text-xs font-bold md:font-normal">Accessories</Label>
                                     <Badge variant="outline" className="text-[10px] w-fit">SUPPLY OF GOODS</Badge>
-                                    <Input className="col-span-1 h-8 text-xs" placeholder="HSN: 8443" defaultValue="HSN: 8443" readOnly />
-                                    <Input className="col-span-1 h-8 text-xs" placeholder="GST: 18%" defaultValue="GST: 18%" readOnly />
+                                    <div className="flex gap-2 w-full">
+                                        <Input className="h-8 text-[10px] md:text-xs flex-1" placeholder="HSN: 8443" defaultValue="HSN: 8443" readOnly />
+                                        <Input className="h-8 text-[10px] md:text-xs flex-1" placeholder="GST: 18%" defaultValue="GST: 18%" readOnly />
+                                    </div>
                                 </div>
                             </div>
 

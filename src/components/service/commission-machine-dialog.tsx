@@ -40,7 +40,7 @@ export function CommissionMachineDialog({ machineId }: { machineId: string }) {
                     </DialogDescription>
                 </DialogHeader>
                 <form onSubmit={handleSubmit} className="space-y-4 py-4">
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div className="grid gap-2">
                             <Label>Machine ID</Label>
                             <Input defaultValue={machineId} readOnly className="bg-muted" />

@@ -76,25 +76,25 @@ export default function AccountingPage() {
                 </div>
             </div>
 
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 h-full">
+            <div className="grid gap-6 grid-cols-1 lg:grid-cols-3 h-full">
                 {/* Financial Overview Column */}
-                <div className="space-y-6 md:col-span-2">
+                <div className="space-y-6 lg:col-span-2">
                     <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
                         <Card>
                             <CardHeader className="pb-2"><CardTitle className="text-sm font-medium">Total Outstanding</CardTitle></CardHeader>
-                            <CardContent><div className="text-2xl font-bold text-red-600">₹ 4,25,000</div></CardContent>
+                            <CardContent><div className="text-xl sm:text-2xl font-bold text-red-600">₹ 4,25,000</div></CardContent>
                         </Card>
                         <Card className="border-amber-200 bg-amber-50/20">
                             <CardHeader className="pb-2"><CardTitle className="text-sm font-medium">Accrued Interest</CardTitle></CardHeader>
-                            <CardContent><div className="text-2xl font-bold text-amber-700">₹ 14,850</div></CardContent>
+                            <CardContent><div className="text-xl sm:text-2xl font-bold text-amber-700">₹ 14,850</div></CardContent>
                         </Card>
                         <Card>
                             <CardHeader className="pb-2"><CardTitle className="text-sm font-medium">Paid Till Date</CardTitle></CardHeader>
-                            <CardContent><div className="text-2xl font-bold text-green-600">₹ 8,75,000</div></CardContent>
+                            <CardContent><div className="text-xl sm:text-2xl font-bold text-green-600">₹ 8,75,000</div></CardContent>
                         </Card>
                         <Card>
                             <CardHeader className="pb-2"><CardTitle className="text-sm font-medium">Credit Limit</CardTitle></CardHeader>
-                            <CardContent><div className="text-2xl font-bold">₹ 15,00,000</div></CardContent>
+                            <CardContent><div className="text-xl sm:text-2xl font-bold">₹ 15,00,000</div></CardContent>
                         </Card>
                     </div>
 
@@ -124,15 +124,15 @@ export default function AccountingPage() {
                                                         <span className="font-bold">{deal.customer}</span>
                                                         <span className="text-muted-foreground">{deal.amount}</span>
                                                     </div>
-                                                    <div className="flex items-center gap-4">
+                                                    <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 flex-1">
                                                         <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
                                                             <div
                                                                 className={`h-full transition-all duration-500 ${deal.progress === 100 ? 'bg-green-500' : 'bg-blue-600'}`}
                                                                 style={{ width: `${deal.progress}%` }}
                                                             />
                                                         </div>
-                                                        <div className="flex items-center gap-2">
-                                                            <span className="text-xs font-semibold uppercase">{deal.stage}</span>
+                                                        <div className="flex items-center justify-between sm:justify-start gap-2">
+                                                            <span className="text-[10px] font-semibold uppercase">{deal.stage}</span>
                                                             {user?.role === 'super_admin' && deal.progress < 100 && (
                                                                 <Button
                                                                     variant="ghost"
@@ -229,15 +229,15 @@ export default function AccountingPage() {
                                 </CardHeader>
                                 <CardContent>
                                     <div className="space-y-4">
-                                        <div className="flex items-center justify-between border-b pb-4">
+                                        <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b pb-4 gap-4">
                                             <div>
                                                 <p className="font-medium">PI-2024-001</p>
                                                 <p className="text-sm text-muted-foreground">{isCustomer ? "Active Order" : "Lotus Printing Press"}</p>
                                             </div>
-                                            <div className="flex items-center gap-4">
-                                                <span className="font-bold">₹ 12,50,000</span>
-                                                <Badge variant="outline">Pending Payment</Badge>
-                                                <Button variant="ghost" size="sm" onClick={() => toast.success("Document Loading...")}>View</Button>
+                                            <div className="flex items-center gap-4 justify-between sm:justify-end">
+                                                <span className="font-bold text-sm sm:text-base">₹ 12,50,000</span>
+                                                <Badge variant="outline" className="text-[10px]">Pending Payment</Badge>
+                                                <Button variant="ghost" size="sm" className="h-7 text-xs" onClick={() => toast.success("Document Loading...")}>View</Button>
                                             </div>
                                         </div>
                                     </div>
@@ -255,14 +255,14 @@ export default function AccountingPage() {
                                 </CardHeader>
                                 <CardContent>
                                     <div className="space-y-4">
-                                        <div className="flex items-center justify-between border-b pb-4">
+                                        <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b pb-4 gap-4">
                                             <div>
                                                 <p className="font-medium">REC-2024-882</p>
                                                 <p className="text-sm text-muted-foreground">{isCustomer ? "NEFT Payment" : "Sharma Graphics • NEFT"}</p>
                                             </div>
-                                            <div className="flex items-center gap-4">
+                                            <div className="flex items-center gap-4 justify-between sm:justify-end">
                                                 <span className="font-bold text-green-600">+ ₹ 2,00,000</span>
-                                                <Badge>Cleared</Badge>
+                                                <Badge className="text-[10px]">Cleared</Badge>
                                             </div>
                                         </div>
                                     </div>
@@ -289,14 +289,14 @@ export default function AccountingPage() {
                                         {[
                                             { id: "CN-2024-001", customer: "Pixel Printers", amount: "₹ 15,000", reason: "Billing Correction", date: "15 May" },
                                         ].map((cn) => (
-                                            <div key={cn.id} className="flex items-center justify-between border-b pb-4 last:border-0">
+                                            <div key={cn.id} className="flex flex-col sm:flex-row sm:items-center justify-between border-b pb-4 last:border-0 gap-4">
                                                 <div>
-                                                    <p className="font-medium">{cn.id}</p>
-                                                    <p className="text-sm text-muted-foreground">{cn.customer} • {cn.reason} • {cn.date}</p>
+                                                    <p className="font-medium text-sm">{cn.id}</p>
+                                                    <p className="text-xs text-muted-foreground">{cn.customer} • {cn.reason} • {cn.date}</p>
                                                 </div>
-                                                <div className="flex items-center gap-4">
-                                                    <span className="font-bold text-red-600">- {cn.amount}</span>
-                                                    <Button variant="ghost" size="sm">View</Button>
+                                                <div className="flex items-center gap-4 justify-between sm:justify-end">
+                                                    <span className="font-bold text-red-600 text-sm">- {cn.amount}</span>
+                                                    <Button variant="ghost" size="sm" className="h-7 text-xs">View</Button>
                                                 </div>
                                             </div>
                                         ))}

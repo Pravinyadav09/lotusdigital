@@ -108,13 +108,13 @@ export default function AuditLogsPage() {
                     <div className="overflow-x-auto">
                         <Table>
                             <TableHeader>
-                                <TableRow>
-                                    <TableHead className="min-w-[150px]">Timestamp</TableHead>
-                                    <TableHead className="min-w-[120px]">User</TableHead>
-                                    <TableHead className="min-w-[140px]">Action</TableHead>
-                                    <TableHead className="min-w-[200px]">Detail</TableHead>
-                                    <TableHead className="min-w-[120px]">Source IP</TableHead>
-                                    <TableHead className="text-right min-w-[100px]">Category</TableHead>
+                                <TableRow className="bg-muted/30 hover:bg-muted/30">
+                                    <TableHead className="min-w-[150px] font-bold">Timestamp</TableHead>
+                                    <TableHead className="min-w-[120px] font-bold">User</TableHead>
+                                    <TableHead className="min-w-[140px] font-bold">Action</TableHead>
+                                    <TableHead className="min-w-[200px] font-bold">Detail</TableHead>
+                                    <TableHead className="min-w-[120px] font-bold">Source IP</TableHead>
+                                    <TableHead className="text-right min-w-[100px] font-bold">Category</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
