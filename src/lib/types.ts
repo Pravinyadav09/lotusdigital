@@ -14,8 +14,8 @@ export interface User {
     avatar?: string;
 }
 
-export type LeadStatus = 'new' | 'contacted' | 'qualified' | 'proposal' | 'negotiation' | 'closed';
-export type LeadSource = 'referral' | 'website' | 'walk-in' | 'social_media' | 'exhibition';
+export type LeadStatus = 'new' | 'contacted' | 'qualified' | 'demo_scheduled' | 'proposal' | 'negotiation' | 'won' | 'lost' | 'closed';
+export type LeadSource = 'referral' | 'website' | 'walk-in' | 'social_media' | 'exhibition' | 'cold_call';
 
 export interface Lead {
     id: string;

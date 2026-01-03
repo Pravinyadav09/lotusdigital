@@ -15,6 +15,12 @@ const MOCK_QUOTES = [
     { id: "Q-2024-002", customer: "Sharma Graphics", amount: 450000, date: "2024-05-02", status: "draft" },
     { id: "Q-2024-003", customer: "Creative Ads", amount: 1250000, date: "2024-05-03", status: "pending_approval" },
     { id: "Q-2024-004", customer: "Lotus Digital Systems", amount: 650000, date: "2024-05-04", status: "rejected" },
+    { id: "Q-2024-005", customer: "Rapid Press", amount: 2400000, date: "2024-05-05", status: "pending_approval" },
+    { id: "Q-2024-006", customer: "Global Colors", amount: 180000, date: "2024-04-28", status: "approved" },
+    { id: "Q-2024-007", customer: "Zenith Press", amount: 3200000, date: "2024-05-06", status: "draft" },
+    { id: "Q-2024-008", customer: "Print Hub", amount: 550000, date: "2024-04-25", status: "expired" },
+    { id: "Q-2024-009", customer: "Tech Print Solutions", amount: 900000, date: "2024-05-01", status: "approved" },
+    { id: "Q-2024-010", customer: "Alpha Prints", amount: 150000, date: "2024-05-07", status: "pending_approval" }
 ];
 
 export default function QuotesListPage() {

@@ -14,10 +14,15 @@ export function CustomerLedger({ customerName = "Pixel Printers" }) {
     const ledgerEntries = [
         { date: "2024-03-01", desc: "EMI #1 Charged (TI-2024-001)", debit: 120000, credit: 0, balance: 120000 },
         { date: "2024-03-05", desc: "Payment Received (REC-882)", debit: 0, credit: 120000, balance: 0 },
+        { date: "2024-03-15", desc: "Service Charge (Consultation)", debit: 5000, credit: 0, balance: 5000 },
+        { date: "2024-03-20", desc: "Payment Received (REC-910)", debit: 0, credit: 5000, balance: 0 },
         { date: "2024-04-01", desc: "EMI #2 Charged (TI-2024-001)", debit: 120000, credit: 0, balance: 120000 },
         { date: "2024-04-10", desc: "7-Day Penalty Grace Expired", debit: 0, credit: 0, balance: 120000 },
-        { date: "2024-04-30", desc: "Delayed Interest (18% p.a. - 23 Days)", debit: 1361, credit: 0, balance: 121361 },
-        { date: "2024-05-01", desc: "EMI #3 Charged (TI-2024-001)", debit: 120000, credit: 0, balance: 241361 },
+        { date: "2024-04-20", desc: "Partial Payment (REC-955)", debit: 0, credit: 50000, balance: 70000 },
+        { date: "2024-04-30", desc: "Delayed Interest (18% p.a. - 23 Days)", debit: 1361, credit: 0, balance: 71361 },
+        { date: "2024-05-01", desc: "EMI #3 Charged (TI-2024-001)", debit: 120000, credit: 0, balance: 191361 },
+        { date: "2024-05-05", desc: "Toner Purchase (Inv-505)", debit: 15000, credit: 0, balance: 206361 },
+        { date: "2024-05-06", desc: "Payment Received (REC-1002)", debit: 0, credit: 50000, balance: 156361 },
     ];
 
     const totalOutstanding = ledgerEntries[ledgerEntries.length - 1].balance;
@@ -42,7 +47,7 @@ export function CustomerLedger({ customerName = "Pixel Printers" }) {
             </CardHeader>
             <CardContent>
                 <div className="rounded-md border overflow-x-auto">
-                    <Table>
+                    <Table className="min-w-[700px]">
                         <TableHeader>
                             <TableRow>
                                 <TableHead className="w-[120px] bg-muted/30 font-bold">Date</TableHead>

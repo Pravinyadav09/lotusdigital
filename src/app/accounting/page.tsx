@@ -27,6 +27,14 @@ export default function AccountingPage() {
     const myDeals = [
         { customer: "Singh Graphics", amount: "₹ 18.2L", stage: "Tax Invoice", progress: 80 },
         { customer: "Singh Graphics", amount: "₹ 5.0L", stage: "Proforma", progress: 30 },
+        { customer: "Pixel Printers", amount: "₹ 24.5L", stage: "Advanced", progress: 60 },
+        { customer: "Rapid Press", amount: "₹ 12.0L", stage: "Tax Invoice", progress: 90 },
+        { customer: "Global Colors", amount: "₹ 8.5L", stage: "Quotation", progress: 10 },
+        { customer: "Zenith Press", amount: "₹ 3.2L", stage: "Proforma", progress: 40 },
+        { customer: "Print Hub", amount: "₹ 15.0L", stage: "Tax Invoice", progress: 75 },
+        { customer: "Sharma Graphics", amount: "₹ 6.8L", stage: "Settled", progress: 100 },
+        { customer: "Tech Print Solutions", amount: "₹ 9.5L", stage: "Overdue", progress: 85 },
+        { customer: "Alpha Prints", amount: "₹ 2.1L", stage: "Draft", progress: 5 }
     ].filter(d => !isCustomer || d.customer === user?.name);
 
     if (isCustomer && myDeals.length === 0) {

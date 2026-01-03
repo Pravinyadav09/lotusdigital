@@ -253,6 +253,113 @@ export default function DashboardPage() {
                 </Card>
             </div>
 
+            {/* Manager Quote Approvals (Clause 4.2) */}
+            {(user?.role === "super_admin" || user?.role === "sales_manager") && (
+                <div className="grid gap-4 md:grid-cols-1">
+                    <Card className="border-amber-200 bg-amber-50/20">
+                        <CardHeader className="flex flex-row items-center justify-between">
+                            <div>
+                                <CardTitle className="text-amber-800">Pending Price Approvals</CardTitle>
+                                <CardDescription>Quotes exceeding 7.5% discount threshold requiring manual override.</CardDescription>
+                            </div>
+                            <Badge className="bg-amber-600 text-white animate-pulse">3 PENDING</Badge>
+                        </CardHeader>
+                        <CardContent>
+                            {/* Mobile View: Stacked Cards */}
+                            <div className="md:hidden space-y-4">
+                                {[
+                                    { id: "QT-2024-882", cust: "Sharma Graphics", val: "₹ 12.5L", disc: "12% (₹ 1.5L)", req: "Vikram Singh" },
+                                    { id: "QT-2024-890", cust: "Pixel Printers", val: "₹ 8.2L", disc: "10% (₹ 82k)", req: "Amit Kumar" },
+                                    { id: "QT-2024-895", cust: "Rapid Press", val: "₹ 24.0L", disc: "15% (₹ 3.6L)", req: "Vikram Singh" },
+                                    { id: "QT-2024-899", cust: "Zenith Press", val: "₹ 18.5L", disc: "9% (₹ 1.6L)", req: "Neha Sharma" },
+                                    { id: "QT-2024-902", cust: "Global Colors", val: "₹ 6.0L", disc: "8% (₹ 48k)", req: "Amit Kumar" },
+                                    { id: "QT-2024-915", cust: "Print Hub", val: "₹ 32.0L", disc: "11% (₹ 3.5L)", req: "Vikram Singh" },
+                                ].map((q) => (
+                                    <div key={q.id} className="bg-white p-4 rounded-lg border border-amber-200 shadow-sm space-y-3">
+                                        <div className="flex justify-between items-start">
+                                            <div>
+                                                <h4 className="font-bold text-amber-900">{q.cust}</h4>
+                                                <p className="text-xs text-muted-foreground font-mono">{q.id}</p>
+                                            </div>
+                                            <Badge variant="outline" className="bg-red-50 text-red-600 border-red-200 font-bold">
+                                                {q.disc} OFF
+                                            </Badge>
+                                        </div>
+                                        <div className="grid grid-cols-2 gap-2 py-2 border-y border-dashed border-amber-100">
+                                            <div>
+                                                <p className="text-[10px] uppercase text-muted-foreground font-bold">Value</p>
+                                                <p className="font-semibold">{q.val}</p>
+                                            </div>
+                                            <div className="text-right">
+                                                <p className="text-[10px] uppercase text-muted-foreground font-bold">Requested By</p>
+                                                <p className="font-semibold">{q.req}</p>
+                                            </div>
+                                        </div>
+                                        <div className="flex gap-2">
+                                            <Button
+                                                variant="outline"
+                                                className="flex-1 h-9 border-red-200 text-red-700 hover:bg-red-50"
+                                                onClick={() => toast.error(`Quote ${q.id} Rejected. Sales rep notified.`)}
+                                            >
+                                                Reject
+                                            </Button>
+                                            <Button
+                                                className="flex-1 h-9 bg-green-600 hover:bg-green-700"
+                                                onClick={() => toast.success(`Quote ${q.id} Approved! Moved to PI stage.`)}
+                                            >
+                                                Approve
+                                            </Button>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+
+                            {/* Desktop View: Table */}
+                            <div className="hidden md:block overflow-x-auto">
+                                <Table className="min-w-[600px]">
+                                    <TableHeader>
+                                        <TableRow className="bg-amber-100/50">
+                                            <TableHead className="font-bold text-amber-900">Quote ID</TableHead>
+                                            <TableHead className="font-bold text-amber-900">Customer</TableHead>
+                                            <TableHead className="font-bold text-amber-900">Value</TableHead>
+                                            <TableHead className="font-bold text-amber-900">Discount</TableHead>
+                                            <TableHead className="font-bold text-amber-900">Requested By</TableHead>
+                                            <TableHead className="text-right font-bold text-amber-900">Action</TableHead>
+                                        </TableRow>
+                                    </TableHeader>
+                                    <TableBody>
+                                        {[
+                                            { id: "QT-2024-882", cust: "Sharma Graphics", val: "₹ 12.5L", disc: "12% (₹ 1.5L)", req: "Vikram Singh" },
+                                            { id: "QT-2024-890", cust: "Pixel Printers", val: "₹ 8.2L", disc: "10% (₹ 82k)", req: "Amit Kumar" },
+                                            { id: "QT-2024-895", cust: "Rapid Press", val: "₹ 24.0L", disc: "15% (₹ 3.6L)", req: "Vikram Singh" },
+                                            { id: "QT-2024-899", cust: "Zenith Press", val: "₹ 18.5L", disc: "9% (₹ 1.6L)", req: "Neha Sharma" },
+                                            { id: "QT-2024-902", cust: "Global Colors", val: "₹ 6.0L", disc: "8% (₹ 48k)", req: "Amit Kumar" },
+                                            { id: "QT-2024-915", cust: "Print Hub", val: "₹ 32.0L", disc: "11% (₹ 3.5L)", req: "Vikram Singh" },
+                                        ].map((q) => (
+                                            <TableRow key={q.id}>
+                                                <TableCell className="font-medium">{q.id}</TableCell>
+                                                <TableCell>{q.cust}</TableCell>
+                                                <TableCell>{q.val}</TableCell>
+                                                <TableCell className="text-red-600 font-bold">{q.disc}</TableCell>
+                                                <TableCell>{q.req}</TableCell>
+                                                <TableCell className="text-right space-x-2">
+                                                    <Button size="sm" variant="outline" className="h-7 text-xs border-red-200 text-red-700 hover:bg-red-50" onClick={() => toast.error(`Quote ${q.id} Rejected. Sales rep notified.`)}>
+                                                        Reject
+                                                    </Button>
+                                                    <Button size="sm" className="h-7 text-xs bg-green-600 hover:bg-green-700" onClick={() => toast.success(`Quote ${q.id} Approved! Moved to PI stage.`)}>
+                                                        Approve
+                                                    </Button>
+                                                </TableCell>
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                            </div>
+                        </CardContent>
+                    </Card>
+                </div>
+            )}
+
             {/* Admin & Manager Deep Dive: Sales & Field Operations */}
             {
                 (user?.role === "super_admin" || user?.role === "sales_manager") && (
@@ -260,8 +367,8 @@ export default function DashboardPage() {
                         {/* Visual Sales Funnel */}
                         <Card className="col-span-full md:col-span-4">
                             <CardHeader>
-                                <CardTitle>Enterprise Sales Funnel (Deep Dive)</CardTitle>
-                                <CardDescription>Real-time conversion metrics across India regions.</CardDescription>
+                                <CardTitle className="text-base md:text-xl leading-tight">Enterprise Sales Funnel (Deep Dive)</CardTitle>
+                                <CardDescription className="text-xs md:text-sm break-words">Real-time conversion metrics across India regions.</CardDescription>
                             </CardHeader>
                             <CardContent className="space-y-6 p-2 sm:p-6">
                                 <div className="space-y-4">
@@ -290,16 +397,16 @@ export default function DashboardPage() {
                                     ))}
                                 </div>
                                 <div className="grid grid-cols-1 gap-1 border-t pt-3 text-center">
-                                    <div className="flex items-center justify-around gap-2">
-                                        <div className="flex-1 p-2 bg-muted/30 rounded-lg">
+                                    <div className="flex flex-wrap items-center justify-around gap-2">
+                                        <div className="flex-1 min-w-[80px] p-2 bg-muted/30 rounded-lg">
                                             <p className="text-[8px] text-muted-foreground uppercase font-bold">Conv.</p>
                                             <p className="text-sm font-bold">6.2%</p>
                                         </div>
-                                        <div className="flex-1 p-2 bg-muted/30 rounded-lg">
+                                        <div className="flex-1 min-w-[80px] p-2 bg-muted/30 rounded-lg">
                                             <p className="text-[8px] text-muted-foreground uppercase font-bold">Size</p>
                                             <p className="text-sm font-bold">₹14.2L</p>
                                         </div>
-                                        <div className="flex-1 p-2 bg-muted/30 rounded-lg">
+                                        <div className="flex-1 min-w-[80px] p-2 bg-muted/30 rounded-lg">
                                             <p className="text-[8px] text-muted-foreground uppercase font-bold">Cycle</p>
                                             <p className="text-sm font-bold">24d</p>
                                         </div>
@@ -318,8 +425,50 @@ export default function DashboardPage() {
                                 <CardDescription>GPS Verified Sites & Check-ins (500m radius)</CardDescription>
                             </CardHeader>
                             <CardContent className="space-y-4">
-                                <div className="overflow-x-auto -mx-2 px-2 sm:mx-0 sm:px-0">
-                                    <Table>
+                                {/* Mobile View: Stacked Cards */}
+                                <div className="md:hidden space-y-4">
+                                    {(visitLogs.length > 0 ? visitLogs.slice(0, 4) : [
+                                        { id: "1", name: "Rahul Singh", loc: "Okhla Ph-III", task: "Demo", status: "Verified", time: "10:15 AM", dist: "12m", visitId: "VST-101", timestamp: new Date().toISOString() },
+                                        { id: "2", name: "Amit Kumar", loc: "Naraina Ind.", task: "Closing", status: "Verified", time: "11:30 AM", dist: "45m", visitId: "VST-102", timestamp: new Date().toISOString() },
+                                        { id: "3", name: "Neha Sharma", loc: "Sector 62, Noida", task: "Payment", status: "Warning", time: "12:10 PM", dist: "850m", visitId: "VST-103", timestamp: new Date().toISOString() },
+                                        { id: "4", name: "Vikram Ad.", loc: "Manesar", task: "Installation", status: "Verified", time: "12:45 PM", dist: "5m", visitId: "VST-104", timestamp: new Date().toISOString() },
+                                        { id: "5", name: "Rohan Das", loc: "Gurgaon Sec-14", task: "Service", status: "Verified", time: "01:15 PM", dist: "20m", visitId: "VST-105", timestamp: new Date().toISOString() },
+                                        { id: "6", name: "Priya Singh", loc: "Faridabad", task: "Audit", status: "Failed", time: "02:30 PM", dist: "1.2km", visitId: "VST-106", timestamp: new Date().toISOString() },
+                                        { id: "7", name: "Karan Johar", loc: "Delhi Cantt", task: "Meeting", status: "Verified", time: "03:45 PM", dist: "8m", visitId: "VST-107", timestamp: new Date().toISOString() },
+                                        { id: "8", name: "Simran Kaur", loc: "Noida Sec-18", task: "Sales", status: "Verified", time: "04:20 PM", dist: "15m", visitId: "VST-108", timestamp: new Date().toISOString() },
+                                    ]).map((log, i) => (
+                                        <div key={i} className="bg-white p-3 rounded-lg border shadow-sm space-y-2">
+                                            <div className="flex justify-between items-start">
+                                                <div className="flex items-center gap-2">
+                                                    <div className={`h-2 w-2 rounded-full ${String(log.status).toLowerCase() === 'verified' ? 'bg-green-500' : 'bg-red-500 animate-ping'}`} />
+                                                    <div>
+                                                        <p className="font-bold text-sm">{(log as any).name || "Field Rep"}</p>
+                                                        <p className="text-[10px] text-muted-foreground">{(log as any).task || "Field Check-in"}</p>
+                                                    </div>
+                                                </div>
+                                                <Badge
+                                                    variant="outline"
+                                                    className={`text-[9px] px-1 h-4 ${String(log.status).toLowerCase() === 'verified' ? 'text-green-700 bg-green-50 border-green-200' : 'text-red-700 bg-red-50 border-red-200'}`}
+                                                >
+                                                    {String(log.status).toUpperCase()}
+                                                </Badge>
+                                            </div>
+                                            <div className="flex justify-between items-center text-xs pl-4 border-l-2 border-muted ml-0.5">
+                                                <div>
+                                                    <p className="font-medium">{(log as any).loc || `Site: ${log.visitId}`}</p>
+                                                    <p className="text-[9px] text-muted-foreground">{(log as any).time || new Date(log.timestamp).toLocaleTimeString()}</p>
+                                                </div>
+                                                <div className="text-right font-mono font-bold text-slate-600">
+                                                    {(log as any).dist || (log as any).distance}m
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+
+                                {/* Desktop View: Table */}
+                                <div className="hidden md:block overflow-x-auto">
+                                    <Table className="min-w-[500px]">
                                         <TableHeader>
                                             <TableRow className="text-[10px] uppercase bg-muted/30">
                                                 <TableHead className="min-w-[120px] font-bold">Rep Name</TableHead>
@@ -356,6 +505,10 @@ export default function DashboardPage() {
                                                     { name: "Amit Kumar", loc: "Naraina Ind.", task: "Closing", status: "Verified", time: "11:30 AM", dist: "45m" },
                                                     { name: "Neha Sharma", loc: "Sector 62, Noida", task: "Payment", status: "Warning", time: "12:10 PM", dist: "850m" },
                                                     { name: "Vikram Ad.", loc: "Manesar", task: "Installation", status: "Verified", time: "12:45 PM", dist: "5m" },
+                                                    { name: "Rohan Das", loc: "Gurgaon Sec-14", task: "Service", status: "Verified", time: "01:15 PM", dist: "20m" },
+                                                    { name: "Priya Singh", loc: "Faridabad", task: "Audit", status: "Failed", time: "02:30 PM", dist: "1.2km" },
+                                                    { name: "Karan Johar", loc: "Delhi Cantt", task: "Meeting", status: "Verified", time: "03:45 PM", dist: "8m" },
+                                                    { name: "Simran Kaur", loc: "Noida Sec-18", task: "Sales", status: "Verified", time: "04:20 PM", dist: "15m" },
                                                 ].map((rep, i) => (
                                                     <TableRow key={i} className="text-xs">
                                                         <TableCell className="font-bold whitespace-nowrap">
@@ -489,8 +642,37 @@ export default function DashboardPage() {
                             </CardHeader>
                             <CardContent className="p-2 sm:p-6">
                                 <div className="space-y-4">
-                                    <div className="overflow-x-auto -mx-2 px-2 sm:mx-0 sm:px-0">
-                                        <Table className="min-w-[600px] sm:min-w-full">
+                                    {/* Mobile View: Stacked Audit Cards */}
+                                    <div className="md:hidden space-y-4">
+                                        {[
+                                            { time: "Today, 11:20", action: "Machine Unlock", detail: "Sharma Graphics - Direct Negotiated", auth: "Admin Self" },
+                                            { time: "Yesterday, 14:45", action: "Price Override", detail: "Lotus X1 - Discount 18% (Bulk Deal)", auth: "Admin Self" },
+                                            { time: "01 May, 09:12", action: "Lead Reassign", detail: "15 Leads from Rep-A to Rep-C", auth: "Conflict" },
+                                            { time: "28 Apr, 16:30", action: "Threshold Change", detail: "Auto-approve limit set to 12%", auth: "Global" },
+                                            { time: "25 Apr, 10:00", action: "New User", detail: "Added 'Rohit Team' to Sales", auth: "Admin Self" },
+                                            { time: "22 Apr, 18:15", action: "System Update", detail: "Patch v2.1.4 deployed", auth: "System" },
+                                            { time: "20 Apr, 12:45", action: "Data Export", detail: "Full SQL Dump for Q1", auth: "Admin Self" },
+                                        ].map((row, i) => (
+                                            <div key={i} className="bg-slate-50 p-3 rounded-lg border space-y-2">
+                                                <div className="flex justify-between items-start">
+                                                    <div>
+                                                        <p className="font-bold text-xs text-slate-800">{row.action}</p>
+                                                        <p className="text-[10px] text-muted-foreground">{row.time}</p>
+                                                    </div>
+                                                    <Badge variant="outline" className="text-[9px] uppercase bg-white border-slate-300">
+                                                        {row.auth}
+                                                    </Badge>
+                                                </div>
+                                                <p className="text-xs text-slate-600 bg-white p-2 rounded border border-slate-100">
+                                                    {row.detail}
+                                                </p>
+                                            </div>
+                                        ))}
+                                    </div>
+
+                                    {/* Desktop View: Audit Table */}
+                                    <div className="hidden md:block overflow-x-auto">
+                                        <Table className="min-w-[600px]">
                                             <TableHeader>
                                                 <TableRow className="text-[10px] uppercase bg-muted/30">
                                                     <TableHead className="min-w-[120px] font-bold">TIMESTAMP</TableHead>
@@ -505,6 +687,9 @@ export default function DashboardPage() {
                                                     { time: "Yesterday, 14:45", action: "Price Override", detail: "Lotus X1 - Discount 18% (Bulk Deal)", auth: "Admin Self" },
                                                     { time: "01 May, 09:12", action: "Lead Reassign", detail: "15 Leads from Rep-A to Rep-C", auth: "Conflict" },
                                                     { time: "28 Apr, 16:30", action: "Threshold Change", detail: "Auto-approve limit set to 12%", auth: "Global" },
+                                                    { time: "25 Apr, 10:00", action: "New User", detail: "Added 'Rohit Team' to Sales", auth: "Admin Self" },
+                                                    { time: "22 Apr, 18:15", action: "System Update", detail: "Patch v2.1.4 deployed", auth: "System" },
+                                                    { time: "20 Apr, 12:45", action: "Data Export", detail: "Full SQL Dump for Q1", auth: "Admin Self" },
                                                 ].map((row, i) => (
                                                     <TableRow key={i} className="text-xs">
                                                         <TableCell className="text-muted-foreground whitespace-nowrap min-w-[100px]">{row.time}</TableCell>

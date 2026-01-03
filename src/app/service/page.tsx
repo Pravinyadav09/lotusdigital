@@ -12,6 +12,14 @@ const MOCK_TICKETS = [
     { id: "SR-501", customer: "Singh Graphics", issue: "Printhead Clogging", status: "open", engineer: "Unassigned", date: "2024-05-02" },
     { id: "SR-498", customer: "Pixel Printers", issue: "Software License Error", status: "assigned", engineer: "Rahul Verma", date: "2024-05-01" },
     { id: "SR-480", customer: "Super Flex", issue: "Installation Request", status: "closed", engineer: "Amit Sharma", date: "2024-04-28" },
+    { id: "SR-505", customer: "Rapid Press", issue: "Paper Jam (Feeder)", status: "open", engineer: "Vikram Ad.", date: "2024-05-03" },
+    { id: "SR-510", customer: "Global Colors", issue: "Color Calibration Mismatch", status: "assigned", engineer: "Rohan Das", date: "2024-05-04" },
+    { id: "SR-512", customer: "Zenith Press", issue: "Error Code E-0014", status: "urgent", engineer: "Rahul Verma", date: "2024-05-04" },
+    { id: "SR-475", customer: "Tech Print Solutions", issue: "Scheduled Maintenance", status: "closed", engineer: "Amit Sharma", date: "2024-04-25" },
+    { id: "SR-515", customer: "Print Hub", issue: "Network Connectivity Lost", status: "open", engineer: "Unassigned", date: "2024-05-05" },
+    { id: "SR-518", customer: "Sharma Graphics", issue: "Fuser Unit Noise", status: "assigned", engineer: "Rohan Das", date: "2024-05-05" },
+    { id: "SR-520", customer: "Alpha Prints", issue: "Toner Spill Clean-up", status: "pending_parts", engineer: "Vikram Ad.", date: "2024-05-03" },
+    { id: "SR-460", customer: "Beta Graphics", issue: "Machine Setup & Training", status: "closed", engineer: "Amit Sharma", date: "2024-04-20" }
 ];
 
 import { CreateTicketDialog } from "@/components/service/create-ticket-dialog";
@@ -71,7 +79,7 @@ export default function ServicePage() {
                 </CardHeader>
                 <CardContent className="p-0">
                     <div className="overflow-x-auto">
-                        <Table>
+                        <Table className="min-w-[800px]">
                             <TableHeader>
                                 <TableRow className="bg-muted/30 hover:bg-muted/30">
                                     <TableHead className="min-w-[100px] font-bold">Ticket ID</TableHead>

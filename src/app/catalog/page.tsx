@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useAuth } from "@/providers/auth-provider";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -8,8 +9,12 @@ import { Badge } from "@/components/ui/badge";
 import { Icons } from "@/components/icons";
 import { toast } from "sonner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
-const CATALOG_DATA = {
+const INITIAL_CATALOG_DATA = {
     machines: [
         { id: "M1", name: "Lotus Max 5000", type: "Inkjet", basePrice: 1200000, hsn: "8443", status: "Active" },
         { id: "M2", name: "Lotus Pro 2000", type: "Laser", basePrice: 850000, hsn: "8456", status: "Active" },
@@ -25,10 +30,57 @@ const CATALOG_DATA = {
         { id: "A2", name: "UV Curing Lamp Kit", price: 95000, category: "Add-on" },
         { id: "A3", name: "External Dryer Fan", price: 15000, category: "Hardware" },
     ]
-}
+};
 
 export default function CatalogPage() {
     const { user } = useAuth();
+    const [activeTab, setActiveTab] = useState("machines");
+
+    // State for catalog data
+    const [machines, setMachines] = useState(INITIAL_CATALOG_DATA.machines);
+    const [heads, setHeads] = useState(INITIAL_CATALOG_DATA.heads);
+    const [accessories, setAccessories] = useState(INITIAL_CATALOG_DATA.accessories);
+
+    // State for Dialog
+    const [isAddOpen, setIsAddOpen] = useState(false);
+    const [newItem, setNewItem] = useState<any>({});
+
+    const handleAddItem = (e: React.FormEvent) => {
+        e.preventDefault();
+
+        if (activeTab === "machines") {
+            const nextId = `M${machines.length + 1}`;
+            setMachines([...machines, {
+                id: newItem.id || nextId,
+                name: newItem.name,
+                type: newItem.type || "Inkjet",
+                basePrice: Number(newItem.price),
+                hsn: newItem.hsn || "8443",
+                status: "Active"
+            }]);
+        } else if (activeTab === "heads") {
+            const nextId = `H${heads.length + 1}`;
+            setHeads([...heads, {
+                id: newItem.id || nextId,
+                name: newItem.name,
+                resolution: newItem.resolution || "14pl",
+                price: Number(newItem.price),
+                status: "In-Stock"
+            }]);
+        } else {
+            const nextId = `A${accessories.length + 1}`;
+            setAccessories([...accessories, {
+                id: newItem.id || nextId,
+                name: newItem.name,
+                category: newItem.category || "General",
+                price: Number(newItem.price)
+            }]);
+        }
+
+        toast.success(`${newItem.name} added to ${activeTab} catalog.`);
+        setIsAddOpen(false);
+        setNewItem({});
+    };
 
     if (user?.role !== "super_admin") {
         return (
@@ -58,14 +110,102 @@ export default function CatalogPage() {
                         <Icons.reports className="mr-2 h-4 w-4" />
                         Export PDF
                     </Button>
-                    <Button className="bg-primary flex-1 sm:flex-none">
-                        <Icons.add className="mr-2 h-4 w-4" />
-                        Add New Item
-                    </Button>
+
+                    <Dialog open={isAddOpen} onOpenChange={setIsAddOpen}>
+                        <DialogTrigger asChild>
+                            <Button className="bg-primary flex-1 sm:flex-none">
+                                <Icons.add className="mr-2 h-4 w-4" />
+                                Add New Item
+                            </Button>
+                        </DialogTrigger>
+                        <DialogContent className="sm:max-w-[425px]">
+                            <DialogHeader>
+                                <DialogTitle className="capitalize">Add New {activeTab.slice(0, -1)}</DialogTitle>
+                                <DialogDescription>
+                                    Add a new item to the {activeTab} master catalog.
+                                </DialogDescription>
+                            </DialogHeader>
+                            <form onSubmit={handleAddItem} className="space-y-4 py-4">
+                                <div className="grid gap-2">
+                                    <Label>Item Name</Label>
+                                    <Input
+                                        required
+                                        placeholder={`e.g. Lotus ${activeTab === 'machines' ? 'Grand' : activeTab === 'heads' ? 'Head X1' : 'Roller'}`}
+                                        value={newItem.name || ''}
+                                        onChange={e => setNewItem({ ...newItem, name: e.target.value })}
+                                    />
+                                </div>
+                                <div className="grid gap-2">
+                                    <Label>Price (₹)</Label>
+                                    <Input
+                                        required
+                                        type="number"
+                                        placeholder="0.00"
+                                        value={newItem.price || ''}
+                                        onChange={e => setNewItem({ ...newItem, price: e.target.value })}
+                                    />
+                                </div>
+
+                                {activeTab === 'machines' && (
+                                    <>
+                                        <div className="grid gap-2">
+                                            <Label>Tech Type</Label>
+                                            <Select onValueChange={v => setNewItem({ ...newItem, type: v })}>
+                                                <SelectTrigger><SelectValue placeholder="Select Type" /></SelectTrigger>
+                                                <SelectContent>
+                                                    <SelectItem value="Inkjet">Inkjet</SelectItem>
+                                                    <SelectItem value="Laser">Laser</SelectItem>
+                                                    <SelectItem value="Hybrid">Hybrid</SelectItem>
+                                                    <SelectItem value="UV">UV Flatbed</SelectItem>
+                                                </SelectContent>
+                                            </Select>
+                                        </div>
+                                        <div className="grid gap-2">
+                                            <Label>HSN Code</Label>
+                                            <Input
+                                                placeholder="8443 / 8456"
+                                                value={newItem.hsn || ''}
+                                                onChange={e => setNewItem({ ...newItem, hsn: e.target.value })}
+                                            />
+                                        </div>
+                                    </>
+                                )}
+
+                                {activeTab === 'heads' && (
+                                    <div className="grid gap-2">
+                                        <Label>Resolution / Droplet Size</Label>
+                                        <Input
+                                            placeholder="e.g. 14pl, 30pl, 1200dpi"
+                                            value={newItem.resolution || ''}
+                                            onChange={e => setNewItem({ ...newItem, resolution: e.target.value })}
+                                        />
+                                    </div>
+                                )}
+
+                                {activeTab === 'accessories' && (
+                                    <div className="grid gap-2">
+                                        <Label>Category</Label>
+                                        <Select onValueChange={v => setNewItem({ ...newItem, category: v })}>
+                                            <SelectTrigger><SelectValue placeholder="Select Category" /></SelectTrigger>
+                                            <SelectContent>
+                                                <SelectItem value="Hardware">Hardware</SelectItem>
+                                                <SelectItem value="Add-on">Add-on</SelectItem>
+                                                <SelectItem value="Consumable">Consumable</SelectItem>
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
+                                )}
+
+                                <DialogFooter>
+                                    <Button type="submit">Add Item</Button>
+                                </DialogFooter>
+                            </form>
+                        </DialogContent>
+                    </Dialog>
                 </div>
             </div>
 
-            <Tabs defaultValue="machines" className="space-y-6">
+            <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
                 <TabsList className="w-full flex h-auto overflow-x-auto bg-muted p-1 rounded-lg justify-start">
                     <TabsTrigger value="machines" className="flex-1 py-2 text-xs sm:text-sm">Machines</TabsTrigger>
                     <TabsTrigger value="heads" className="flex-1 py-2 text-xs sm:text-sm">Printheads</TabsTrigger>
@@ -89,7 +229,7 @@ export default function CatalogPage() {
                                         </TableRow>
                                     </TableHeader>
                                     <TableBody>
-                                        {CATALOG_DATA.machines.map((m) => (
+                                        {machines.map((m) => (
                                             <TableRow key={m.id}>
                                                 <TableCell className="font-mono text-xs">{m.id}</TableCell>
                                                 <TableCell className="font-bold">{m.name}</TableCell>
@@ -131,7 +271,7 @@ export default function CatalogPage() {
                                         </TableRow>
                                     </TableHeader>
                                     <TableBody>
-                                        {CATALOG_DATA.heads.map((h) => (
+                                        {heads.map((h) => (
                                             <TableRow key={h.id}>
                                                 <TableCell className="font-mono text-xs">{h.id}</TableCell>
                                                 <TableCell className="font-bold">{h.name}</TableCell>
@@ -171,7 +311,7 @@ export default function CatalogPage() {
                                         </TableRow>
                                     </TableHeader>
                                     <TableBody>
-                                        {CATALOG_DATA.accessories.map((a) => (
+                                        {accessories.map((a) => (
                                             <TableRow key={a.id}>
                                                 <TableCell className="font-mono text-xs">{a.id}</TableCell>
                                                 <TableCell className="font-bold">{a.name}</TableCell>

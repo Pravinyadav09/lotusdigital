@@ -20,6 +20,15 @@ const INITIAL_USERS = [
     { id: "4", name: "Finance Dept", email: "finance@lotus.com", role: "finance_user", status: "active" },
     { id: "5", name: "Rahul Engineer", email: "service1@lotus.com", role: "service_engineer", status: "active" },
     { id: "6", name: "Pixel Printers", email: "customer1@example.com", role: "customer", status: "active" },
+    { id: "7", name: "Amit Kumar", email: "amit.sales@lotus.com", role: "senior_sales_rep", status: "active" },
+    { id: "8", name: "Neha Sharma", email: "neha.sales@lotus.com", role: "senior_sales_rep", status: "active" },
+    { id: "9", name: "Rohan Das", email: "rohan.service@lotus.com", role: "service_engineer", status: "active" },
+    { id: "10", name: "Sharma Graphics", email: "contact@sharmagraphics.in", role: "customer", status: "active" },
+    { id: "11", name: "Rapid Press", email: "info@rapidpress.com", role: "customer", status: "inactive" },
+    { id: "12", name: "Priya Verma", email: "priya.finance@lotus.com", role: "finance_user", status: "active" },
+    { id: "13", name: "Karan Johar", email: "karan.manager@lotus.com", role: "sales_manager", status: "active" },
+    { id: "14", name: "Tech Print Solutions", email: "support@techprint.com", role: "customer", status: "active" },
+    { id: "15", name: "Vikram Ad.", email: "vikram.service@lotus.com", role: "service_engineer", status: "inactive" }
 ];
 
 export default function UserManagementPage() {
@@ -125,8 +134,101 @@ export default function UserManagementPage() {
                     <CardTitle>Active Directory</CardTitle>
                 </CardHeader>
                 <CardContent className="p-0">
-                    <div className="overflow-x-auto -mx-4 md:mx-0">
-                        <Table>
+                    {/* Mobile View: Stacked User Cards */}
+                    <div className="md:hidden space-y-4 p-4">
+                        {users.map((u) => (
+                            <div key={u.id} className="bg-white p-4 rounded-lg border shadow-sm space-y-3">
+                                <div className="flex justify-between items-start">
+                                    <div>
+                                        <h4 className="font-bold text-slate-900">{u.name}</h4>
+                                        <p className="text-xs text-muted-foreground">{u.email}</p>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                        <div className={`h-2 w-2 rounded-full ${u.status === 'active' ? 'bg-green-500' : 'bg-red-500'}`} />
+                                        <Badge variant="outline" className="capitalize text-[10px]">
+                                            {u.role.replace(/_/g, " ")}
+                                        </Badge>
+                                    </div>
+                                </div>
+                                <div className="flex items-center justify-between border-t pt-3 gap-2">
+                                    <Button
+                                        variant="outline"
+                                        size="sm"
+                                        className="flex-1 h-8 text-xs"
+                                        onClick={() => {
+                                            toast.info(`Audit: ${u.name}`);
+                                            toast.promise(new Promise(r => setTimeout(r, 1500)), {
+                                                loading: 'Fetching logs...',
+                                                success: 'Audit Trail: 14 actions.',
+                                                error: 'Failed'
+                                            });
+                                        }}
+                                    >
+                                        <Icons.history className="mr-2 h-3 w-3" /> History
+                                    </Button>
+                                    <Button
+                                        variant="outline"
+                                        size="sm"
+                                        className="flex-1 h-8 text-xs"
+                                        onClick={() => {
+                                            setEditingUser(u);
+                                            setIsEditOpen(true);
+                                        }}
+                                    >
+                                        <Icons.settings className="mr-2 h-3 w-3" /> Edit
+                                    </Button>
+                                    <Dialog>
+                                        <DialogTrigger asChild>
+                                            <Button variant="outline" size="sm" className="flex-1 h-8 text-xs text-destructive border-red-200 hover:bg-red-50">
+                                                <Icons.delete className="mr-2 h-3 w-3" /> Del
+                                            </Button>
+                                        </DialogTrigger>
+                                        <DialogContent className="sm:max-w-[500px] max-h-[90vh] overflow-y-auto">
+                                            <DialogHeader>
+                                                <DialogTitle>Deactivate User: {u.name}</DialogTitle>
+                                                <DialogDescription>
+                                                    CRITICAL: Transfer assets before deactivation.
+                                                </DialogDescription>
+                                            </DialogHeader>
+                                            <div className="grid gap-4 py-4 text-sm">
+                                                <div className="p-3 bg-amber-50 rounded border border-amber-200">
+                                                    <p className="font-bold text-amber-700">Active Assets Found:</p>
+                                                    <ul className="list-disc ml-4 text-amber-600">
+                                                        <li>12 Open Leads</li>
+                                                        <li>4 Ongoing Service Calls</li>
+                                                        <li>₹ 24.5L Outstanding</li>
+                                                    </ul>
+                                                </div>
+                                                <div className="space-y-2">
+                                                    <Label>Transfer To:</Label>
+                                                    <Select>
+                                                        <SelectTrigger><SelectValue placeholder="Select Team Member" /></SelectTrigger>
+                                                        <SelectContent>
+                                                            <SelectItem value="m1">Amit Kumar (Sales Manager)</SelectItem>
+                                                            <SelectItem value="r2">Neha Sharma (Sr Rep)</SelectItem>
+                                                        </SelectContent>
+                                                    </Select>
+                                                </div>
+                                            </div>
+                                            <DialogFooter>
+                                                <Button
+                                                    variant="destructive"
+                                                    onClick={() => handleDeactivate(u.id)}
+                                                    disabled={u.status === 'inactive'}
+                                                >
+                                                    {u.status === 'inactive' ? 'Deactivated' : 'Confirm'}
+                                                </Button>
+                                            </DialogFooter>
+                                        </DialogContent>
+                                    </Dialog>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* Desktop View: Table */}
+                    <div className="hidden md:block overflow-x-auto">
+                        <Table className="min-w-[800px]">
                             <TableHeader>
                                 <TableRow className="bg-muted/30 hover:bg-muted/30">
                                     <TableHead className="min-w-[150px] font-bold">Name</TableHead>

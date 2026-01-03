@@ -72,6 +72,84 @@ const MOCK_LEADS: Lead[] = [
         createdAt: "2024-04-15",
         lastActivity: "5h ago"
     },
+    {
+        id: "L-104",
+        customerName: "Sohan Lal",
+        companyName: "Rapid Press",
+        mobile: "9988776655",
+        address: "Manesar, Gurgaon",
+        source: "exhibition",
+        status: "demo_scheduled",
+        productInterest: ["Ricoh Pro C7200"],
+        followUpDate: "2024-05-10",
+        createdAt: "2024-04-25",
+        lastActivity: "3h ago"
+    },
+    {
+        id: "L-105",
+        customerName: "Priya Sharma",
+        companyName: "Global Colors",
+        mobile: "9123456780",
+        address: "Connaught Place, Delhi",
+        source: "website",
+        status: "new",
+        productInterest: ["Heavy Duty Cutter"],
+        followUpDate: "2024-05-18",
+        createdAt: "2024-05-05",
+        lastActivity: "10m ago"
+    },
+    {
+        id: "L-106",
+        customerName: "Amitabh Verma",
+        companyName: "Zenith Press",
+        mobile: "8899001122",
+        address: "Andheri East, Mumbai",
+        source: "cold_call",
+        status: "won",
+        productInterest: ["Konica C4080"],
+        followUpDate: "2024-05-01",
+        createdAt: "2024-03-20",
+        lastActivity: "2d ago"
+    },
+    {
+        id: "L-107",
+        customerName: "Deepak Chopra",
+        companyName: "Print Hub",
+        mobile: "7766554433",
+        address: "Chandigarh Ind. Area",
+        source: "referral",
+        status: "lost",
+        productInterest: ["Eco Solvent Printer"],
+        followUpDate: "2024-06-01",
+        createdAt: "2024-02-10",
+        lastActivity: "1w ago"
+    },
+    {
+        id: "L-108",
+        customerName: "Neha Gupta",
+        companyName: "Alpha Prints",
+        mobile: "9911223344",
+        address: "Jaipur, Rajasthan",
+        source: "social_media",
+        status: "qualified",
+        productInterest: ["Binding Machine"],
+        followUpDate: "2024-05-14",
+        createdAt: "2024-04-30",
+        lastActivity: "4h ago"
+    },
+    {
+        id: "L-109",
+        customerName: "Karan Johar",
+        companyName: "Tech Print",
+        mobile: "9876500000",
+        address: "Bangalore, KA",
+        source: "website",
+        status: "demo_scheduled",
+        productInterest: ["3D Printer XL"],
+        followUpDate: "2024-05-22",
+        createdAt: "2024-05-02",
+        lastActivity: "30m ago"
+    }
 ];
 
 export default function LeadsPage() {

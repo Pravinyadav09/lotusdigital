@@ -52,6 +52,77 @@ const MOCK_MACHINES = [
         serviceType: "AMC Active",
         health: "100%",
         lastService: "2024-05-01"
+    },
+    {
+        id: "XR-VERSANT-280",
+        model: "Xerox Versant 280 Press",
+        owner: "Rapid Press",
+        status: "Maintenance",
+        warrantyTill: "2024-11-30",
+        serviceType: "On-Demand",
+        health: "45%",
+        lastService: "2024-05-12"
+    },
+    {
+        id: "RICOH-PRO-7200",
+        model: "Ricoh Pro C7200x",
+        owner: "Tech Print Solutions",
+        status: "Running",
+        warrantyTill: "2026-06-15",
+        serviceType: "Premium AMC",
+        health: "99%",
+        lastService: "2024-04-20"
+    },
+    {
+        id: "LP-MAX-5000",
+        model: "Lotus Max 5000",
+        owner: "Global Colors",
+        status: "Idle",
+        warrantyTill: "2025-08-01",
+        serviceType: "Standard Warranty",
+        health: "92%",
+        lastService: "2024-02-28"
+    },
+    {
+        id: "KONICA-C14000",
+        model: "Konica Minolta AccurioPress C14000",
+        owner: "Pixel Printers",
+        status: "Running",
+        warrantyTill: "2025-12-31",
+        serviceType: "Platinum Care",
+        health: "95%",
+        lastService: "2024-05-10"
+    },
+    {
+        id: "CANON-V1000",
+        model: "Canon imagePRESS V1000",
+        owner: "Sharma Graphics",
+        status: "Running",
+        warrantyTill: "2024-10-05",
+        serviceType: "AMC Expiring",
+        health: "88%",
+        lastService: "2024-03-25"
+    },
+    {
+        id: "LP-ECO-300",
+        model: "Lotus EcoPrint 300",
+        owner: "Zenith Press",
+        status: "Locked",
+        reason: "Contract Dispute",
+        warrantyTill: "2024-09-15",
+        serviceType: "Expired",
+        health: "Unknown",
+        lastService: "2023-11-10"
+    },
+    {
+        id: "KONICA-958",
+        model: "Konica bizhub PRO 958",
+        owner: "Print Hub",
+        status: "Running",
+        warrantyTill: "2025-04-22",
+        serviceType: "Standard Warranty",
+        health: "96%",
+        lastService: "2024-04-15"
     }
 ];
 
@@ -232,7 +303,7 @@ export default function MachinesPage() {
                                         <TabsTrigger value="history">Service History</TabsTrigger>
                                     </TabsList>
                                     <TabsContent value="specs">
-                                        <div className="grid grid-cols-2 gap-6 p-4 border rounded-lg bg-slate-50">
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 p-4 border rounded-lg bg-slate-50">
                                             <div>
                                                 <p className="text-[10px] uppercase text-muted-foreground font-bold">Printheads</p>
                                                 <p className="text-sm font-semibold">Konica Minolta 512i (High Density)</p>
