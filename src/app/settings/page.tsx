@@ -44,12 +44,12 @@ export default function SettingsPage() {
 
     return (
         <div className="flex-1 space-y-6 p-4 md:p-8 pt-6 h-full overflow-y-auto">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                    <h2 className="text-3xl font-bold tracking-tight">Global Settings</h2>
-                    <p className="text-muted-foreground">Configure business rules, thresholds, and system behavior.</p>
+                    <h2 className="text-2xl md:text-3xl font-bold tracking-tight">Global Settings</h2>
+                    <p className="text-muted-foreground text-sm md:text-base">Configure business rules, thresholds, and system behavior.</p>
                 </div>
-                <Button onClick={handleSave} disabled={isLoading}>
+                <Button onClick={handleSave} disabled={isLoading} className="w-full md:w-auto">
                     {isLoading ? "Saving..." : "Save Changes"}
                 </Button>
             </div>

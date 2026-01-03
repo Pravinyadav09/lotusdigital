@@ -27,13 +27,13 @@ export default function AuditLogsPage() {
 
     return (
         <div className="flex-1 space-y-4 p-4 md:p-8 pt-6 h-full overflow-y-auto">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                    <h2 className="text-3xl font-bold tracking-tight">System Audit Logs</h2>
-                    <p className="text-muted-foreground">Immutable record of all critical system actions.</p>
+                    <h2 className="text-2xl md:text-3xl font-bold tracking-tight">System Audit Logs</h2>
+                    <p className="text-muted-foreground text-sm md:text-base">Immutable record of all critical system actions.</p>
                 </div>
                 <div className="flex items-center gap-2">
-                    <Button variant="outline">
+                    <Button variant="outline" className="w-full md:w-auto">
                         <Icons.reports className="mr-2 h-4 w-4" />
                         Export CSV
                     </Button>
@@ -42,9 +42,9 @@ export default function AuditLogsPage() {
 
             <Card>
                 <CardHeader>
-                    <div className="flex items-center justify-between">
+                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                         <CardTitle>Activity Log</CardTitle>
-                        <div className="relative w-64">
+                        <div className="relative w-full md:w-64">
                             <Icons.search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
                             <Input
                                 placeholder="Search logs..."
@@ -56,34 +56,36 @@ export default function AuditLogsPage() {
                     </div>
                 </CardHeader>
                 <CardContent>
-                    <Table>
-                        <TableHeader>
-                            <TableRow>
-                                <TableHead className="w-[180px]">Timestamp</TableHead>
-                                <TableHead>User / Role</TableHead>
-                                <TableHead>Module</TableHead>
-                                <TableHead>Action</TableHead>
-                                <TableHead>Details</TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {filteredLogs.map((log) => (
-                                <TableRow key={log.id}>
-                                    <TableCell className="text-xs text-muted-foreground font-mono">{log.timestamp}</TableCell>
-                                    <TableCell className="font-medium">{log.user}</TableCell>
-                                    <TableCell>
-                                        <Badge variant="outline">{log.module}</Badge>
-                                    </TableCell>
-                                    <TableCell>
-                                        <Badge variant={log.action.includes("UPDATE") || log.action.includes("DELETE") ? "destructive" : "secondary"}>
-                                            {log.action}
-                                        </Badge>
-                                    </TableCell>
-                                    <TableCell className="text-sm max-w-sm truncate" title={log.details}>{log.details}</TableCell>
+                    <div className="overflow-x-auto">
+                        <Table>
+                            <TableHeader>
+                                <TableRow>
+                                    <TableHead className="w-[180px]">Timestamp</TableHead>
+                                    <TableHead>User / Role</TableHead>
+                                    <TableHead>Module</TableHead>
+                                    <TableHead>Action</TableHead>
+                                    <TableHead>Details</TableHead>
                                 </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
+                            </TableHeader>
+                            <TableBody>
+                                {filteredLogs.map((log) => (
+                                    <TableRow key={log.id}>
+                                        <TableCell className="text-xs text-muted-foreground font-mono">{log.timestamp}</TableCell>
+                                        <TableCell className="font-medium">{log.user}</TableCell>
+                                        <TableCell>
+                                            <Badge variant="outline">{log.module}</Badge>
+                                        </TableCell>
+                                        <TableCell>
+                                            <Badge variant={log.action.includes("UPDATE") || log.action.includes("DELETE") ? "destructive" : "secondary"}>
+                                                {log.action}
+                                            </Badge>
+                                        </TableCell>
+                                        <TableCell className="text-sm max-w-sm truncate" title={log.details}>{log.details}</TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </div>
                 </CardContent>
             </Card>
         </div>

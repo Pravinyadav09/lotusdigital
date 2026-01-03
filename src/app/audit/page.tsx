@@ -50,19 +50,19 @@ export default function AuditLogsPage() {
 
     return (
         <div className="flex-1 space-y-6 p-4 md:p-8 pt-6 h-full overflow-y-auto">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                    <h2 className="text-3xl font-bold tracking-tight">System Audit Logs</h2>
-                    <p className="text-muted-foreground">Immutable record of all critical system actions.</p>
+                    <h2 className="text-2xl md:text-3xl font-bold tracking-tight">System Audit Logs</h2>
+                    <p className="text-muted-foreground text-sm md:text-base">Immutable record of all critical system actions.</p>
                 </div>
-                <Button variant="outline" onClick={handleExport}>
+                <Button variant="outline" onClick={handleExport} className="w-full md:w-auto">
                     <Icons.reports className="mr-2 h-4 w-4" />
                     Export Ledger
                 </Button>
             </div>
 
-            <div className="flex flex-wrap gap-2 items-center">
-                <div className="relative flex-1 max-w-sm">
+            <div className="flex flex-col md:flex-row gap-4 items-start md:items-center">
+                <div className="relative w-full md:max-w-sm">
                     <Icons.search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                     <Input
                         type="search"
@@ -72,7 +72,7 @@ export default function AuditLogsPage() {
                         onChange={(e) => setSearchTerm(e.target.value)}
                     />
                 </div>
-                <div className="flex gap-1 overflow-x-auto pb-2 md:pb-0">
+                <div className="flex gap-1 overflow-x-auto pb-2 md:pb-0 w-full md:w-auto">
                     <Button
                         variant={filterCategory === null ? "default" : "outline"}
                         size="sm"
@@ -85,7 +85,7 @@ export default function AuditLogsPage() {
                             key={cat}
                             variant={filterCategory === cat ? "default" : "outline"}
                             size="sm"
-                            className="capitalize"
+                            className="capitalize whitespace-nowrap"
                             onClick={() => setFilterCategory(cat)}
                         >
                             {cat}
@@ -105,38 +105,40 @@ export default function AuditLogsPage() {
                     </div>
                 </CardHeader>
                 <CardContent className="p-0">
-                    <Table>
-                        <TableHeader>
-                            <TableRow>
-                                <TableHead>Timestamp</TableHead>
-                                <TableHead>User</TableHead>
-                                <TableHead>Action</TableHead>
-                                <TableHead>Detail</TableHead>
-                                <TableHead>Source IP</TableHead>
-                                <TableHead className="text-right">Category</TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {filteredLogs.map((log) => (
-                                <TableRow key={log.id} className="hover:bg-muted/30">
-                                    <TableCell className="text-xs font-mono text-muted-foreground">{log.timestamp}</TableCell>
-                                    <TableCell className="text-xs font-bold">{log.user}</TableCell>
-                                    <TableCell className="text-xs font-semibold">{log.action}</TableCell>
-                                    <TableCell className="text-xs">{log.detail}</TableCell>
-                                    <TableCell className="text-[10px] font-mono text-muted-foreground">{log.ip}</TableCell>
-                                    <TableCell className="text-right">
-                                        <Badge variant="outline" className={`text-[10px] capitalize ${log.category === 'security' ? 'border-red-200 text-red-700 bg-red-50' :
+                    <div className="overflow-x-auto">
+                        <Table>
+                            <TableHeader>
+                                <TableRow>
+                                    <TableHead>Timestamp</TableHead>
+                                    <TableHead>User</TableHead>
+                                    <TableHead>Action</TableHead>
+                                    <TableHead>Detail</TableHead>
+                                    <TableHead>Source IP</TableHead>
+                                    <TableHead className="text-right">Category</TableHead>
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                                {filteredLogs.map((log) => (
+                                    <TableRow key={log.id} className="hover:bg-muted/30">
+                                        <TableCell className="text-xs font-mono text-muted-foreground">{log.timestamp}</TableCell>
+                                        <TableCell className="text-xs font-bold">{log.user}</TableCell>
+                                        <TableCell className="text-xs font-semibold">{log.action}</TableCell>
+                                        <TableCell className="text-xs">{log.detail}</TableCell>
+                                        <TableCell className="text-[10px] font-mono text-muted-foreground">{log.ip}</TableCell>
+                                        <TableCell className="text-right">
+                                            <Badge variant="outline" className={`text-[10px] capitalize ${log.category === 'security' ? 'border-red-200 text-red-700 bg-red-50' :
                                                 log.category === 'accounting' ? 'border-green-200 text-green-700 bg-green-50' :
                                                     log.category === 'approval' ? 'border-amber-200 text-amber-700 bg-amber-50' :
                                                         'bg-blue-50 text-blue-700 border-blue-200'
-                                            }`}>
-                                            {log.category}
-                                        </Badge>
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
+                                                }`}>
+                                                {log.category}
+                                            </Badge>
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </div>
                 </CardContent>
             </Card>
 

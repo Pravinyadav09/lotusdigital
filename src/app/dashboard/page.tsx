@@ -72,16 +72,16 @@ export default function DashboardPage() {
 
     return (
         <div className="flex-1 space-y-6 p-4 md:p-8 pt-6 h-full overflow-y-auto">
-            <div className="flex items-center justify-between space-y-2">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                    <h2 className="text-3xl font-bold tracking-tight">Welcome, {user?.name}!</h2>
+                    <h2 className="text-2xl md:text-3xl font-bold tracking-tight">Welcome, {user?.name}!</h2>
                     <p className="text-muted-foreground">
                         <Badge variant="outline" className="mt-1">
                             {user?.role?.replace(/_/g, " ").toUpperCase()}
                         </Badge>
                     </p>
                 </div>
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center gap-2">
                     {/* Date Range Filter Mock */}
                     {(user?.role === "super_admin" || user?.role === "sales_manager") && (
                         <div className="hidden md:flex items-center space-x-2 mr-2">
@@ -96,11 +96,11 @@ export default function DashboardPage() {
                         </div>
                     )}
 
-                    <Button variant="outline" size="icon" className="relative" onClick={() => toast.info("No new notifications")}>
+                    <Button variant="outline" size="icon" className="relative shrink-0" onClick={() => toast.info("No new notifications")}>
                         <Icons.bell className="h-4 w-4" />
                         <span className="absolute -top-1 -right-1 h-3 w-3 rounded-full bg-red-600 border-2 border-background" />
                     </Button>
-                    <Button variant="outline" onClick={() => router.push("/reports")}>
+                    <Button variant="outline" className="flex-1 md:flex-none" onClick={() => router.push("/reports")}>
                         <Icons.reports className="mr-2 h-4 w-4" />
                         Reports
                     </Button>
@@ -566,24 +566,24 @@ export default function DashboardPage() {
                         </CardHeader>
                         <CardContent className="pt-4 h-[250px] relative">
                             {/* Mock Multi-Series Chart */}
-                            <div className="flex items-end justify-between h-40 gap-4 mt-4">
+                            <div className="flex items-end justify-around h-40 gap-2 mt-4">
                                 {[
                                     { label: "Body", val: "75%", color: "bg-blue-600", amount: "₹3.2Cr" },
                                     { label: "Service", val: "15%", color: "bg-emerald-600", amount: "₹65L" },
                                     { label: "Acc.", val: "10%", color: "bg-amber-600", amount: "₹42L" },
                                 ].map((bar) => (
-                                    <div key={bar.label} className="flex-1 flex flex-col items-center gap-2 group cursor-pointer">
-                                        <div className="w-full bg-slate-100 rounded-lg relative h-40 flex items-end overflow-hidden">
+                                    <div key={bar.label} className="flex-1 flex flex-col items-center gap-2 group cursor-pointer max-w-[80px]">
+                                        <div className="w-full bg-slate-100 rounded-md relative h-40 flex items-end overflow-hidden">
                                             <div
-                                                className={`w-full ${bar.color} rounded-lg transition-all group-hover:opacity-80`}
+                                                className={`w-full ${bar.color} rounded-t-md transition-all group-hover:opacity-80`}
                                                 style={{ height: bar.val }}
                                             />
-                                            <div className="absolute top-2 w-full text-center text-[8px] font-bold opacity-0 group-hover:opacity-100 transition-opacity">
+                                            <div className="absolute top-2 w-full text-center text-[8px] font-bold opacity-0 group-hover:opacity-100 md:opacity-100 transition-opacity">
                                                 {bar.amount}
                                             </div>
                                         </div>
-                                        <span className="text-xs font-medium">{bar.label}</span>
-                                        <span className="text-[10px] text-muted-foreground">{bar.val}</span>
+                                        <span className="text-[10px] sm:text-xs font-medium">{bar.label}</span>
+                                        <span className="text-[9px] text-muted-foreground">{bar.val}</span>
                                     </div>
                                 ))}
                             </div>
@@ -607,33 +607,35 @@ export default function DashboardPage() {
                         </CardHeader>
                         <CardContent>
                             <div className="space-y-4">
-                                <Table>
-                                    <TableHeader>
-                                        <TableRow className="text-[10px]">
-                                            <TableHead>TIMESTAMP</TableHead>
-                                            <TableHead>ACTION</TableHead>
-                                            <TableHead>REASON / DETAIL</TableHead>
-                                            <TableHead className="text-right">APPROVAL</TableHead>
-                                        </TableRow>
-                                    </TableHeader>
-                                    <TableBody>
-                                        {[
-                                            { time: "Today, 11:20", action: "Machine Unlock", detail: "Sharma Graphics - Direct Negotiated", auth: "Admin Self" },
-                                            { time: "Yesterday, 14:45", action: "Price Override", detail: "Lotus X1 - Discount 18% (Bulk Deal)", auth: "Admin Self" },
-                                            { time: "01 May, 09:12", action: "Lead Reassign", detail: "15 Leads from Rep-A to Rep-C", auth: "Conflict" },
-                                            { time: "28 Apr, 16:30", action: "Threshold Change", detail: "Auto-approve limit set to 12%", auth: "Global" },
-                                        ].map((row, i) => (
-                                            <TableRow key={i} className="text-xs">
-                                                <TableCell className="text-muted-foreground">{row.time}</TableCell>
-                                                <TableCell className="font-bold">{row.action}</TableCell>
-                                                <TableCell>{row.detail}</TableCell>
-                                                <TableCell className="text-right">
-                                                    <Badge variant="outline" className="text-[8px] uppercase">{row.auth}</Badge>
-                                                </TableCell>
+                                <div className="overflow-x-auto">
+                                    <Table>
+                                        <TableHeader>
+                                            <TableRow className="text-[10px]">
+                                                <TableHead>TIMESTAMP</TableHead>
+                                                <TableHead>ACTION</TableHead>
+                                                <TableHead>REASON / DETAIL</TableHead>
+                                                <TableHead className="text-right">APPROVAL</TableHead>
                                             </TableRow>
-                                        ))}
-                                    </TableBody>
-                                </Table>
+                                        </TableHeader>
+                                        <TableBody>
+                                            {[
+                                                { time: "Today, 11:20", action: "Machine Unlock", detail: "Sharma Graphics - Direct Negotiated", auth: "Admin Self" },
+                                                { time: "Yesterday, 14:45", action: "Price Override", detail: "Lotus X1 - Discount 18% (Bulk Deal)", auth: "Admin Self" },
+                                                { time: "01 May, 09:12", action: "Lead Reassign", detail: "15 Leads from Rep-A to Rep-C", auth: "Conflict" },
+                                                { time: "28 Apr, 16:30", action: "Threshold Change", detail: "Auto-approve limit set to 12%", auth: "Global" },
+                                            ].map((row, i) => (
+                                                <TableRow key={i} className="text-xs">
+                                                    <TableCell className="text-muted-foreground whitespace-nowrap">{row.time}</TableCell>
+                                                    <TableCell className="font-bold whitespace-nowrap">{row.action}</TableCell>
+                                                    <TableCell className="min-w-[150px]">{row.detail}</TableCell>
+                                                    <TableCell className="text-right">
+                                                        <Badge variant="outline" className="text-[8px] uppercase">{row.auth}</Badge>
+                                                    </TableCell>
+                                                </TableRow>
+                                            ))}
+                                        </TableBody>
+                                    </Table>
+                                </div>
                                 <div className="p-4 border border-dashed rounded-lg bg-red-50/20">
                                     <p className="text-[10px] font-bold text-red-600 uppercase mb-2">Security Warning</p>
                                     <p className="text-[10px] text-muted-foreground italic">

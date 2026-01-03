@@ -58,14 +58,14 @@ export default function UserManagementPage() {
 
     return (
         <div className="flex-1 space-y-6 p-4 md:p-8 pt-6 h-full overflow-y-auto">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                    <h2 className="text-3xl font-bold tracking-tight">User Management</h2>
-                    <p className="text-muted-foreground">Manage organizational roles and access control.</p>
+                    <h2 className="text-2xl md:text-3xl font-bold tracking-tight">User Management</h2>
+                    <p className="text-muted-foreground text-sm md:text-base">Manage organizational roles and access control.</p>
                 </div>
                 <Dialog open={isAddOpen} onOpenChange={setIsAddOpen}>
                     <DialogTrigger asChild>
-                        <Button>
+                        <Button className="w-full md:w-auto">
                             <Icons.add className="mr-2 h-4 w-4" />
                             Create New User
                         </Button>
@@ -125,106 +125,108 @@ export default function UserManagementPage() {
                     <CardTitle>Active Directory</CardTitle>
                 </CardHeader>
                 <CardContent className="p-0">
-                    <Table>
-                        <TableHeader>
-                            <TableRow>
-                                <TableHead>Name</TableHead>
-                                <TableHead>Email</TableHead>
-                                <TableHead>Role</TableHead>
-                                <TableHead>Status</TableHead>
-                                <TableHead className="text-right">Actions</TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {users.map((u) => (
-                                <TableRow key={u.id}>
-                                    <TableCell className="font-medium">{u.name}</TableCell>
-                                    <TableCell>{u.email}</TableCell>
-                                    <TableCell>
-                                        <Badge variant="outline" className="capitalize">
-                                            {u.role.replace(/_/g, " ")}
-                                        </Badge>
-                                    </TableCell>
-                                    <TableCell>
-                                        <div className="flex items-center gap-2">
-                                            <div className={`h-2 w-2 rounded-full ${u.status === 'active' ? 'bg-green-500' : 'bg-red-500'}`} />
-                                            <span className="text-xs capitalize">{u.status}</span>
-                                        </div>
-                                    </TableCell>
-                                    <TableCell className="text-right flex justify-end gap-1">
-                                        <Button
-                                            variant="ghost"
-                                            size="icon"
-                                            onClick={() => {
-                                                toast.info(`Viewing system audit trail for ${u.name}...`);
-                                                toast.promise(new Promise(r => setTimeout(r, 1500)), {
-                                                    loading: 'Fetching user logs from global ledger...',
-                                                    success: 'Audit Trail: 14 actions today. Last IP: 202.45.1.2',
-                                                    error: 'Failed to fetch logs'
-                                                });
-                                            }}
-                                        >
-                                            <Icons.history className="h-4 w-4" />
-                                        </Button>
-                                        <Button
-                                            variant="ghost"
-                                            size="icon"
-                                            onClick={() => {
-                                                setEditingUser(u);
-                                                setIsEditOpen(true);
-                                            }}
-                                        >
-                                            <Icons.settings className="h-4 w-4" />
-                                        </Button>
-                                        <Dialog>
-                                            <DialogTrigger asChild>
-                                                <Button variant="ghost" size="icon" className="text-destructive">
-                                                    <Icons.delete className="h-4 w-4" />
-                                                </Button>
-                                            </DialogTrigger>
-                                            <DialogContent>
-                                                <DialogHeader>
-                                                    <DialogTitle>Deactivate User: {u.name}</DialogTitle>
-                                                    <DialogDescription>
-                                                        CRITICAL: You must transfer all active leads and customer assignments before deactivation.
-                                                    </DialogDescription>
-                                                </DialogHeader>
-                                                <div className="grid gap-4 py-4 text-sm">
-                                                    <div className="p-3 bg-amber-50 rounded border border-amber-200">
-                                                        <p className="font-bold text-amber-700">Active Assets Found:</p>
-                                                        <ul className="list-disc ml-4 text-amber-600">
-                                                            <li>12 Open Leads</li>
-                                                            <li>4 Ongoing Service Calls</li>
-                                                            <li>₹ 24.5L Outstanding Collections</li>
-                                                        </ul>
-                                                    </div>
-                                                    <div className="space-y-2">
-                                                        <Label>Transfer Assignments To:</Label>
-                                                        <Select>
-                                                            <SelectTrigger><SelectValue placeholder="Select Team Member" /></SelectTrigger>
-                                                            <SelectContent>
-                                                                <SelectItem value="m1">Amit Kumar (Sales Manager)</SelectItem>
-                                                                <SelectItem value="r2">Neha Sharma (Sr Rep)</SelectItem>
-                                                            </SelectContent>
-                                                        </Select>
-                                                    </div>
-                                                </div>
-                                                <DialogFooter>
-                                                    <Button
-                                                        variant="destructive"
-                                                        onClick={() => handleDeactivate(u.id)}
-                                                        disabled={u.status === 'inactive'}
-                                                    >
-                                                        {u.status === 'inactive' ? 'Deactivated' : 'Transfer & Deactivate'}
-                                                    </Button>
-                                                </DialogFooter>
-                                            </DialogContent>
-                                        </Dialog>
-                                    </TableCell>
+                    <div className="overflow-x-auto">
+                        <Table>
+                            <TableHeader>
+                                <TableRow>
+                                    <TableHead>Name</TableHead>
+                                    <TableHead>Email</TableHead>
+                                    <TableHead>Role</TableHead>
+                                    <TableHead>Status</TableHead>
+                                    <TableHead className="text-right">Actions</TableHead>
                                 </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
+                            </TableHeader>
+                            <TableBody>
+                                {users.map((u) => (
+                                    <TableRow key={u.id}>
+                                        <TableCell className="font-medium">{u.name}</TableCell>
+                                        <TableCell>{u.email}</TableCell>
+                                        <TableCell>
+                                            <Badge variant="outline" className="capitalize">
+                                                {u.role.replace(/_/g, " ")}
+                                            </Badge>
+                                        </TableCell>
+                                        <TableCell>
+                                            <div className="flex items-center gap-2">
+                                                <div className={`h-2 w-2 rounded-full ${u.status === 'active' ? 'bg-green-500' : 'bg-red-500'}`} />
+                                                <span className="text-xs capitalize">{u.status}</span>
+                                            </div>
+                                        </TableCell>
+                                        <TableCell className="text-right flex justify-end gap-1">
+                                            <Button
+                                                variant="ghost"
+                                                size="icon"
+                                                onClick={() => {
+                                                    toast.info(`Viewing system audit trail for ${u.name}...`);
+                                                    toast.promise(new Promise(r => setTimeout(r, 1500)), {
+                                                        loading: 'Fetching user logs from global ledger...',
+                                                        success: 'Audit Trail: 14 actions today. Last IP: 202.45.1.2',
+                                                        error: 'Failed to fetch logs'
+                                                    });
+                                                }}
+                                            >
+                                                <Icons.history className="h-4 w-4" />
+                                            </Button>
+                                            <Button
+                                                variant="ghost"
+                                                size="icon"
+                                                onClick={() => {
+                                                    setEditingUser(u);
+                                                    setIsEditOpen(true);
+                                                }}
+                                            >
+                                                <Icons.settings className="h-4 w-4" />
+                                            </Button>
+                                            <Dialog>
+                                                <DialogTrigger asChild>
+                                                    <Button variant="ghost" size="icon" className="text-destructive">
+                                                        <Icons.delete className="h-4 w-4" />
+                                                    </Button>
+                                                </DialogTrigger>
+                                                <DialogContent>
+                                                    <DialogHeader>
+                                                        <DialogTitle>Deactivate User: {u.name}</DialogTitle>
+                                                        <DialogDescription>
+                                                            CRITICAL: You must transfer all active leads and customer assignments before deactivation.
+                                                        </DialogDescription>
+                                                    </DialogHeader>
+                                                    <div className="grid gap-4 py-4 text-sm">
+                                                        <div className="p-3 bg-amber-50 rounded border border-amber-200">
+                                                            <p className="font-bold text-amber-700">Active Assets Found:</p>
+                                                            <ul className="list-disc ml-4 text-amber-600">
+                                                                <li>12 Open Leads</li>
+                                                                <li>4 Ongoing Service Calls</li>
+                                                                <li>₹ 24.5L Outstanding Collections</li>
+                                                            </ul>
+                                                        </div>
+                                                        <div className="space-y-2">
+                                                            <Label>Transfer Assignments To:</Label>
+                                                            <Select>
+                                                                <SelectTrigger><SelectValue placeholder="Select Team Member" /></SelectTrigger>
+                                                                <SelectContent>
+                                                                    <SelectItem value="m1">Amit Kumar (Sales Manager)</SelectItem>
+                                                                    <SelectItem value="r2">Neha Sharma (Sr Rep)</SelectItem>
+                                                                </SelectContent>
+                                                            </Select>
+                                                        </div>
+                                                    </div>
+                                                    <DialogFooter>
+                                                        <Button
+                                                            variant="destructive"
+                                                            onClick={() => handleDeactivate(u.id)}
+                                                            disabled={u.status === 'inactive'}
+                                                        >
+                                                            {u.status === 'inactive' ? 'Deactivated' : 'Transfer & Deactivate'}
+                                                        </Button>
+                                                    </DialogFooter>
+                                                </DialogContent>
+                                            </Dialog>
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </div>
                 </CardContent>
             </Card>
 
