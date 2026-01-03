@@ -4,6 +4,7 @@ export async function generateStaticParams() {
     return [{ id: 'SR-501' }, { id: 'SR-502' }];
 }
 
-export default function ServiceTicketPage({ params }: { params: { id: string } }) {
-    return <ServiceTicketClient id={params.id} />;
+export default async function ServiceTicketPage({ params }: { params: Promise<{ id: string }> }) {
+    const { id } = await params;
+    return <ServiceTicketClient id={id} />;
 }

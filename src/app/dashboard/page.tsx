@@ -10,6 +10,13 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useGeofence } from "@/providers/geofence-provider";
+import dynamic from "next/dynamic";
+
+const OSMMap = dynamic(() => import("@/components/maps/osm-map"), {
+    ssr: false,
+    loading: () => <div className="h-full w-full bg-slate-200 animate-pulse flex items-center justify-center">Loading Satellite Feed...</div>
+});
 import {
     Dialog,
     DialogContent,
@@ -21,6 +28,7 @@ import {
 
 export default function DashboardPage() {
     const { user } = useAuth();
+    const { visitLogs } = useGeofence();
     const router = useRouter();
     const [isMapOpen, setIsMapOpen] = useState(false);
 
@@ -37,10 +45,10 @@ export default function DashboardPage() {
                 ];
             case "senior_sales_rep":
                 return [
-                    { title: "My Leads", value: "8", icon: Icons.leads, description: "3 new this week", color: "text-blue-500" },
-                    { title: "My Quotes", value: "5", icon: Icons.quotes, description: "2 pending approval", color: "text-amber-500" },
-                    { title: "Conversions", value: "3", icon: Icons.check, description: "This month", color: "text-green-500" },
-                    { title: "Visits Pending", value: "4", icon: Icons.location, description: "Scheduled", color: "text-orange-500" },
+                    { title: "My Open Leads", value: "8", icon: Icons.leads, description: "3 need follow-up", color: "text-blue-500" },
+                    { title: "Today's Visits", value: "3", icon: Icons.location, description: "2 verified check-ins", color: "text-orange-500" },
+                    { title: "Quote Submissions", value: "5", icon: Icons.quotes, description: "2 pending manager", color: "text-amber-500" },
+                    { title: "Target Achieved", value: "₹22L", icon: Icons.check, description: "44% of monthly target", color: "text-green-500" },
                 ];
             case "finance_user":
                 return [
@@ -245,9 +253,9 @@ export default function DashboardPage() {
                 </Card>
             </div>
 
-            {/* Admin Deep Dive: Sales & Field Operations */}
+            {/* Admin & Manager Deep Dive: Sales & Field Operations */}
             {
-                user?.role === "super_admin" && (
+                (user?.role === "super_admin" || user?.role === "sales_manager") && (
                     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
                         {/* Visual Sales Funnel */}
                         <Card className="col-span-full md:col-span-4">
@@ -321,31 +329,54 @@ export default function DashboardPage() {
                                             </TableRow>
                                         </TableHeader>
                                         <TableBody>
-                                            {[
-                                                { name: "Rahul Singh", loc: "Okhla Ph-III", task: "Demo", status: "Verified", time: "10:15 AM", dist: "12m" },
-                                                { name: "Amit Kumar", loc: "Naraina Ind.", task: "Closing", status: "Verified", time: "11:30 AM", dist: "45m" },
-                                                { name: "Neha Sharma", loc: "Sector 62, Noida", task: "Payment", status: "Warning", time: "12:10 PM", dist: "850m" },
-                                                { name: "Vikram Ad.", loc: "Manesar", task: "Installation", status: "Verified", time: "12:45 PM", dist: "5m" },
-                                            ].map((rep, i) => (
-                                                <TableRow key={i} className="text-xs">
-                                                    <TableCell className="font-bold whitespace-nowrap">
-                                                        <div className="flex items-center gap-2">
-                                                            <div className={`h-1.5 w-1.5 rounded-full ${rep.status === 'Verified' ? 'bg-green-500' : 'bg-red-500 animate-ping'}`} />
-                                                            {rep.name}
-                                                        </div>
-                                                    </TableCell>
-                                                    <TableCell className="whitespace-nowrap">
-                                                        <p className="font-medium text-[10px]">{rep.loc}</p>
-                                                        <p className="text-[9px] text-muted-foreground">{rep.task} • {rep.time}</p>
-                                                    </TableCell>
-                                                    <TableCell>
-                                                        <Badge variant="outline" className={`text-[8px] px-1 h-4 ${rep.status === 'Verified' ? 'text-green-700 bg-green-50 border-green-200' : 'text-red-700 bg-red-50 border-red-200'}`}>
-                                                            {rep.status}
-                                                        </Badge>
-                                                    </TableCell>
-                                                    <TableCell className="text-right font-mono text-[10px]">{rep.dist}</TableCell>
-                                                </TableRow>
-                                            ))}
+                                            {visitLogs.length > 0 ? (
+                                                visitLogs.slice(0, 4).map((log, i) => (
+                                                    <TableRow key={log.id} className="text-xs">
+                                                        <TableCell className="font-bold whitespace-nowrap">
+                                                            <div className="flex items-center gap-2">
+                                                                <div className={`h-1.5 w-1.5 rounded-full ${log.status === 'verified' ? 'bg-green-500' : 'bg-red-500 animate-ping'}`} />
+                                                                Field Rep Check-in
+                                                            </div>
+                                                        </TableCell>
+                                                        <TableCell className="whitespace-nowrap">
+                                                            <p className="font-medium text-[10px]">Site: {log.visitId}</p>
+                                                            <p className="text-[9px] text-muted-foreground">{new Date(log.timestamp).toLocaleTimeString()}</p>
+                                                        </TableCell>
+                                                        <TableCell>
+                                                            <Badge variant="outline" className={`text-[8px] px-1 h-4 ${log.status === 'verified' ? 'text-green-700 bg-green-50 border-green-200' : 'text-red-700 bg-red-50 border-red-200'}`}>
+                                                                {log.status.toUpperCase()}
+                                                            </Badge>
+                                                        </TableCell>
+                                                        <TableCell className="text-right font-mono text-[10px]">{log.distance}m</TableCell>
+                                                    </TableRow>
+                                                ))
+                                            ) : (
+                                                [
+                                                    { name: "Rahul Singh", loc: "Okhla Ph-III", task: "Demo", status: "Verified", time: "10:15 AM", dist: "12m" },
+                                                    { name: "Amit Kumar", loc: "Naraina Ind.", task: "Closing", status: "Verified", time: "11:30 AM", dist: "45m" },
+                                                    { name: "Neha Sharma", loc: "Sector 62, Noida", task: "Payment", status: "Warning", time: "12:10 PM", dist: "850m" },
+                                                    { name: "Vikram Ad.", loc: "Manesar", task: "Installation", status: "Verified", time: "12:45 PM", dist: "5m" },
+                                                ].map((rep, i) => (
+                                                    <TableRow key={i} className="text-xs">
+                                                        <TableCell className="font-bold whitespace-nowrap">
+                                                            <div className="flex items-center gap-2">
+                                                                <div className={`h-1.5 w-1.5 rounded-full ${rep.status === 'Verified' ? 'bg-green-500' : 'bg-red-500 animate-ping'}`} />
+                                                                {rep.name}
+                                                            </div>
+                                                        </TableCell>
+                                                        <TableCell className="whitespace-nowrap">
+                                                            <p className="font-medium text-[10px]">{rep.loc}</p>
+                                                            <p className="text-[9px] text-muted-foreground">{rep.task} • {rep.time}</p>
+                                                        </TableCell>
+                                                        <TableCell>
+                                                            <Badge variant="outline" className={`text-[8px] px-1 h-4 ${rep.status === 'Verified' ? 'text-green-700 bg-green-50 border-green-200' : 'text-red-700 bg-red-50 border-red-200'}`}>
+                                                                {rep.status}
+                                                            </Badge>
+                                                        </TableCell>
+                                                        <TableCell className="text-right font-mono text-[10px]">{rep.dist}</TableCell>
+                                                    </TableRow>
+                                                ))
+                                            )}
                                         </TableBody>
                                     </Table>
                                 </div>
@@ -365,7 +396,7 @@ export default function DashboardPage() {
 
             {/* Master Map Dialog */}
             <Dialog open={isMapOpen} onOpenChange={setIsMapOpen}>
-                <DialogContent className="max-w-4xl h-[80vh] flex flex-col p-0 overflow-hidden border-none shadow-2xl">
+                <DialogContent className="max-w-4xl w-[95vw] sm:w-full h-[85vh] sm:h-[80vh] flex flex-col p-0 overflow-hidden border-none shadow-2xl">
                     <DialogHeader className="p-6 bg-slate-900 text-white">
                         <div className="flex justify-between items-center">
                             <div>
@@ -379,34 +410,23 @@ export default function DashboardPage() {
                             </Badge>
                         </div>
                     </DialogHeader>
-                    <div className="flex-1 bg-slate-200 relative overflow-hidden">
-                        {/* Mock Map Image */}
-                        <div className="absolute inset-0 bg-[url('https://maps.googleapis.com/maps/api/staticmap?center=28.6,77.2&zoom=11&size=1200x800&scale=2')] bg-cover">
-                            {/* Animated Markers */}
-                            <div className="absolute top-[40%] left-[30%] group">
-                                <div className="h-4 w-4 bg-blue-600 rounded-full border-2 border-white shadow-lg animate-bounce" />
-                                <div className="absolute -top-10 -left-10 bg-white p-2 rounded shadow text-[10px] opacity-0 group-hover:opacity-100 transition-opacity">
-                                    <p className="font-bold">Rahul Singh (Okhla)</p>
-                                    <p>Status: Verified Demo</p>
-                                </div>
-                            </div>
-                            <div className="absolute top-[60%] left-[50%] group">
-                                <div className="h-4 w-4 bg-emerald-600 rounded-full border-2 border-white shadow-lg animate-pulse" />
-                            </div>
-                            <div className="absolute top-[20%] left-[70%] group">
-                                <div className="h-4 w-4 bg-orange-600 rounded-full border-2 border-white shadow-lg" />
-                            </div>
-                        </div>
+                    <div className="flex-1 bg-slate-200 relative overflow-hidden z-0">
+                        <OSMMap
+                            center={[28.6139, 77.2090]}
+                            zoom={11}
+                            geofences={useGeofence().geofences}
+                            height="100%"
+                        />
 
                         {/* Map Overlay Stats */}
-                        <div className="absolute bottom-6 left-6 grid grid-cols-3 gap-4 bg-white/90 backdrop-blur rounded-lg p-4 shadow-xl border">
+                        <div className="absolute bottom-4 left-4 right-4 sm:bottom-6 sm:left-6 sm:right-auto grid grid-cols-3 gap-2 sm:gap-4 bg-white/95 backdrop-blur rounded-lg p-2 sm:p-4 shadow-xl border z-10">
                             <div className="text-center">
-                                <p className="text-[10px] text-muted-foreground font-bold">ACTIVE REPS</p>
-                                <p className="text-lg font-black">12</p>
+                                <p className="text-[8px] sm:text-[10px] text-muted-foreground font-bold">ACTIVE REPS</p>
+                                <p className="text-sm sm:text-lg font-black">12</p>
                             </div>
-                            <div className="text-center border-x px-4">
-                                <p className="text-[10px] text-muted-foreground font-bold">AVG RADIUS</p>
-                                <p className="text-lg font-black text-green-600">32m</p>
+                            <div className="text-center border-x px-2 sm:px-4">
+                                <p className="text-[8px] sm:text-[10px] text-muted-foreground font-bold">AVG RADIUS</p>
+                                <p className="text-sm sm:text-lg font-black text-green-600">32m</p>
                             </div>
                             <div className="text-center">
                                 <p className="text-[10px] text-muted-foreground font-bold">ALERTS</p>

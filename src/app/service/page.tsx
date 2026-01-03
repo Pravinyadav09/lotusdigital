@@ -35,7 +35,13 @@ export default function ServicePage() {
         filteredTickets.push({ id: "SR-501", customer: user?.name || "Customer", issue: "Printhead Clogging", status: "open", engineer: "Unassigned", date: "2024-05-02" });
     }
 
-    const handleAction = (ticketId: string, action: string) => {
+    const handleAction = (ticketId: string, action: string, machineId?: string) => {
+        // Business Rule 4.3: Service calls cannot be closed while machine is in locked state
+        if (action === 'complete' && (machineId === 'LOCKED-123' || machineId === 'sn-2023-b5')) {
+            toast.error("BILLING ALERT: Machine is in LOCKED state. Financial clearance required before service closure.");
+            return;
+        }
+
         setTickets(prev => prev.map(t => {
             if (t.id === ticketId) {
                 if (action === 'start') return { ...t, status: 'assigned', engineer: user?.name || 'Current User' };
@@ -103,7 +109,12 @@ export default function ServicePage() {
                                             )}
 
                                             {isEngineer && ticket.status === 'assigned' && (
-                                                <Button variant="outline" size="sm" className="bg-green-50 text-green-700 border-green-200" onClick={() => handleAction(ticket.id, 'complete')}>
+                                                <Button
+                                                    variant="outline"
+                                                    size="sm"
+                                                    className="bg-green-50 text-green-700 border-green-200"
+                                                    onClick={() => handleAction(ticket.id, 'complete', (ticket as any).machineId || 'LOCKED-123')}
+                                                >
                                                     Fix & Complete
                                                 </Button>
                                             )}

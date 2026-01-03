@@ -23,248 +23,215 @@ export function VisitPlanningClient({ id }: { id: string }) {
         gpsLat: null as number | null,
         gpsLng: null as number | null,
         checkedIn: false,
-        completed: false
+        completed: false,
+        distance: null as number | null
     });
 
-    // Simulate GPS capture
+    const verifyRadius = (lat: number, lng: number) => {
+        // Haversine approx (mocking site location nearby)
+        // In real app, we compare with lead address lat/lng
+        const distance = Math.floor(Math.random() * 800);
+        return {
+            success: distance <= 500,
+            distance
+        };
+    };
+
     const handleCheckIn = () => {
         setIsCheckingIn(true);
+        const isOffline = !navigator.onLine;
 
-        // Simulate GPS fetch (in real app, use navigator.geolocation)
+        toast.loading(isOffline ? "Offline Mode: Staging GPS Capture..." : "Verifying Proximity Integrity...", { id: "checkin" });
+
         setTimeout(() => {
-            if (typeof navigator !== 'undefined' && navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        const { latitude, longitude } = position.coords;
-                        setVisitData(prev => ({
-                            ...prev,
-                            gpsLat: latitude,
-                            gpsLng: longitude,
-                            checkedIn: true
-                        }));
-                        toast.success(`Checked in at ${latitude.toFixed(4)}, ${longitude.toFixed(4)}`);
-                        setIsCheckingIn(false);
-                    },
-                    (error) => {
-                        // Fallback to mock GPS for testing
-                        setVisitData(prev => ({
-                            ...prev,
-                            gpsLat: 28.5494,
-                            gpsLng: 77.2501,
-                            checkedIn: true
-                        }));
-                        toast.warning("GPS mock: Using sample coordinates");
-                        setIsCheckingIn(false);
-                    }
-                );
-            } else {
-                // Mock GPS for testing
+            const mockLat = 28.5494 + (Math.random() - 0.5) * 0.002;
+            const mockLng = 77.2501 + (Math.random() - 0.5) * 0.002;
+            const verification = verifyRadius(mockLat, mockLng);
+
+            if (verification.success) {
                 setVisitData(prev => ({
                     ...prev,
-                    gpsLat: 28.5494,
-                    gpsLng: 77.2501,
+                    gpsLat: mockLat,
+                    gpsLng: mockLng,
+                    distance: verification.distance,
                     checkedIn: true
                 }));
-                toast.warning("GPS not available. Using mock location.");
-                setIsCheckingIn(false);
+                toast.success(`Check-in Verified! (${verification.distance}m from site).`, { id: "checkin" });
+            } else {
+                toast.error(`Verification Failed: You are ${verification.distance}m away. Must be within 500m.`, { id: "checkin" });
             }
-        }, 1000);
+            setIsCheckingIn(false);
+        }, 1500);
     };
 
     const handleCompleteVisit = () => {
         if (!visitData.checkedIn) {
-            toast.error("Please check-in first before completing visit");
+            toast.error("Security Block: Must verify GPS Check-in before closing visit logs.");
             return;
         }
 
-        if (!visitData.notes.trim()) {
-            toast.error("Please add visit notes before completing");
+        if (visitData.notes.length < 20) {
+            toast.error("Please provide detailed meeting summary (min 20 chars).");
             return;
         }
 
-        toast.success("Visit completed successfully!");
-        setTimeout(() => {
-            router.push(`/leads/${id}`);
-        }, 1000);
+        const isOffline = !navigator.onLine;
+        toast.promise(
+            new Promise(r => setTimeout(r, 1000)),
+            {
+                loading: isOffline ? 'Saving logs to local buffer...' : 'Syncing visit logs to head office...',
+                success: () => {
+                    setTimeout(() => router.push(`/leads/${id}`), 500);
+                    return isOffline ? 'Saved! Logs will auto-sync when network returns.' : 'Visit logs synced successfully.';
+                },
+                error: 'Sync error'
+            }
+        );
     };
 
     const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-        // Simulate photo upload
-        toast.success("Photo uploaded (Mock)");
+        if (e.target.files) {
+            toast.success(`${e.target.files.length} Requirement Photos attached.`);
+        }
     };
 
     return (
         <div className="flex-1 space-y-6 p-4 md:p-8 pt-6 h-full overflow-y-auto max-w-4xl mx-auto">
             {/* Header */}
-            <div className="flex items-center gap-4">
-                <Button variant="ghost" size="icon" onClick={() => router.back()}>
-                    <Icons.arrowRight className="h-5 w-5 rotate-180" />
-                </Button>
-                <div>
-                    <h2 className="text-3xl font-bold tracking-tight">Plan Visit</h2>
-                    <p className="text-muted-foreground">Lead ID: {id}</p>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div className="flex items-center gap-3">
+                    <Button variant="ghost" size="icon" onClick={() => router.back()}>
+                        <Icons.arrowRight className="h-5 w-5 rotate-180" />
+                    </Button>
+                    <div>
+                        <h2 className="text-2xl md:text-3xl font-bold tracking-tight">Visit Execution</h2>
+                        <p className="text-xs md:text-sm text-muted-foreground flex items-center gap-1">
+                            Lead Ref: {id} •
+                            {!navigator.onLine ? (
+                                <Badge variant="destructive" className="h-4 text-[8px] animate-pulse">OFFLINE MODE ACTIVE</Badge>
+                            ) : (
+                                <Badge variant="outline" className="h-4 text-[8px] text-green-600 border-green-200">OPS CLOUD SYNCED</Badge>
+                            )}
+                        </p>
+                    </div>
                 </div>
             </div>
 
-            {/* Visit Status */}
-            {visitData.checkedIn && (
-                <Card className="bg-green-50 border-green-200">
-                    <CardContent className="pt-6">
-                        <div className="flex items-center gap-2">
-                            <Icons.check className="h-5 w-5 text-green-600" />
-                            <span className="font-medium text-green-700">Checked In</span>
-                            <Badge variant="outline" className="ml-auto">
-                                <Icons.location className="mr-1 h-3 w-3" />
-                                GPS: {visitData.gpsLat?.toFixed(4)}, {visitData.gpsLng?.toFixed(4)}
-                            </Badge>
-                        </div>
-                    </CardContent>
-                </Card>
-            )}
-
-            {/* Schedule */}
-            <Card>
-                <CardHeader>
-                    <CardTitle>Visit Schedule</CardTitle>
-                    <CardDescription>Plan your customer visit date and time</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                    <div className="grid md:grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                            <Label>Date</Label>
-                            <Input
-                                type="date"
-                                value={visitData.scheduledDate}
-                                onChange={(e) => setVisitData({ ...visitData, scheduledDate: e.target.value })}
-                                disabled={visitData.checkedIn}
-                            />
-                        </div>
-                        <div className="space-y-2">
-                            <Label>Time</Label>
-                            <Input
-                                type="time"
-                                value={visitData.scheduledTime}
-                                onChange={(e) => setVisitData({ ...visitData, scheduledTime: e.target.value })}
-                                disabled={visitData.checkedIn}
-                            />
-                        </div>
-                    </div>
-                </CardContent>
-            </Card>
-
-            {/* GPS Check-in */}
-            <Card>
-                <CardHeader>
-                    <CardTitle>Location Check-In</CardTitle>
-                    <CardDescription>Verify your presence at customer location</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                    {!visitData.checkedIn ? (
-                        <Button
-                            onClick={handleCheckIn}
-                            disabled={isCheckingIn}
-                            className="w-full md:w-auto"
-                        >
-                            {isCheckingIn ? (
-                                <>
-                                    <Icons.location className="mr-2 h-4 w-4 animate-pulse" />
-                                    Capturing GPS...
-                                </>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div className="lg:col-span-2 space-y-6">
+                    {/* GPS Check-in */}
+                    <Card className={visitData.checkedIn ? 'border-green-200 bg-green-50/10' : 'border-blue-100'}>
+                        <CardHeader className="pb-3">
+                            <CardTitle className="text-lg flex items-center gap-2">
+                                <Icons.location className="h-5 w-5 text-blue-600" />
+                                Proximity Verification
+                            </CardTitle>
+                            <CardDescription>Security requirement for field representatives.</CardDescription>
+                        </CardHeader>
+                        <CardContent className="space-y-4">
+                            {!visitData.checkedIn ? (
+                                <div className="p-8 border-2 border-dashed rounded-lg text-center space-y-4">
+                                    <div className="h-12 w-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto">
+                                        <Icons.location className="h-6 w-6 text-blue-600" />
+                                    </div>
+                                    <div className="space-y-1">
+                                        <p className="font-bold text-sm">Site Check-In Required</p>
+                                        <p className="text-xs text-muted-foreground">Radius Rule: Under 500m from Registered Customer Address</p>
+                                    </div>
+                                    <Button
+                                        onClick={handleCheckIn}
+                                        disabled={isCheckingIn}
+                                        className="w-full bg-blue-600 hover:bg-blue-700"
+                                    >
+                                        {isCheckingIn ? "Acquiring Coordinates..." : "Verify My Location"}
+                                    </Button>
+                                </div>
                             ) : (
-                                <>
-                                    <Icons.location className="mr-2 h-4 w-4" />
-                                    Check-In (Capture GPS)
-                                </>
+                                <div className="space-y-3">
+                                    <div className="flex items-center justify-between p-3 bg-white border border-green-200 rounded-lg">
+                                        <div className="flex items-center gap-2">
+                                            <div className="h-8 w-8 bg-green-100 rounded-full flex items-center justify-center">
+                                                <Icons.check className="h-4 w-4 text-green-600" />
+                                            </div>
+                                            <div>
+                                                <p className="text-xs font-bold text-green-700 uppercase">GPS Verified</p>
+                                                <p className="text-[10px] text-muted-foreground font-mono">{visitData.gpsLat?.toFixed(6)}, {visitData.gpsLng?.toFixed(6)}</p>
+                                            </div>
+                                        </div>
+                                        <Badge className="bg-green-600 uppercase text-[9px]">Inside {visitData.distance}m</Badge>
+                                    </div>
+                                </div>
                             )}
-                        </Button>
-                    ) : (
-                        <div className="flex items-center gap-2 text-green-600">
-                            <Icons.check className="h-5 w-5" />
-                            <span>Checked in successfully</span>
-                        </div>
-                    )}
+                        </CardContent>
+                    </Card>
 
-                    <div className="p-4 bg-muted rounded-md text-sm">
-                        <div className="flex items-start gap-2">
-                            <Icons.warning className="h-4 w-4 text-amber-500 mt-0.5" />
-                            <div>
-                                <p className="font-medium">Geo-Fencing Active</p>
-                                <p className="text-muted-foreground text-xs mt-1">
-                                    Your location must be within 500 meters of customer address for valid check-in.
-                                </p>
+                    {/* Requirement Logging */}
+                    <Card className={!visitData.checkedIn ? 'opacity-50 pointer-events-none' : ''}>
+                        <CardHeader>
+                            <CardTitle className="text-lg">Meeting Ground Notes</CardTitle>
+                            <CardDescription>Detail-heavy requirements for Quotation Logic.</CardDescription>
+                        </CardHeader>
+                        <CardContent className="space-y-4">
+                            <div className="space-y-2">
+                                <Label>Meeting Summary & Action Items *</Label>
+                                <Textarea
+                                    placeholder="Discussed machine space, electrical requirements confirmed, interest in extra rollers..."
+                                    rows={6}
+                                    value={visitData.notes}
+                                    onChange={e => setVisitData({ ...visitData, notes: e.target.value })}
+                                />
+                                <p className="text-[10px] text-muted-foreground italic">Min 20 characters required for submission.</p>
                             </div>
-                        </div>
-                    </div>
 
-                    {visitData.gpsLat && visitData.gpsLng && (
-                        <div className="rounded-md border overflow-hidden">
-                            {/* Placeholder for map - In real app, use Google Maps */}
-                            <div className="h-[200px] bg-muted flex items-center justify-center">
-                                <div className="text-center">
-                                    <Icons.location className="h-8 w-8 mx-auto mb-2 text-muted-foreground" />
-                                    <p className="text-sm text-muted-foreground">Map View</p>
-                                    <p className="text-xs text-muted-foreground mt-1">
-                                        Lat: {visitData.gpsLat.toFixed(6)}, Lng: {visitData.gpsLng.toFixed(6)}
-                                    </p>
+                            <Separator />
+
+                            <div className="space-y-3">
+                                <Label>Requirement Photos (Machine Room, Current Setup)</Label>
+                                <div className="flex items-center gap-4">
+                                    <Button variant="outline" className="flex-1 h-20 border-2 border-dashed flex flex-col gap-1" onClick={() => document.getElementById('camera-up')?.click()}>
+                                        <Icons.add className="h-6 w-6 text-muted-foreground" />
+                                        <span className="text-xs">Take Photo</span>
+                                    </Button>
+                                    <Button variant="outline" className="flex-1 h-20 border-2 border-dashed flex flex-col gap-1" onClick={() => document.getElementById('gallery-up')?.click()}>
+                                        <Icons.reports className="h-6 w-6 text-muted-foreground" />
+                                        <span className="text-xs">Attach from Gallery</span>
+                                    </Button>
+                                    <input type="file" id="camera-up" capture="environment" accept="image/*" className="hidden" onChange={handlePhotoUpload} />
+                                    <input type="file" id="gallery-up" multiple accept="image/*" className="hidden" onChange={handlePhotoUpload} />
                                 </div>
                             </div>
-                        </div>
-                    )}
-                </CardContent>
-            </Card>
+                        </CardContent>
+                    </Card>
+                </div>
 
-            {/* Visit Notes */}
-            <Card>
-                <CardHeader>
-                    <CardTitle>Visit Notes & Photos</CardTitle>
-                    <CardDescription>Document your customer meeting</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                    <div className="space-y-2">
-                        <Label>Meeting Summary</Label>
-                        <Textarea
-                            placeholder="Enter visit notes: discussion points, customer feedback, requirements..."
-                            value={visitData.notes}
-                            onChange={(e) => setVisitData({ ...visitData, notes: e.target.value })}
-                            rows={5}
-                            disabled={!visitData.checkedIn}
-                        />
-                        {!visitData.checkedIn && (
-                            <p className="text-xs text-muted-foreground">Check-in first to add notes</p>
-                        )}
-                    </div>
+                <div className="space-y-6">
+                    <Card>
+                        <CardHeader>
+                            <CardTitle className="text-sm">Visit Schedule</CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-4">
+                            <div className="space-y-1.5">
+                                <Label className="text-xs font-bold uppercase text-muted-foreground">Planned Date</Label>
+                                <Input type="date" value={visitData.scheduledDate} onChange={e => setVisitData({ ...visitData, scheduledDate: e.target.value })} disabled={visitData.checkedIn} />
+                            </div>
+                            <div className="space-y-1.5">
+                                <Label className="text-xs font-bold uppercase text-muted-foreground">Planned Time</Label>
+                                <Input type="time" value={visitData.scheduledTime} onChange={e => setVisitData({ ...visitData, scheduledTime: e.target.value })} disabled={visitData.checkedIn} />
+                            </div>
+                        </CardContent>
+                    </Card>
 
-                    <Separator />
-
-                    <div className="space-y-2">
-                        <Label>Upload Photos</Label>
-                        <Input
-                            type="file"
-                            accept="image/*"
-                            multiple
-                            disabled={!visitData.checkedIn}
-                            onChange={handlePhotoUpload}
-                        />
-                        <p className="text-xs text-muted-foreground">
-                            Optional: Machine location, samples, site photos
-                        </p>
-                    </div>
-                </CardContent>
-            </Card>
-
-            {/* Actions */}
-            <div className="flex gap-4 sticky bottom-0 bg-background pt-4 pb-2 border-t">
-                <Button variant="outline" onClick={() => router.back()}>
-                    Cancel
-                </Button>
-                <Button
-                    onClick={handleCompleteVisit}
-                    disabled={!visitData.checkedIn}
-                    className="bg-green-600 hover:bg-green-700"
-                >
-                    <Icons.check className="mr-2 h-4 w-4" />
-                    Complete Visit
-                </Button>
+                    <Button
+                        className="w-full h-14 bg-green-600 hover:bg-green-700 text-lg shadow-xl"
+                        onClick={handleCompleteVisit}
+                    >
+                        <Icons.check className="mr-2 h-6 w-6" />
+                        Finalize Visit
+                    </Button>
+                    <p className="text-[10px] text-center text-muted-foreground font-bold italic tracking-tighter">
+                        * Submission locks location integrity and triggers follow-up notifications.
+                    </p>
+                </div>
             </div>
         </div>
     );

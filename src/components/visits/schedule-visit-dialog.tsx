@@ -97,6 +97,14 @@ export function ScheduleVisitDialog({ leadName, leadLocation }: { leadName?: str
                         </Select>
                     </div>
 
+                    <div className="p-3 bg-blue-50/50 rounded-lg border border-blue-100 flex items-center justify-between">
+                        <div className="space-y-0.5">
+                            <Label className="text-xs font-bold text-blue-900">GPS Geo-verification</Label>
+                            <p className="text-[10px] text-blue-700">Enforce check-in within site radius.</p>
+                        </div>
+                        <div className="h-2 w-2 rounded-full bg-blue-500 animate-pulse" />
+                    </div>
+
                     <DialogFooter>
                         <Button type="button" variant="ghost" onClick={() => setOpen(false)}>Cancel</Button>
                         <Button type="submit" className="bg-blue-600 hover:bg-blue-700">Set Visit Schedule</Button>

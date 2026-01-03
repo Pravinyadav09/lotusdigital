@@ -15,17 +15,24 @@ export interface User {
 }
 
 export type LeadStatus = 'new' | 'contacted' | 'qualified' | 'proposal' | 'negotiation' | 'closed';
+export type LeadSource = 'referral' | 'website' | 'walk-in' | 'social_media' | 'exhibition';
 
 export interface Lead {
     id: string;
     customerName: string;
     companyName: string;
     mobile: string;
+    email?: string;
+    address: string;
     status: LeadStatus;
+    source: LeadSource;
     productInterest: string[];
+    notes?: string;
+    followUpDate: string; // Mandatory
     assignedTo?: string; // User ID
     createdAt: string;
     lastActivity: string;
+    photos?: string[];
 }
 
 export interface MachineConfig {
@@ -36,6 +43,14 @@ export interface MachineConfig {
     accessories: string[];
 }
 
+export interface QuotePricing {
+    bodyBillable: number;
+    extendedService: number; // Installation, training, warranty
+    accessories: number;
+    discountAmount: number;
+    discountSection: 'body' | 'service' | 'accessories' | null;
+}
+
 export type QuoteStatus = 'draft' | 'submitted' | 'approved' | 'rejected' | 'converted';
 
 export interface Quote {
@@ -43,7 +58,24 @@ export interface Quote {
     leadId: string;
     version: number;
     config: MachineConfig;
+    pricing: QuotePricing;
     totalAmount: number;
     status: QuoteStatus;
+    createdBy: string; // User ID
     createdAt: string;
+}
+
+export interface Visit {
+    id: string;
+    leadId: string;
+    scheduledAt: string;
+    checkedInAt?: string;
+    gps?: {
+        lat: number;
+        lng: number;
+        verified: boolean;
+    };
+    notes?: string;
+    photos?: string[];
+    completed: boolean;
 }

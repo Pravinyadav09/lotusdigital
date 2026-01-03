@@ -35,7 +35,11 @@ const MOCK_LEAD = {
     createdAt: "2024-05-01",
     lastActivity: "2h ago",
     notes: "Interested in 3.2m machine for flex printing. Budget: 8-10L",
-    followUpDate: "2024-05-15"
+    followUpDate: "2024-05-15",
+    photos: [
+        "https://images.unsplash.com/photo-1590602847861-f357a9332bbc?w=200&h=200&fit=crop",
+        "https://images.unsplash.com/photo-1590602847861-f357a9332bbc?w=200&h=200&fit=crop"
+    ]
 };
 
 const ACTIVITIES = [
@@ -212,6 +216,9 @@ export function LeadDetailsClient({ id }: LeadDetailsProps) {
                         Quotes
                         <Badge variant="secondary" className="ml-1.5 sm:ml-2 text-[10px] px-1">{QUOTES.length}</Badge>
                     </TabsTrigger>
+                    <TabsTrigger value="documents" className="flex-1 sm:flex-none">
+                        Docs & Photos
+                    </TabsTrigger>
                 </TabsList>
 
                 {/* Details Tab */}
@@ -365,37 +372,59 @@ export function LeadDetailsClient({ id }: LeadDetailsProps) {
                 <TabsContent value="quotes" className="space-y-4">
                     {QUOTES.map((quote) => (
                         <Card key={quote.id}>
-                            <CardHeader>
-                                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                                    <div className="space-y-1">
-                                        <CardTitle className="text-lg">{quote.id} (v{quote.version})</CardTitle>
-                                        <p className="text-sm text-muted-foreground">{quote.date}</p>
-                                    </div>
-                                    <div className="flex sm:flex-col items-center sm:items-end justify-between sm:justify-center gap-2">
-                                        <div className="text-xl sm:text-2xl font-bold">₹{quote.amount.toLocaleString()}</div>
-                                        <Badge variant={quote.status === 'pending_approval' ? 'default' : 'destructive'} className="text-[10px] uppercase">
-                                            {quote.status.replace(/_/g, ' ')}
-                                        </Badge>
-                                    </div>
-                                </div>
-                            </CardHeader>
-                            <CardContent className="flex gap-2">
-                                <Button variant="outline" size="sm" onClick={() => toast.success("Opening Quotation PDF...")}>
-                                    <Icons.reports className="mr-2 h-4 w-4" />
-                                    View PDF
-                                </Button>
-                                {quote.status === 'rejected' && (
-                                    <Button variant="outline" size="sm" onClick={() => {
-                                        toast.info("Cloning configuration for new version...");
-                                        router.push(`/quotes/create?clone=${quote.id}`);
-                                    }}>
-                                        <Icons.add className="mr-2 h-4 w-4" />
-                                        Create New Version
-                                    </Button>
-                                )}
-                            </CardContent>
+                            {/* ... existing code ... */}
                         </Card>
                     ))}
+                </TabsContent>
+
+                {/* Documents Tab */}
+                <TabsContent value="documents" className="space-y-4">
+                    <Card>
+                        <CardHeader className="pb-3">
+                            <CardTitle>Site & Verification Media</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                                {lead.photos?.map((url, i) => (
+                                    <div key={i} className="aspect-square rounded-lg border overflow-hidden bg-slate-50 relative group">
+                                        <img src={url} className="h-full w-full object-cover" />
+                                        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                            <Button variant="ghost" size="sm" className="text-white h-8 w-8 p-0"><Icons.view className="h-4 w-4" /></Button>
+                                        </div>
+                                    </div>
+                                ))}
+                                <button className="aspect-square rounded-lg border-2 border-dashed flex flex-col items-center justify-center text-muted-foreground hover:bg-slate-50">
+                                    <Icons.add className="h-5 w-5 mb-1" />
+                                    <span className="text-[10px]">Add Photo</span>
+                                </button>
+                            </div>
+                        </CardContent>
+                    </Card>
+
+                    <Card>
+                        <CardHeader className="pb-3">
+                            <CardTitle>Compliance Documents</CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-2">
+                            {[
+                                { name: "GST Certificate.pdf", size: "1.2 MB" },
+                                { name: "Company_PAN.jpg", size: "450 KB" }
+                            ].map((doc, i) => (
+                                <div key={i} className="flex items-center justify-between p-3 border rounded-lg hover:bg-slate-50 transition-colors">
+                                    <div className="flex items-center gap-3">
+                                        <div className="h-8 w-8 rounded bg-blue-50 flex items-center justify-center">
+                                            <Icons.reports className="h-4 w-4 text-blue-600" />
+                                        </div>
+                                        <div>
+                                            <p className="text-sm font-medium">{doc.name}</p>
+                                            <p className="text-[10px] text-muted-foreground">{doc.size}</p>
+                                        </div>
+                                    </div>
+                                    <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-muted-foreground"><Icons.view className="h-4 w-4" /></Button>
+                                </div>
+                            ))}
+                        </CardContent>
+                    </Card>
                 </TabsContent>
             </Tabs>
         </div>

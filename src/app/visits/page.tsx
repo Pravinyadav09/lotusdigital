@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -9,6 +9,13 @@ import { toast } from "sonner";
 import { useAuth } from "@/providers/auth-provider";
 import { Progress } from "@/components/ui/progress";
 import { ScheduleVisitDialog } from "@/components/visits/schedule-visit-dialog";
+import { useGeofence } from "@/providers/geofence-provider";
+import dynamic from "next/dynamic";
+
+const OSMMap = dynamic(() => import("@/components/maps/osm-map"), {
+    ssr: false,
+    loading: () => <div className="h-[300px] w-full bg-muted animate-pulse rounded-lg flex items-center justify-center">Loading Field Map...</div>
+});
 
 const MOCK_VISITS = [
     { id: "V-201", rep: "Rahul Singh", customer: "Pixel Printers", location: "Okhla Phase III, New Delhi", targetLat: 28.5355, targetLng: 77.2732, time: "10:30 AM", type: "Installation", status: "planned" },
@@ -19,39 +26,67 @@ const MOCK_VISITS = [
 
 export default function VisitsPage() {
     const { user } = useAuth();
+    const { verifyLocation, logVisit, geofences } = useGeofence();
     const isManager = user?.role === "super_admin" || user?.role === "sales_manager";
     const [visits, setVisits] = useState(MOCK_VISITS);
     const [isCheckingIn, setIsCheckingIn] = useState<string | null>(null);
     const [progress, setProgress] = useState(0);
+    const [showMap, setShowMap] = useState(true);
 
     const filteredVisits = isManager ? visits : visits.filter(v => v.rep === user?.name);
 
-    const handleCheckIn = (visitId: string) => {
-        setIsCheckingIn(visitId);
+    const handleCheckIn = async (visit: any) => {
+        setIsCheckingIn(visit.id);
         setProgress(0);
 
-        // Simulate GPS Radius Validation
-        let interval = setInterval(() => {
-            setProgress(prev => {
-                if (prev >= 100) {
-                    clearInterval(interval);
-                    return 100;
+        // Progress simulation
+        let progressVal = 0;
+        const interval = setInterval(() => {
+            progressVal += 10;
+            setProgress(progressVal);
+            if (progressVal >= 90) clearInterval(interval);
+        }, 150);
+
+        try {
+            // Find if there's an associated geofence or use visit coordinates
+            const targetLat = visit.targetLat;
+            const targetLng = visit.targetLng;
+            // Default 500m radius if not specified
+            const radius = 500;
+
+            const result = await verifyLocation(targetLat, targetLng, radius);
+
+            setProgress(100);
+            setTimeout(() => {
+                if (result.success) {
+                    toast.success(`GPS Verified: You are within ${result.distance}m. Check-in successful.`);
+                    setVisits(prev => prev.map(v => v.id === visit.id ? { ...v, status: 'checked-in' } : v));
+
+                    logVisit({
+                        visitId: visit.id,
+                        geofenceId: "MANUAL", // Or linked GF ID
+                        timestamp: new Date().toISOString(),
+                        status: "verified",
+                        distance: result.distance,
+                        coordinates: { lat: targetLat, lng: targetLng }
+                    });
+                } else {
+                    toast.error(`GPS Fail: You are ${result.distance}m away. Minimum required: ${radius}m.`);
+                    logVisit({
+                        visitId: visit.id,
+                        geofenceId: "MANUAL",
+                        timestamp: new Date().toISOString(),
+                        status: "failed",
+                        distance: result.distance,
+                        coordinates: { lat: targetLat, lng: targetLng }
+                    });
                 }
-                return prev + 20;
-            });
-        }, 300);
-
-        setTimeout(() => {
-            const isWithinRadius = Math.random() > 0.2; // 80% chance of success for demo
-
-            if (isWithinRadius) {
-                toast.success("GPS Verified: You are within 500m of the site. Check-in successful.");
-                setVisits(prev => prev.map(v => v.id === visitId ? { ...v, status: 'checked-in' } : v));
-            } else {
-                toast.error("GPS Fail: You are currently 1.2km away from the site. Check-in blocked.");
-            }
+                setIsCheckingIn(null);
+            }, 500);
+        } catch (error) {
+            toast.error("GPS Acquisition Failed. Please check device permissions.");
             setIsCheckingIn(null);
-        }, 1800);
+        }
     };
 
     return (
@@ -62,6 +97,15 @@ export default function VisitsPage() {
                     <p className="text-xs md:text-sm text-muted-foreground">Manage your field schedule with Geo-verification.</p>
                 </div>
                 <div className="flex items-center gap-2 flex-wrap">
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        className={showMap ? "bg-blue-50 text-blue-700 border-blue-200" : ""}
+                        onClick={() => setShowMap(!showMap)}
+                    >
+                        <Icons.location className="mr-2 h-4 w-4" />
+                        {showMap ? "Hide Map" : "Show Map"}
+                    </Button>
                     <ScheduleVisitDialog />
                     <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200 py-1 text-[10px] sm:text-xs">
                         <div className="h-2 w-2 bg-green-500 rounded-full mr-2 animate-pulse shrink-0" />
@@ -69,6 +113,29 @@ export default function VisitsPage() {
                     </Badge>
                 </div>
             </div>
+
+            {showMap && (
+                <Card className="border-blue-100 shadow-sm overflow-hidden">
+                    <CardHeader className="bg-muted/30 py-3">
+                        <CardTitle className="text-xs uppercase tracking-wider font-bold">Field Route Visualizer</CardTitle>
+                    </CardHeader>
+                    <CardContent className="p-0">
+                        <OSMMap
+                            center={[28.6139, 77.2090]}
+                            zoom={10}
+                            height="300px"
+                            geofences={filteredVisits.map(v => ({
+                                id: v.id,
+                                name: v.customer,
+                                lat: v.targetLat,
+                                lng: v.targetLng,
+                                radius: 500,
+                                isActive: v.status === 'checked-in'
+                            }))}
+                        />
+                    </CardContent>
+                </Card>
+            )}
 
             <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
                 {filteredVisits.map((visit) => (
@@ -94,8 +161,9 @@ export default function VisitsPage() {
                         <CardContent className="space-y-4">
                             {isCheckingIn === visit.id ? (
                                 <div className="space-y-2">
-                                    <p className="text-[10px] text-center font-bold animate-pulse">VALIDATING GEO-COORD...</p>
+                                    <p className="text-[10px] text-center font-bold animate-pulse text-blue-600">ACQUIRING SATELLITE LOCK...</p>
                                     <Progress value={progress} className="h-2" />
+                                    <p className="text-[8px] text-center text-muted-foreground">Validating precision within 5-10m radius</p>
                                 </div>
                             ) : visit.status === 'checked-in' ? (
                                 <div className="space-y-3 font-mono text-[10px]">
@@ -104,8 +172,8 @@ export default function VisitsPage() {
                                         <span>{new Date().toLocaleTimeString()}</span>
                                     </div>
                                     <div className="p-2 rounded bg-white border border-green-100 flex items-center justify-between">
-                                        <span className="text-muted-foreground uppercase">Precision:</span>
-                                        <span className="text-green-600">± 8m (GPS)</span>
+                                        <span className="text-muted-foreground uppercase">Stability:</span>
+                                        <span className="text-green-600">EXCELLENT (GPS)</span>
                                     </div>
                                     <Button className="w-full bg-blue-600 hover:bg-blue-700" onClick={() => toast.success("Opening Visit Summary & Action Log...")}>
                                         <Icons.add className="mr-2 h-4 w-4" />
@@ -124,7 +192,7 @@ export default function VisitsPage() {
                                         <Icons.view className="mr-2 h-4 w-4" />
                                         Route
                                     </Button>
-                                    <Button className="bg-blue-600 hover:shadow-lg transition-all" onClick={() => handleCheckIn(visit.id)} disabled={isManager}>
+                                    <Button className="bg-blue-600 hover:shadow-lg transition-all" onClick={() => handleCheckIn(visit)} disabled={isManager}>
                                         {isManager ? "Rep Only" : "Check-in"}
                                     </Button>
                                 </div>
@@ -146,9 +214,9 @@ export default function VisitsPage() {
             <div className="p-4 border rounded-lg bg-blue-50/30 flex items-start gap-3">
                 <Icons.warning className="h-5 w-5 text-blue-600 shrink-0 mt-0.5" />
                 <div className="space-y-1">
-                    <p className="text-sm font-bold text-blue-900">Offline Awareness Mode</p>
-                    <p className="text-xs text-blue-700">
-                        If you lose connectivity, you can still perform 'Check-in'. The visit will be saved locally with its timestamp and GPS coordinates. It will auto-sync once you are back in a 4G/WiFi zone.
+                    <p className="text-sm font-bold text-blue-900">Geofencing Integrity</p>
+                    <p className="text-xs text-blue-700 leading-relaxed">
+                        Lotus Digital uses high-precision Geofencing. Check-ins are only permitted within the defined radius of a customer site. Manual overrides are flagged for manager review.
                     </p>
                 </div>
             </div>

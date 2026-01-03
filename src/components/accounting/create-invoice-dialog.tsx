@@ -126,6 +126,18 @@ export function CreateInvoiceDialog() {
                         </div>
                     )}
 
+                    {type === "tax" && (
+                        <div className="p-3 border rounded-lg bg-green-50/20 border-green-100 flex items-center justify-between">
+                            <div className="space-y-0.5">
+                                <p className="text-xs font-bold text-green-700">Advance Balance Available</p>
+                                <p className="text-[10px] text-green-600 italic">Found ₹ 50,000 for Pixel Printers</p>
+                            </div>
+                            <Button variant="outline" size="sm" type="button" className="h-7 text-[10px] bg-white border-green-200 text-green-700 hover:bg-green-50" onClick={() => toast.success("Advance Adjusted: ₹ 50,000 applied to this Invoice.")}>
+                                Adjust Advance
+                            </Button>
+                        </div>
+                    )}
+
                     <DialogFooter>
                         <Button type="button" variant="outline" onClick={() => toast.info("PDF Preview Generated")}>
                             <Icons.view className="mr-2 h-4 w-4" />

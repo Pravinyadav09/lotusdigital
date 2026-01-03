@@ -10,6 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Icons } from "@/components/icons";
 import { toast } from "sonner";
 import { useAuth } from "@/providers/auth-provider";
+import { GeofenceManager } from "@/components/settings/geofence-manager";
 
 export default function SettingsPage() {
     const { user } = useAuth();
@@ -59,6 +60,7 @@ export default function SettingsPage() {
             <Tabs defaultValue="business" className="space-y-4">
                 <TabsList className="w-full flex h-auto overflow-x-auto bg-muted p-1 rounded-lg justify-start">
                     <TabsTrigger value="business" className="flex-1 py-2 text-xs sm:text-sm whitespace-nowrap">Business Rules</TabsTrigger>
+                    <TabsTrigger value="geofencing" className="flex-1 py-2 text-xs sm:text-sm whitespace-nowrap">Geofencing Control</TabsTrigger>
                     <TabsTrigger value="notifications" className="flex-1 py-2 text-xs sm:text-sm whitespace-nowrap">Communications</TabsTrigger>
                     <TabsTrigger value="taxes" className="flex-1 py-2 text-xs sm:text-sm whitespace-nowrap">GST & Finance</TabsTrigger>
                 </TabsList>
@@ -104,6 +106,10 @@ export default function SettingsPage() {
                             </CardContent>
                         </Card>
                     </div>
+                </TabsContent>
+
+                <TabsContent value="geofencing" className="space-y-4">
+                    <GeofenceManager />
                 </TabsContent>
 
                 <TabsContent value="notifications" className="space-y-4">
